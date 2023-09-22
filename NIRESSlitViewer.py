@@ -249,7 +249,7 @@ class FitsViewer(QtGui.QMainWindow):
         self.cachedFiles = self.walkDirectory()
         print("scan started...")
         scanner = Scanner(self.scan)
-        scanner.signals.load.connect(self.processData)
+        scanner.signals.load.connect(self.load_file)
         self.threadpool.start(scanner)
 
     def stop_scan(self):
@@ -285,7 +285,7 @@ class FitsViewer(QtGui.QMainWindow):
         else:
             fileName = str(res)
         if len(fileName) != 0:
-            self.processData(fileName)
+            self.load_file(fileName)
 
     # def load_sky(self):
     #     res = QtGui.QFileDialog.getOpenFileName(self, "Open Sky file",

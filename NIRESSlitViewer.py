@@ -59,22 +59,22 @@ class FitsViewer(QtGui.QMainWindow):
         self.cachedFiles = None
         #KTL stuff
         #Cache KTL keywords
-        self.trickxpos = ktl.cache('tds', 'TRKRO1X')
-        self.trickypos = ktl.cache('tds', 'TRKRO1Y')
-        self.trickxsize = ktl.cache('tds', 'TRKRO1SX')
-        self.trickysize = ktl.cache('tds', 'TRKRO1SY')
-        self.progress = ktl.cache('tds', 'progress')
-        self.roipixels = ktl.cache('ao', 'TRKRO1PX')
-        self.roipixels.monitor()
-        self.tkenrup = ktl.cache('ao', 'tkenrup')
-        self.tkcrxs = ktl.cache('ao','tkcrxs')
-        self.tkcrys = ktl.cache('ao','tkcrys')
-        self.tkcrevxp = ktl.cache('ao','tkcrevxp')
-        self.tkcrevyp = ktl.cache('ao','tkcrevyp')
-        self.tkcrevxo = ktl.cache('ao','tkcrevxo')
-        self.tkcrevyo = ktl.cache('ao','tkcrevyo')
-        self.tkcxim = ktl.cache('ao','tkcxim')
-        self.tkcyim = ktl.cache('ao','tkcyim')
+        # self.trickxpos = ktl.cache('tds', 'TRKRO1X')
+        # self.trickypos = ktl.cache('tds', 'TRKRO1Y')
+        # self.trickxsize = ktl.cache('tds', 'TRKRO1SX')
+        # self.trickysize = ktl.cache('tds', 'TRKRO1SY')
+        # self.progress = ktl.cache('tds', 'progress')
+        # self.roipixels = ktl.cache('ao', 'TRKRO1PX')
+        # self.roipixels.monitor()
+        # self.tkenrup = ktl.cache('ao', 'tkenrup')
+        # self.tkcrxs = ktl.cache('ao','tkcrxs')
+        # self.tkcrys = ktl.cache('ao','tkcrys')
+        # self.tkcrevxp = ktl.cache('ao','tkcrevxp')
+        # self.tkcrevyp = ktl.cache('ao','tkcrevyp')
+        # self.tkcrevxo = ktl.cache('ao','tkcrevxo')
+        # self.tkcrevyo = ktl.cache('ao','tkcrevyo')
+        # self.tkcxim = ktl.cache('ao','tkcxim')
+        # self.tkcyim = ktl.cache('ao','tkcyim')
 
         self.rawfile = ''
         self.mode = ''
@@ -127,46 +127,33 @@ class FitsViewer(QtGui.QMainWindow):
         hw = QtGui.QWidget()
         hw.setLayout(readout_hbox)
         vbox.addWidget(hw)
-        roi_hbox = QtGui.QHBoxLayout()
-        roi_hbox.setObjectName("roi_hbox")
-        self.roi_info = QtGui.QLabel("ROI: ")
-        self.roi_info.setObjectName("roi_info")
-        roi_hbox.addWidget(self.roi_info)
-        self.box_readout = QtGui.QLabel("Amplitude:                  FWHM: ")
-        self.box_readout.setMinimumSize(QtCore.QSize(350, 0))
-        self.box_readout.setObjectName("box_readout")
-        roi_hbox.addWidget(self.box_readout)
+        file_hbox = QtGui.QHBoxLayout()
+        file_hbox.setObjectName("file_hbox")
+        self.file_info = QtGui.QLabel("file: ")
+        self.file_info.setObjectName("file_info")
+        file_hbox.addWidget(self.file_info)
+        # self.box_readout = QtGui.QLabel("Amplitude:                  FWHM: ")
+        # self.box_readout.setMinimumSize(QtCore.QSize(350, 0))
+        # self.box_readout.setObjectName("box_readout")
+        # roi_hbox.addWidget(self.box_readout)
         hw = QtGui.QWidget()
-        hw.setLayout(roi_hbox)
+        hw.setLayout(file_hbox)
         vbox.addWidget(hw)
         buttons_hbox = QtGui.QHBoxLayout()
         buttons_hbox.setObjectName("buttons_hbox")
-        buttons_vbox_mid = QtGui.QVBoxLayout()
-        buttons_vbox_mid.setObjectName("buttons_vbox_mid")
-        self.wsetroi = QtGui.QPushButton("Set ROI")
-        self.wsetroi.setObjectName("wsetroi")
-        self.wsetroi.clicked.connect(self.set_roi)
-        buttons_vbox_mid.addWidget(self.wsetroi)
-        self.wsky = QtGui.QPushButton("Load Sky")
-        self.wsky.clicked.connect(self.load_sky)
-        buttons_vbox_mid.addWidget(self.wsky)
+        buttons_vbox_left = QtGui.QVBoxLayout()
+        buttons_vbox_left.setContentsMargins(QtCore.QMargins(0, 0, 10, 0))
+        buttons_vbox_left.setObjectName("buttons_vbox_left")
+        self.wcenter = QtGui.QPushButton("Center")
+        self.wcenter.setObjectName("wcenter")
+        self.wcenter.clicked.connect(self.center)
+        buttons_vbox_left.addWidget(self.wcenter)
+        self.wrecenter = QtGui.QPushButton("Re-center")
+        self.wrecenter.setObjectName("wrecenter")
+        self.wrecenter.clicked.connect(self.recenter)
+        buttons_vbox_left.addWidget(self.wrecenter)
         hw = QtGui.QWidget()
-        hw.setLayout(buttons_vbox_mid)
-        buttons_hbox.addWidget(hw)
-        image_info_vbox = QtGui.QVBoxLayout()
-        image_info_vbox.setObjectName("image_info_vbox")
-        self.sky_info = QtGui.QLabel("Sky: ")
-        self.sky_info.setObjectName("sky_info")
-        image_info_vbox.addWidget(self.sky_info)
-        self.filt_info = QtGui.QLabel("Filter: ")
-        self.filt_info.setObjectName("filt_info")
-        image_info_vbox.addWidget(self.filt_info)
-        self.image_info = QtGui.QLabel("Image: ")
-        self.image_info.setMinimumSize(QtCore.QSize(175, 0))
-        self.image_info.setObjectName("image_info")
-        image_info_vbox.addWidget(self.image_info)
-        hw = QtGui.QWidget()
-        hw.setLayout(image_info_vbox)
+        hw.setLayout(buttons_vbox_left)
         buttons_hbox.addWidget(hw)
         buttons_vbox_right = QtGui.QVBoxLayout()
         buttons_vbox_right.setObjectName("buttons_vbox_right")
@@ -176,7 +163,6 @@ class FitsViewer(QtGui.QMainWindow):
         buttons_vbox_right.addWidget(self.wopen)
         self.wquit = QtGui.QPushButton("Quit")
         self.wquit.setObjectName("wquit")
-        #TODO add ROI confirm function
         self.wquit.clicked.connect(self.quit)
         buttons_vbox_right.addWidget(self.wquit)
         hw = QtGui.QWidget()
@@ -194,7 +180,6 @@ class FitsViewer(QtGui.QMainWindow):
         fi.add_callback('cursor-down', self.btndown)
 
         self.recdc, self.compdc = self.add_canvas()
-        self.boxtag = "roi-box"
         self.picktag = "pick-box"
 
     def add_canvas(self, tag=None):
@@ -252,23 +237,6 @@ class FitsViewer(QtGui.QMainWindow):
         self.threadpool = False
         QtGui.QApplication.instance().quit()
 
-    def pixels_to_image(self, pix):
-        lst = str(pix).strip().replace(':', '').split()
-        dct = {int(lst[i]): float(lst[i + 1]) for i in range(0, len(lst), 2)}
-        size = int(math.sqrt(len(dct)))
-
-        image = []
-
-        for i in range(size):
-            row = []
-            for k in range(size):
-                row.append(dct[(i*16)+k])
-            image.append(row)
-
-        image = np.array(image)
-
-        return(image)
-
     ##Full frame stuff
     def start_scan(self):
         self.scanning = True
@@ -292,15 +260,6 @@ class FitsViewer(QtGui.QMainWindow):
         image = load_data(filepath, logger=self.logger)
         self.fitsimage.set_image(image)
         # self.setWindowTitle(filepath)
-        left, right, up, down = self.getROI()
-        try:
-            self.fitsimage.get_canvas().get_object_by_tag(self.boxtag)
-            self.fitsimage.get_canvas().delete_object_by_tag(self.boxtag)
-            self.box = self.recdc(left, down, right, up, color='green')
-            self.fitsimage.get_canvas().add(self.box, tag=self.boxtag, redraw=True)
-        except KeyError:
-            self.box = self.recdc(left, down, right, up, color='green')
-            self.fitsimage.get_canvas().add(self.box, tag=self.boxtag, redraw=True)
         try:
             self.fitsimage.get_canvas().get_object_by_tag(self.picktag)
             self.fitsimage.get_canvas().delete_object_by_tag(self.picktag)
@@ -312,7 +271,10 @@ class FitsViewer(QtGui.QMainWindow):
         radius = float(max(width, height)) / 20
         self.fitsimage.get_canvas().add(self.compdc(data_x, data_y, radius, color='skyblue',
                                        fontsize=8))
-        self.bd._orient(self.fitsimage, righthand=False, msg=True)
+        header = fits.getheader(image)
+        name = header['DATAFILE']
+        text = f"Image: {name}"
+        self.file_info.setText(text)
 
     def open_file(self):
         res = QtGui.QFileDialog.getOpenFileName(self, "Open FITS file",
@@ -325,116 +287,25 @@ class FitsViewer(QtGui.QMainWindow):
         if len(fileName) != 0:
             self.processData(fileName)
 
-    def load_sky(self):
-        res = QtGui.QFileDialog.getOpenFileName(self, "Open Sky file",
-                                                str(self.nightpath()))
-        if isinstance(res, tuple):
-            fileName = res[0]
-        else:
-            fileName = str(res)
-        if len(fileName) != 0:
-            self.subtract_sky(fileName)
+    # def load_sky(self):
+    #     res = QtGui.QFileDialog.getOpenFileName(self, "Open Sky file",
+    #                                             str(self.nightpath()))
+    #     if isinstance(res, tuple):
+    #         fileName = res[0]
+    #     else:
+    #         fileName = str(res)
+    #     if len(fileName) != 0:
+    #         self.subtract_sky(fileName)
 
-    def subtract_sky(self, filename):
-        skyname, skyheader, skyfitsData, skyfilter = self.addWcs(filename)
-        name, header, fitsData, filter = self.addWcs(self.rawfile)
-        with_sky = fitsData - skyfitsData
-        mask = fits.getdata('/kroot/rel/ao/qfix/data/Trick/BadPix_1014Hz.fits', ext=0)
-        text = f"Sky: {skyname}"
-        self.sky_info.setText(text)
-        self.load_file(self.writeFits(header, np.multiply(with_sky, mask)))
+    # def subtract_sky(self, filename):
+    #     skyname, skyheader, skyfitsData, skyfilter = self.addWcs(filename)
+    #     name, header, fitsData, filter = self.addWcs(self.rawfile)
+    #     with_sky = fitsData - skyfitsData
+    #     mask = fits.getdata('/kroot/rel/ao/qfix/data/Trick/BadPix_1014Hz.fits', ext=0)
+    #     text = f"Sky: {skyname}"
+    #     self.sky_info.setText(text)
+    #     self.load_file(self.writeFits(header, np.multiply(with_sky, mask)))
 
-    def set_roi(self):
-        xroi = self.xclick-8
-        yroi = self.yclick-8
-        self.trickxpos.write(xroi)
-        self.trickypos.write(yroi)
-        distcoeff = np.zeros(20)
-        rows = csv.reader(open('/usr/local/qfix/data/Trick/setup_files/TRICK_DistCoeff.dat','r'))
-        for idx,row in enumerate(rows):
-            distcoeff[idx] = float(row[0][5:])
-        self.trk_putxy_spoc(self, xroi, yroi, distcoeff, roisz=None)
-        print("TRICK ROI set")
-        left, right, up, down = self.getROI()
-        self.fitsimage.get_canvas().get_object_by_tag(self.boxtag)
-        self.fitsimage.get_canvas().delete_object_by_tag(self.boxtag)
-        self.box = self.recdc(left, down, right, up, color='green')
-        self.fitsimage.get_canvas().add(self.box, tag=self.boxtag, redraw=True)
-
-    def trk_distortion_model(self, x0, y0, p):
-        # Translation of DistortionModel into Python
-        x0T = x0-p[0]
-        y0T = y0-p[10]
-
-        x1 = p[0]+p[1]*y0T+p[2]*x0T+p[3]*y0T**2+p[4]*y0T*x0T+p[5]*x0T**2+\
-            p[6]*y0T**3+p[7]*y0T**2*x0T+p[8]*y0T*x0T**2+p[9]*x0T**3
-
-        y1 = p[10]+p[11]*y0T+p[12]*x0T+p[13]*y0T**2+p[14]*y0T*x0T+p[15]*x0T**2+\
-            p[16]*y0T**3+p[17]*y0T**2*x0T+p[18]*y0T*x0T**2+p[19]*x0T**3
-
-        return (x1,y1)
-
-    def trk_undo_distmodel(self, x1, y1, DistC):
-        eps = 0.5 # error in pixels
-        maxiter = 20
-
-        k = 0
-        x0 = copy.copy(x1)
-        y0 = copy.copy(y1)
-        (x1p,y1p) = self.trk_distortion_model(x0,y0,DistC)
-
-        while (np.sqrt((x1p-x1)**2+(y1p-y1)**2) > eps):
-            if k >= maxiter:
-                print('No convergence in '+str(iter)+' iterations')
-                break
-
-            x0 -= (x1p-x1)
-            y0 -= (y1p-y1)
-
-            (x1p,y1p) = self.trk_distortion_model(x0,y0,DistC)
-            k += 1
-
-        return (x0,y0)
-
-
-    def trk_putxy_spoc(self, xroi, yroi, distcoeff, roisz=None):
-        # TODO: error handling
-
-        if roisz not in [None,2, 4, 8, 16]:
-            raise('Invalid value for roisz')
-            return
-
-        sctrack = self.tkenrup.read() # what is the error handling here?
-        if sctrack:
-            # turn sctracking off
-            status = self.tkenrup.write(0)
-
-        if roisz is not None:
-            status = self.tkcrxs.write(roisz)
-            status = self.tkcrys.write(roisz)
-
-        (xp,yp) = self.trk_undo_distmodel(xroi, yroi, distcoeff)
-        status = self.tkcrevxp.write(xp)
-        status = self.tkcrevyp.write(yp)
-
-        xim = self.tkcrevxo.read()
-        yim = self.tkcrevyo.read()
-        status = self.tkcxim.write(xim)
-        status = self.tkcyim.write(yim)
-
-        # need to tigger the ROI calculator TWICE (as told to Bruno Femenia by Paul Stomski)
-        status = self.tksrtrg.write(1)
-        time.sleep(0.1)    # wait 0.1 s
-        status = self.tksrtrg.write(1)
-
-        # need to set to propagate SPOC-Camera-WFC
-        status = self.tkenrup.write(1)
-        if sctrack == 0:
-            status = self.tkenrup.write(0)
-
-        # Setting trkrordy syncs SPOC and camera values with WFC and triggers actions by WFC: bad pixel map, etc
-        status = self.trkrordy.write(1)
-        return
 
     ##Start of image find and processing code
 
@@ -502,17 +373,8 @@ class FitsViewer(QtGui.QMainWindow):
         # if the file exists but locked, wait wait_time seconds and check
         # again until it's no longer locked by another process
         while self.fileIsCurrentlyLocked(filename):
-            print(self.progress.read())
+            # print(self.progress.read())
             time.sleep(wait_time)
-
-    def getROI(self):
-        left = int(self.trickxpos.read())  + 8 - int(self.trickxsize.read())*3
-        right = int(self.trickxpos.read()) + 8 + int(self.trickxsize.read())*3
-        up = int(self.trickypos.read()) + 8 - int(self.trickysize.read())*3
-        down = int(self.trickypos.read()) + 8 + int(self.trickysize.read())*3
-        text = f"ROI: {str(self.trickxpos.read())} {str(self.trickypos.read())}"
-        self.roi_info.setText(text)
-        return left, right, up, down
 
     def nightpath(self):
         nightly = Path('/net/k1aoserver/k1aodata/nightly')
@@ -521,61 +383,62 @@ class FitsViewer(QtGui.QMainWindow):
         nightly = nightly / year / month / day / 'Trick'
         return nightly
 
-    def processData(self, filename):
-        self.rawfile = filename
-        name, header, fitsData, filter = self.addWcs(filename)
-        mask = fits.getdata('/kroot/rel/ao/qfix/data/Trick/BadPix_1014Hz.fits', ext=0)
-        if filter == 'H':
-            background = fits.getdata('/kroot/rel/ao/qfix/data/Trick/sky_H.fits')
-            self.sky_info.setText('Sky: sky_H.fits')
-        else:
-            background = fits.getdata('/kroot/rel/ao/qfix/data/Trick/sky_Ks.fits')
-            self.sky_info.setText('sky_Ks.fits')
-        subtracted_data = fitsData-background
-        self.load_file(self.writeFits(header, np.multiply(subtracted_data, mask)))
-        text = f"Image: {name}"
-        self.image_info.setText(text)
-        text = f"Filter: {filter}"
-        self.filt_info.setText(text)
-        self.wsky.setEnabled(True)
+    # def processData(self, filename):
+    #     self.rawfile = filename
+    #     name, header, fitsData, filter = self.addWcs(filename)
+        # mask = fits.getdata('/kroot/rel/ao/qfix/data/Trick/BadPix_1014Hz.fits', ext=0)
+        # if filter == 'H':
+        #     background = fits.getdata('/kroot/rel/ao/qfix/data/Trick/sky_H.fits')
+        #     self.sky_info.setText('Sky: sky_H.fits')
+        # else:
+        #     background = fits.getdata('/kroot/rel/ao/qfix/data/Trick/sky_Ks.fits')
+        #     self.sky_info.setText('sky_Ks.fits')
+        # subtracted_data = fitsData-background
+        # self.load_file(self.writeFits(header, np.multiply(subtracted_data, mask)))
+    #     self.load_file(self.writeFits(header, fitsData))
+    #     text = f"Image: {name}"
+    #     self.image_info.setText(text)
+    #     text = f"Filter: {filter}"
+    #     self.filt_info.setText(text)
+    #     self.wsky.setEnabled(True)
 
-    def addWcs(self, filen):
-        w = wcs.WCS(naxis=2)
-        fitsData = fits.getdata(filen, ext=0)
-        header = fits.getheader(filen)
-        ht, wd = fitsData.shape[:2]
-        y = ht//2
-        x = wd//2
-        name = header['DATAFILE']
-        ra = float(header['RA'])
-        dec = float(header['DEC'])
-        rot = float(header['ROTPOSN'])
-        filter = header['TRFWNAME']
-        w.wcs.crpix = [y, x]
-        w.wcs.cdelt = np.array([-0.05, 0.05])
-        w.wcs.crota = np.array([0.05, rot])
-        w.wcs.crval = [ra, dec]
-        w.wcs.ctype = ["RA---TAN", "DEC--TAN"]
-        pixcrd = np.array([[0, 0], [24, 38], [45, 98]], dtype=np.float64)
-        world = w.wcs_pix2world(pixcrd, 0)
-        # Convert the same coordinates back to pixel coordinates.
-        pixcrd2 = w.wcs_world2pix(world, 0)
-        # These should be the same as the original pixel coordinates, modulo
-        # some floating-point error.
-        assert np.max(np.abs(pixcrd - pixcrd2)) < 1e-6
-        # Now, write out the WCS object as a FITS header
-        header = w.to_header()
-        return name, header, fitsData, filter
+    # def addWcs(self, filen):
+    #     w = wcs.WCS(naxis=2)
+    #     fitsData = fits.getdata(filen, ext=0)
+    #     header = fits.getheader(filen)
+    #     ht, wd = fitsData.shape[:2]
+    #     y = ht//2
+    #     x = wd//2
+    #     name = header['DATAFILE']
+    #     ra = float(header['RA'])
+    #     dec = float(header['DEC'])
+    #     rot = float(header['ROTPOSN'])
+    #     filter = header['TRFWNAME']
+    #     w.wcs.crpix = [y, x]
+    #     w.wcs.cdelt = np.array([-0.05, 0.05])
+    #     w.wcs.crota = np.array([0.05, rot])
+    #     w.wcs.crval = [ra, dec]
+    #     w.wcs.ctype = ["RA---TAN", "DEC--TAN"]
+    #     pixcrd = np.array([[0, 0], [24, 38], [45, 98]], dtype=np.float64)
+    #     world = w.wcs_pix2world(pixcrd, 0)
+    #     # Convert the same coordinates back to pixel coordinates.
+    #     pixcrd2 = w.wcs_world2pix(world, 0)
+    #     # These should be the same as the original pixel coordinates, modulo
+    #     # some floating-point error.
+    #     assert np.max(np.abs(pixcrd - pixcrd2)) < 1e-6
+    #     # Now, write out the WCS object as a FITS header
+    #     header = w.to_header()
+    #     return name, header, fitsData, filter
 
-    def writeFits(self, headerinfo, image_data):
-        hdu = fits.PrimaryHDU(header=headerinfo, data=image_data)
-        filename = 'procImage.fits'
-        try:
-            hdu.writeto(filename)
-        except OSError:
-            os.remove(filename)
-            hdu.writeto(filename)
-        return filename
+    # def writeFits(self, headerinfo, image_data):
+    #     hdu = fits.PrimaryHDU(header=headerinfo, data=image_data)
+    #     filename = 'procImage.fits'
+    #     try:
+    #         hdu.writeto(filename)
+    #     except OSError:
+    #         os.remove(filename)
+    #         hdu.writeto(filename)
+    #     return filename
 
     ##Find star stuff
     def cutdetail(self, image, shape_obj):
@@ -659,7 +522,7 @@ def main():
     # ginga needs a logger.
     # If you don't want to log anything you can create a null logger by
     # using null=True in this call instead of log_stderr=True
-    logger = log.get_logger("TrickManager", log_stderr=True, level=40)
+    logger = log.get_logger("NIRESSlitViewer", log_stderr=True, level=40)
 
     w = FitsViewer(logger)
     w.show()

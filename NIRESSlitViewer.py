@@ -50,6 +50,33 @@ class Scanner(QtCore.QRunnable):
 
         self.fn(*self.args, **self.kwargs)
 
+class UpdateControlWindowSignals(QtCore.QObject):
+    load = QtCore.Signal()
+
+class UpdateControlWindow(QtCore.QRunnable):
+    '''
+    Control Window thread
+    '''
+    def __init__(self, fn, *args, **kwargs):
+        super(UpdateControlWindow, self).__init__()
+
+        # Store constructor arguments (re-used for processing)
+        self.fn = fn
+        self.args = args
+        self.kwargs = kwargs
+        self.signals = UpdateControlWindowSignals()
+        self.kwargs['file_callback'] = self.signals.load
+
+        # Add the callback to our kwargs
+    @QtCore.Slot()
+    def run(self):
+        '''
+        Initialise the runner function with passed args, kwargs.
+        '''
+
+        self.fn(*self.args, **self.kwargs)
+
+
 class FitsViewer(QtGui.QMainWindow):
 
     def __init__(self, logger):
@@ -59,6 +86,7 @@ class FitsViewer(QtGui.QMainWindow):
         self.cachedFiles = None
         #KTL stuff
         #Cache KTL keywords
+        self.slit_filename = ktl.cache('nids', 'FILENAME')
         # self.trickxpos = ktl.cache('tds', 'TRKRO1X')
         # self.trickypos = ktl.cache('tds', 'TRKRO1Y')
         # self.trickxsize = ktl.cache('tds', 'TRKRO1SX')
@@ -183,6 +211,26 @@ class FitsViewer(QtGui.QMainWindow):
         self.recdc = self.add_canvas()
         self.picktag = "pick-box"
 
+        self.start_updating()
+
+    def start_updating(self):
+        self.updating = True
+        updater = UpdateControlWindow(self.update)
+        updater.signals.load.connect(self.update_gui)
+        self.threadpool.start(updater)
+
+    def update(self, file_callback):
+        while self.updating:
+            file_callback.emit()
+            time.sleep(1)
+
+    def stop_updating(self):
+        self.updating = False
+
+    def update_gui(self):
+        name = self.slit_filename.read()
+        self.file_info.setText(f"Name: {name}")
+        
     def add_canvas(self, tag=None):
         # add a canvas to the view
         my_canvas = self.fitsimage.get_canvas()

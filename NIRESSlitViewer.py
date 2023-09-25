@@ -271,8 +271,7 @@ class FitsViewer(QtGui.QMainWindow):
         radius = float(max(width, height)) / 20
         self.fitsimage.get_canvas().add(self.compdc(data_x, data_y, radius, color='skyblue',
                                        fontsize=8))
-        header = fits.getheader(image)
-        name = header['DATAFILE']
+        name = 'tmp'
         text = f"Image: {name}"
         self.file_info.setText(text)
 
@@ -377,7 +376,7 @@ class FitsViewer(QtGui.QMainWindow):
             time.sleep(wait_time)
 
     def nightpath(self):
-        nightly = Path('/s/sdata1500/nires1/')
+        nightly = Path('/s/sdata1500/nires1/2023sep25')
         # date = datetime.datetime.utcnow()
         # year, month, day = str(date.strftime("%y")), str(date.strftime("%m")), str(date.strftime("%d"))
         # nightly = nightly / year / month / day / 'Trick'

@@ -377,10 +377,10 @@ class FitsViewer(QtGui.QMainWindow):
             time.sleep(wait_time)
 
     def nightpath(self):
-        nightly = Path('/net/k1aoserver/k1aodata/nightly')
-        date = datetime.datetime.utcnow()
-        year, month, day = str(date.strftime("%y")), str(date.strftime("%m")), str(date.strftime("%d"))
-        nightly = nightly / year / month / day / 'Trick'
+        nightly = Path('/s/data1500/nires1/')
+        # date = datetime.datetime.utcnow()
+        # year, month, day = str(date.strftime("%y")), str(date.strftime("%m")), str(date.strftime("%d"))
+        # nightly = nightly / year / month / day / 'Trick'
         return nightly
 
     # def processData(self, filename):

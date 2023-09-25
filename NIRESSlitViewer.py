@@ -179,15 +179,17 @@ class FitsViewer(QtGui.QMainWindow):
         fi.set_callback('cursor-changed', self.motion_cb)
         fi.add_callback('cursor-down', self.btndown)
 
-        self.recdc, self.compdc = self.add_canvas()
+        # self.recdc, self.compdc = self.add_canvas()
+        self.recdc = self.add_canvas()
         self.picktag = "pick-box"
 
     def add_canvas(self, tag=None):
         # add a canvas to the view
         my_canvas = self.fitsimage.get_canvas()
         RecCanvas = my_canvas.get_draw_class('rectangle')
-        CompCanvas = my_canvas.get_draw_class('compass')
-        return RecCanvas, CompCanvas
+        # CompCanvas = my_canvas.get_draw_class('compass')
+        # return RecCanvas, CompCanvas
+        return RecCanvas
 
 
     def cut_change(self):
@@ -266,11 +268,11 @@ class FitsViewer(QtGui.QMainWindow):
         except KeyError:
             pass
         width, height = image.get_size()
-        data_x, data_y = width / 2.0, height / 2.0
-        # x, y = self.fitsimage.get_canvas_xy(data_x, data_y)
-        radius = float(max(width, height)) / 20
-        self.fitsimage.get_canvas().add(self.compdc(data_x, data_y, radius, color='skyblue',
-                                       fontsize=8))
+        # data_x, data_y = width / 2.0, height / 2.0
+        # # x, y = self.fitsimage.get_canvas_xy(data_x, data_y)
+        # radius = float(max(width, height)) / 20
+        # self.fitsimage.get_canvas().add(self.compdc(data_x, data_y, radius, color='skyblue',
+        #                                fontsize=8))
         name = 'tmp'
         text = f"Image: {name}"
         self.file_info.setText(text)

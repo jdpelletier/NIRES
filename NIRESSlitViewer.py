@@ -131,7 +131,7 @@ class FitsViewer(QtGui.QMainWindow):
         viewer_hbox = QtGui.QHBoxLayout()
         viewer_hbox.setObjectName("viewer_hbox")
         w = fi.get_widget()
-        w.setMinimumSize(QtCore.QSize(512, 512))
+        w.setMinimumSize(QtCore.QSize(512, 800))
         viewer_hbox.addWidget(w)
         hw = QtGui.QWidget()
         hw.setLayout(viewer_hbox)
@@ -315,7 +315,7 @@ class FitsViewer(QtGui.QMainWindow):
             self.fitsimage.get_canvas().delete_object_by_tag(self.picktag)
         except KeyError:
             pass
-        width, height = image.get_size()
+        # width, height = image.get_size()
         # data_x, data_y = width / 2.0, height / 2.0
         # # x, y = self.fitsimage.get_canvas_xy(data_x, data_y)
         # radius = float(max(width, height)) / 20

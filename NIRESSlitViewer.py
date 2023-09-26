@@ -578,7 +578,7 @@ def main():
     app.setActiveWindow(w)
     w.raise_()
     w.activateWindow()
-    w.start_scan()
+    # w.start_scan()
     sys.exit(app.exec_())
 
 if __name__ == "__main__":

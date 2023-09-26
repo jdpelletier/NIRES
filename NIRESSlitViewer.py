@@ -184,7 +184,6 @@ class FitsViewer(QtGui.QMainWindow):
         hw.setLayout(buttons_vbox_left)
         buttons_hbox.addWidget(hw)
         buttons_vbox_cent = QtGui.QVBoxLayout()
-        buttons_vbox_cent.setContentsMargins(QtCore.QMargins(0, 0, 10, 0))
         buttons_vbox_cent.setObjectName("buttons_vbox_cent")
         self.wstartscan = QtGui.QPushButton("Start Scan")
         self.wstartscan.setObjectName("wstartscan")

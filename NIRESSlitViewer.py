@@ -442,7 +442,7 @@ class FitsViewer(QtGui.QMainWindow):
     def nightpath(self):
         file = self.slit_filename.read()
         dir = file.split("//")
-        path = dir[1]
+        path = dir[0]
         nightly = Path(path)
         # date = datetime.datetime.utcnow()
         # year, month, day = str(date.strftime("%y")), str(date.strftime("%m")), str(date.strftime("%d"))

@@ -230,7 +230,7 @@ class FitsViewer(QtGui.QMainWindow):
     def update_gui(self):
         name = self.slit_filename.read()
         self.file_info.setText(f"Name: {name}")
-        
+
     def add_canvas(self, tag=None):
         # add a canvas to the view
         my_canvas = self.fitsimage.get_canvas()
@@ -290,12 +290,12 @@ class FitsViewer(QtGui.QMainWindow):
     ##Full frame stuff
     def start_scan(self):
         self.scanning = True
-        hdu = fits.PrimaryHDU()
-        try:
-            hdu.writeto('procImage.fits')
-        except OSError:
-            os.remove('procImage.fits')
-            hdu.writeto('procImage.fits')
+        # hdu = fits.PrimaryHDU()
+        # try:
+        #     hdu.writeto('procImage.fits')
+        # except OSError:
+        #     os.remove('procImage.fits')
+        #     hdu.writeto('procImage.fits')
         self.cachedFiles = self.walkDirectory()
         print("scan started...")
         scanner = Scanner(self.scan)

@@ -577,11 +577,15 @@ class FitsViewer(QtGui.QMainWindow):
             text = "Amplitude: N/A FWHM: N/A"
             self.box_readout.setText(text)
 
+    # def panto(self, viewer):
+
+
 
     def btndown(self, canvas, event, data_x, data_y):
-        # self.fitsimage.set_pan(data_x, data_y)
         self.xclick = data_x
         self.yclick = data_y
+        self.fitsimage.set_pan(data_x, data_y)
+        # self.panto(self.fitsimage)
         self.pickstar(self.fitsimage)
 
 def main():

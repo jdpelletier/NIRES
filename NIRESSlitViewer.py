@@ -8,7 +8,7 @@ import copy
 
 import numpy as np
 from astropy.io import fits
-from astropy import wcs
+# from astropy import wcs
 import astropy.units as u
 from astropy.stats import gaussian_sigma_to_fwhm
 from astropy.modeling import models, fitting
@@ -258,19 +258,19 @@ class FitsViewer(QtGui.QMainWindow):
         fits_x, fits_y = data_x, data_y
 
         # Calculate WCS RA
-        try:
-            # NOTE: image function operates on DATA space coords
-            image = viewer.get_image()
-            if image is None:
-                # No image loaded
-                return
-            ra_txt, dec_txt = image.pixtoradec(fits_x, fits_y,
-                                               format='str', coords='fits')
-        except Exception as e:
-            self.logger.warning("Bad coordinate conversion: %s" % (
-                str(e)))
-            ra_txt = 'BAD WCS'
-            dec_txt = 'BAD WCS'
+        # try:
+        #     # NOTE: image function operates on DATA space coords
+        #     image = viewer.get_image()
+        #     if image is None:
+        #         # No image loaded
+        #         return
+        #     ra_txt, dec_txt = image.pixtoradec(fits_x, fits_y,
+        #                                        format='str', coords='fits')
+        # except Exception as e:
+        #     self.logger.warning("Bad coordinate conversion: %s" % (
+        #         str(e)))
+        #     ra_txt = 'BAD WCS'
+        #     dec_txt = 'BAD WCS'
         if (fits_x > 2048 or fits_x <0) or (fits_y > 2048 or fits_y <0):
             text = "X: Y:  Value:"
             self.readout.setText(text)

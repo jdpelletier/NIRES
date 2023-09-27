@@ -375,7 +375,7 @@ class FitsViewer(QtGui.QMainWindow):
     def scan(self, file_callback):
         while self.scanning:
             hasNewFiles, files, self.cachedFiles = self.updateFileCache(self.cachedFiles)
-            if hasNewFiles and ('.fits' in files[0] or '.fits.gz' in files[0]):
+            if hasNewFiles and ('.fits' in files[0] or '.fits.gz' in files[0]) and ('v' in files[0]):
                 print("New Image Detected!")
                 filen = files[0]
                 self.waitForFileToBeUnlocked(filen, 1)

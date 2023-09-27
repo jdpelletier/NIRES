@@ -187,11 +187,12 @@ class FitsViewer(QtGui.QMainWindow):
         buttons_vbox_cent.setObjectName("buttons_vbox_cent")
         self.wstartscan = QtGui.QPushButton("Start Scan")
         self.wstartscan.setObjectName("wstartscan")
-        self.wcenter.clicked.connect(self.start_scan)
+        self.wstartscan.clicked.connect(self.start_scan)
         buttons_vbox_cent.addWidget(self.wstartscan)
         self.wstopscan = QtGui.QPushButton("Stop Scan")
         self.wstopscan.setObjectName("wstopscan")
         self.wstopscan.clicked.connect(self.stop_scan)
+        self.wstopscan.setEnabled(False)
         buttons_vbox_cent.addWidget(self.wstopscan)
         hw = QtGui.QWidget()
         hw.setLayout(buttons_vbox_cent)
@@ -320,10 +321,14 @@ class FitsViewer(QtGui.QMainWindow):
         scanner = Scanner(self.scan)
         scanner.signals.load.connect(self.load_file)
         self.threadpool.start(scanner)
+        self.wstartscan.setEnabled(False)
+        self.wstopscan.setEnabled(True)
 
     def stop_scan(self):
         self.scanning = False
         print('Scanning stopped.')
+        self.wstartscan.setEnabled(True)
+        self.wstopscan.setEnabled(False)
 
     def load_file(self, filepath):
         image = load_data(filepath, logger=self.logger)

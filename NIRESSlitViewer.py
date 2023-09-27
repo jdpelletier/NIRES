@@ -300,8 +300,8 @@ class FitsViewer(QtGui.QMainWindow):
         self.stop_scan()
         print('time.sleep(2)')
         time.sleep(2)
-        print('self.threadpool = False')
-        self.threadpool = False
+        # print('self.threadpool = False')
+        # self.threadpool = False
         print('QtGui.QApplication.instance().quit()')
         QtGui.QApplication.instance().quit()
         print('done')

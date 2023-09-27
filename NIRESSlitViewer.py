@@ -202,10 +202,10 @@ class FitsViewer(QtGui.QMainWindow):
         self.wopen.setObjectName("wopen")
         self.wopen.clicked.connect(self.open_file)
         buttons_vbox_right.addWidget(self.wopen)
-        # self.wquit = QtGui.QPushButton("Quit")
-        # self.wquit.setObjectName("wquit")
-        # self.wquit.clicked.connect(self.quit)
-        # buttons_vbox_right.addWidget(self.wquit)
+        self.wquit = QtGui.QPushButton("Quit")
+        self.wquit.setObjectName("wquit")
+        self.wquit.clicked.connect(self.quit)
+        buttons_vbox_right.addWidget(self.wquit)
         hw = QtGui.QWidget()
         hw.setLayout(buttons_vbox_right)
         buttons_hbox.addWidget(hw)
@@ -295,10 +295,15 @@ class FitsViewer(QtGui.QMainWindow):
 
     def quit(self, *args):
         self.logger.info("Attempting to shut down the application...")
+        print('self.stop_scan()')
         self.stop_scan()
+        print('time.sleep(2)')
         time.sleep(2)
+        print('self.threadpool = False')
         self.threadpool = False
+        print('QtGui.QApplication.instance().quit()')
         QtGui.QApplication.instance().quit()
+        print('done')
 
     ##Full frame stuff
     def start_scan(self):

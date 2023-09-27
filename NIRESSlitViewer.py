@@ -562,7 +562,7 @@ class FitsViewer(QtGui.QMainWindow):
             self.box_readout.setText(text)
     
     def recenter(self):
-        self.fitsimage.set_pan(data_x, data_y)
+        image = self.fitsimage.get_image()
         width, height = image.get_size()
         data_x, data_y = width / 2.0, height / 2.0
         self.fitsimage.set_pan(data_x, data_y)

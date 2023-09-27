@@ -296,19 +296,13 @@ class FitsViewer(QtGui.QMainWindow):
 
     def quit(self, *args):
         self.logger.info("Attempting to shut down the application...")
-        print('self.stop_scan()')
         self.stop_scan()
-        print('time.sleep(2)')
         time.sleep(2)
-        # print('self.threadpool = False')
         # self.threadpool = False
-        print('QtGui.QApplication.instance().quit()')
         QtGui.QApplication.instance().quit()
-        print('done')
 
     ##Full frame stuff
     def start_scan(self):
-        print("starting scan")
         self.scanning = True
         # hdu = fits.PrimaryHDU()
         # try:

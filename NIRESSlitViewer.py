@@ -87,22 +87,6 @@ class FitsViewer(QtGui.QMainWindow):
         #KTL stuff
         #Cache KTL keywords
         self.slit_filename = ktl.cache('nids', 'FILENAME')
-        # self.trickxpos = ktl.cache('tds', 'TRKRO1X')
-        # self.trickypos = ktl.cache('tds', 'TRKRO1Y')
-        # self.trickxsize = ktl.cache('tds', 'TRKRO1SX')
-        # self.trickysize = ktl.cache('tds', 'TRKRO1SY')
-        # self.progress = ktl.cache('tds', 'progress')
-        # self.roipixels = ktl.cache('ao', 'TRKRO1PX')
-        # self.roipixels.monitor()
-        # self.tkenrup = ktl.cache('ao', 'tkenrup')
-        # self.tkcrxs = ktl.cache('ao','tkcrxs')
-        # self.tkcrys = ktl.cache('ao','tkcrys')
-        # self.tkcrevxp = ktl.cache('ao','tkcrevxp')
-        # self.tkcrevyp = ktl.cache('ao','tkcrevyp')
-        # self.tkcrevxo = ktl.cache('ao','tkcrevxo')
-        # self.tkcrevyo = ktl.cache('ao','tkcrevyo')
-        # self.tkcxim = ktl.cache('ao','tkcxim')
-        # self.tkcyim = ktl.cache('ao','tkcyim')
 
         self.rawfile = ''
         self.mode = ''
@@ -172,13 +156,13 @@ class FitsViewer(QtGui.QMainWindow):
         buttons_vbox_left = QtGui.QVBoxLayout()
         buttons_vbox_left.setContentsMargins(QtCore.QMargins(0, 0, 10, 0))
         buttons_vbox_left.setObjectName("buttons_vbox_left")
-        self.wcenter = QtGui.QPushButton("Center")
-        self.wcenter.setObjectName("wcenter")
+        # self.wcenter = QtGui.QPushButton("Center")
+        # self.wcenter.setObjectName("wcenter")
         # self.wcenter.clicked.connect(self.center)
-        buttons_vbox_left.addWidget(self.wcenter)
+        # buttons_vbox_left.addWidget(self.wcenter)
         self.wrecenter = QtGui.QPushButton("Re-center")
         self.wrecenter.setObjectName("wrecenter")
-        # self.wrecenter.clicked.connect(self.recenter)
+        self.wrecenter.clicked.connect(self.recenter)
         buttons_vbox_left.addWidget(self.wrecenter)
         hw = QtGui.QWidget()
         hw.setLayout(buttons_vbox_left)
@@ -576,17 +560,18 @@ class FitsViewer(QtGui.QMainWindow):
         except IndexError:
             text = "Amplitude: N/A FWHM: N/A"
             self.box_readout.setText(text)
-
-    # def panto(self, viewer):
-
-
+    
+    def recenter(self):
+        self.fitsimage.set_pan(data_x, data_y)
+        width, height = image.get_size()
+        data_x, data_y = width / 2.0, height / 2.0
+        self.fitsimage.set_pan(data_x, data_y)
 
     def btndown(self, canvas, event, data_x, data_y):
         self.xclick = data_x
         self.yclick = data_y
         self.fitsimage.set_pan(data_x, data_y)
-        # self.panto(self.fitsimage)
-        self.pickstar(self.fitsimage)
+        # self.pickstar(self.fitsimage)
 
 def main():
     ##Write dummy file so walkDirectory caches it in the beginning

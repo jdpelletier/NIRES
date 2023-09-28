@@ -329,7 +329,7 @@ class FitsViewer(QtGui.QMainWindow):
         name = 'tmp'
         text = f"Image: {name}"
         self.file_info.setText(text)
-        self.fitsimage.set_zoom(zoom)
+        self.fitsimage.zoom_to(zoom)
         if self.panx != 0 and self.pany != 0:
             self.fitsimage.set_pan(self.panx, self.pany)
     

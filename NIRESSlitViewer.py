@@ -87,6 +87,8 @@ class FitsViewer(QtGui.QMainWindow):
         #KTL stuff
         #Cache KTL keywords
         self.slit_filename = ktl.cache('nids', 'FILENAME')
+        self.go = ktl.cache('nids', 'GO')
+        self.go.monitor()
 
         self.rawfile = ''
         self.mode = ''
@@ -100,7 +102,7 @@ class FitsViewer(QtGui.QMainWindow):
         fi = CanvasView(self.logger, render='widget')
         fi.enable_autocuts('on')
         fi.set_autocut_params('zscale')
-        fi.enable_autozoom('on')
+        # fi.enable_autozoom('on')
         # fi.set_callback('drag-drop', self.drop_file)
         fi.set_bg(0.2, 0.2, 0.2)
         fi.ui_set_active(True)
@@ -156,10 +158,6 @@ class FitsViewer(QtGui.QMainWindow):
         buttons_vbox_left = QtGui.QVBoxLayout()
         buttons_vbox_left.setContentsMargins(QtCore.QMargins(0, 0, 10, 0))
         buttons_vbox_left.setObjectName("buttons_vbox_left")
-        # self.wcenter = QtGui.QPushButton("Center")
-        # self.wcenter.setObjectName("wcenter")
-        # self.wcenter.clicked.connect(self.center)
-        # buttons_vbox_left.addWidget(self.wcenter)
         self.wrecenter = QtGui.QPushButton("Re-center")
         self.wrecenter.setObjectName("wrecenter")
         self.wrecenter.clicked.connect(self.recenter)
@@ -208,6 +206,10 @@ class FitsViewer(QtGui.QMainWindow):
         # self.recdc, self.compdc = self.add_canvas()
         self.recdc = self.add_canvas()
         self.picktag = "pick-box"
+
+        #Keeping zoom and pan same over images
+        self.panx, self.pany = 0, 0
+        self.zoom = 1
 
         self.start_updating()
 
@@ -362,69 +364,20 @@ class FitsViewer(QtGui.QMainWindow):
 
     def scan(self, file_callback):
         while self.scanning:
-            hasNewFiles, files, self.cachedFiles = self.updateFileCache(self.cachedFiles)
-            if hasNewFiles and ('.fits' in files[0] or '.fits.gz' in files[0]) and ('v' in files[0]):
-                print("New Image Detected!")
-                filen = files[0]
-                self.waitForFileToBeUnlocked(filen, 1)
-                file_callback.emit(filen)
+            if self.go == 1:
+                print("Taking image")
+                self.waitForFileToBeUnlocked(1)
+                file_callback.emit(self.slit_filename.read())
             time.sleep(1)
 
-    def walkDirectory(self):
-        directory = self.nightpath()
-        return [abspath(join(directory, f)) for f in listdir(directory) if isfile(join(directory, f))]
-
-    def updateFileCache(self, cachedFiles):
-        updatedFileList = self.walkDirectory()
-        filtered = [i for i in updatedFileList if not i in cachedFiles]
-        cachedFiles = updatedFileList
-        return len(filtered) > 0, filtered, cachedFiles
-
     def fileIsCurrentlyLocked(self, filepath):
-        locked = None
-        hdulist = None
-        file_object = None
-        if os.path.exists(filepath):
-            try:
-                print("Trying to open %s." % filepath)
-                #time.sleep(15) #place holder if OSError catch doesn't work
-                hdulist = fits.open(filepath)
-
-                file_object = np.sum([1 for hdu in hdulist if type(hdu) in
-                        	[fits.hdu.image.PrimaryHDU, fits.hdu.image.ImageHDU]
-                        	and hdu.data is not None])
-                if file_object:
-                    locked = False
-
-            except TypeError:
-                locked = True
-
-            except OSError:
-                locked = True
-
-            finally:
-                if file_object:
-                    hdulist.close()
-
-        else:
-            print("%s not found." % filepath)
-
+        locked = True
+        if self.go == 0:
+            locked = False
         return locked
 
-
-    #    Checks if the files are ready.
-    #    For a file to be ready it must exist and can be opened in append mode.
-
     def waitForFileToBeUnlocked(self, filename, wait_time):
-        # if the file doesn't exist, wait wait_time seconds and try again until it's found
-        while not os.path.exists(filename):
-            print("%s hasn't arrived. Waiting %s seconds." % (filename, wait_time))
-            time.sleep(wait_time)
-
-        # if the file exists but locked, wait wait_time seconds and check
-        # again until it's no longer locked by another process
         while self.fileIsCurrentlyLocked(filename):
-            # print(self.progress.read())
             time.sleep(wait_time)
 
     def nightpath(self):

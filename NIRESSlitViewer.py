@@ -163,6 +163,10 @@ class FitsViewer(QtGui.QMainWindow):
         self.wrecenter.setObjectName("wrecenter")
         self.wrecenter.clicked.connect(self.recenter)
         buttons_vbox_left.addWidget(self.wrecenter)
+        self.wzoomtofit = QtGui.QPushButton("Re-center")
+        self.wzoomtofit.setObjectName("wzoomtofit")
+        self.wzoomtofit.clicked.connect(self.zoomtofit)
+        buttons_vbox_left.addWidget(self.wzoomtofit)
         hw = QtGui.QWidget()
         hw.setLayout(buttons_vbox_left)
         buttons_hbox.addWidget(hw)
@@ -525,6 +529,9 @@ class FitsViewer(QtGui.QMainWindow):
         width, height = image.get_size()
         data_x, data_y = width / 2.0, height / 2.0
         self.fitsimage.set_pan(data_x, data_y)
+
+    def zoomtofit(self):
+        self.fitsimage.zoom_fit()
 
     def btndown(self, canvas, event, data_x, data_y):
         self.xclick = data_x

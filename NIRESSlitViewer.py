@@ -330,8 +330,8 @@ class FitsViewer(QtGui.QMainWindow):
         text = f"Image: {name}"
         self.file_info.setText(text)
         # self.fitsimage.zoom_to(zoom)
-        # if self.panx != 0 and self.pany != 0:
-        #     self.fitsimage.set_pan(self.panx, self.pany)
+        if self.panx != 0 and self.pany != 0:
+            self.fitsimage.set_pan(self.panx, self.pany)
     
 
     def open_file(self):

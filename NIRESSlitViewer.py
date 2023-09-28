@@ -314,6 +314,7 @@ class FitsViewer(QtGui.QMainWindow):
         zoom = self.fitsimage.get_zoom()
         image = load_data(filepath, logger=self.logger)
         self.fitsimage.set_image(image)
+        self.fitsimage.set_fg(0,0,1)
         # self.setWindowTitle(filepath)
         try:
             self.fitsimage.get_canvas().get_object_by_tag(self.picktag)

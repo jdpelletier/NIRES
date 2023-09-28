@@ -328,6 +328,9 @@ class FitsViewer(QtGui.QMainWindow):
         name = 'tmp'
         text = f"Image: {name}"
         self.file_info.setText(text)
+        if self.panx != 0 and self.pany != 0:
+            self.fitsimage.set_pan(self.panx, self.pany)
+    
 
     def open_file(self):
         res = QtGui.QFileDialog.getOpenFileName(self, "Open FITS file",
@@ -523,6 +526,8 @@ class FitsViewer(QtGui.QMainWindow):
     def btndown(self, canvas, event, data_x, data_y):
         self.xclick = data_x
         self.yclick = data_y
+        self.panx = data_x
+        self.pany = data_y
         self.fitsimage.set_pan(data_x, data_y)
         # self.pickstar(self.fitsimage)
 

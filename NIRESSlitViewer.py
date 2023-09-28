@@ -103,6 +103,7 @@ class FitsViewer(QtGui.QMainWindow):
         fi.enable_autocuts('on')
         fi.set_autocut_params('zscale')
         fi.enable_autozoom('off')
+        fi.enable_autocenter('off')
         # fi.set_callback('drag-drop', self.drop_file)
         # fi.set_bg(0.2, 0.2, 0.2)
         fi.ui_set_active(True)
@@ -330,8 +331,8 @@ class FitsViewer(QtGui.QMainWindow):
         text = f"Image: {name}"
         self.file_info.setText(text)
         # self.fitsimage.zoom_to(zoom)
-        if self.panx != 0 and self.pany != 0:
-            self.fitsimage.set_pan(self.panx, self.pany)
+        # if self.panx != 0 and self.pany != 0:
+        #     self.fitsimage.set_pan(self.panx, self.pany)
     
 
     def open_file(self):

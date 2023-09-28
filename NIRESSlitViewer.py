@@ -163,7 +163,7 @@ class FitsViewer(QtGui.QMainWindow):
         self.wrecenter.setObjectName("wrecenter")
         self.wrecenter.clicked.connect(self.recenter)
         buttons_vbox_left.addWidget(self.wrecenter)
-        self.wzoomtofit = QtGui.QPushButton("Re-center")
+        self.wzoomtofit = QtGui.QPushButton("Zoom to Fit")
         self.wzoomtofit.setObjectName("wzoomtofit")
         self.wzoomtofit.clicked.connect(self.zoomtofit)
         buttons_vbox_left.addWidget(self.wzoomtofit)

@@ -104,6 +104,7 @@ class FitsViewer(QtGui.QMainWindow):
         fi.set_autocut_params('zscale')
         fi.enable_autozoom('off')
         fi.enable_autocenter('off')
+        fi.set_bg(0,0,1)
         # fi.set_callback('drag-drop', self.drop_file)
         # fi.set_bg(0.2, 0.2, 0.2)
         fi.ui_set_active(True)
@@ -208,10 +209,6 @@ class FitsViewer(QtGui.QMainWindow):
         self.recdc = self.add_canvas()
         self.picktag = "pick-box"
 
-        #Keeping zoom and pan same over images
-        self.panx, self.pany = 0, 0
-        self.zoom = 1
-
         self.start_updating()
 
     def start_updating(self):
@@ -312,7 +309,6 @@ class FitsViewer(QtGui.QMainWindow):
         self.wstopscan.setEnabled(False)
 
     def load_file(self, filepath):
-        zoom = self.fitsimage.get_zoom()
         image = load_data(filepath, logger=self.logger)
         self.fitsimage.set_image(image)
         # self.setWindowTitle(filepath)
@@ -330,9 +326,6 @@ class FitsViewer(QtGui.QMainWindow):
         name = 'tmp'
         text = f"Image: {name}"
         self.file_info.setText(text)
-        # self.fitsimage.zoom_to(zoom)
-        # if self.panx != 0 and self.pany != 0:
-        #     self.fitsimage.set_pan(self.panx, self.pany)
     
 
     def open_file(self):
@@ -526,8 +519,6 @@ class FitsViewer(QtGui.QMainWindow):
     def btndown(self, canvas, event, data_x, data_y):
         self.xclick = data_x
         self.yclick = data_y
-        self.panx = data_x
-        self.pany = data_y
         self.fitsimage.set_pan(data_x, data_y)
         # self.pickstar(self.fitsimage)
 

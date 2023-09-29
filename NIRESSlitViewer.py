@@ -361,7 +361,8 @@ class FitsViewer(QtGui.QMainWindow):
         previous = fits.getdata('/s/sdata1500/nires3/2023sep29//v230929_0035.fits')
         # previous = fits.getdata(str(self.previous_image))
         subtracted = data - previous
-        load_data(subtracted)
+        self.load_file(self.writeFits(header, subtracted))
+        # load_data(subtracted)
 
 
     # def load_sky(self):
@@ -464,15 +465,15 @@ class FitsViewer(QtGui.QMainWindow):
     #     header = w.to_header()
     #     return name, header, fitsData, filter
 
-    # def writeFits(self, headerinfo, image_data):
-    #     hdu = fits.PrimaryHDU(header=headerinfo, data=image_data)
-    #     filename = 'procImage.fits'
-    #     try:
-    #         hdu.writeto(filename)
-    #     except OSError:
-    #         os.remove(filename)
-    #         hdu.writeto(filename)
-    #     return filename
+    def writeFits(self, headerinfo, image_data):
+        hdu = fits.PrimaryHDU(header=headerinfo, data=image_data)
+        filename = 'procImage.fits'
+        try:
+            hdu.writeto(filename)
+        except OSError:
+            os.remove(filename)
+            hdu.writeto(filename)
+        return filename
 
     ##Find star stuff
     def cutdetail(self, image, shape_obj):

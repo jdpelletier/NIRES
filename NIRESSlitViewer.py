@@ -358,6 +358,7 @@ class FitsViewer(QtGui.QMainWindow):
         image = self.fitsimage.get_image()
         data = image.get_data()
         header = image.get_header()
+        print(header)
         previous = fits.getdata('/s/sdata1500/nires3/2023sep29//v230929_0035.fits')
         # previous = fits.getdata(str(self.previous_image))
         subtracted = data - previous

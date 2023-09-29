@@ -382,14 +382,14 @@ class FitsViewer(QtGui.QMainWindow):
                 file_callback.emit(self.slit_filename)
             time.sleep(1)
 
-    def fileIsCurrentlyLocked(self, filepath):
+    def fileIsCurrentlyLocked(self):
         locked = True
         if self.go == 0:
             locked = False
         return locked
 
     def waitForFileToBeUnlocked(self, wait_time):
-        while self.fileIsCurrentlyLocked(filename):
+        while self.fileIsCurrentlyLocked():
             time.sleep(wait_time)
 
     def nightpath(self):

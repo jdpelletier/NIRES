@@ -88,6 +88,7 @@ class FitsViewer(QtGui.QMainWindow):
         #Cache KTL keywords
         self.slit_filename = ktl.cache('nids', 'FILENAME')
         self.slit_filename.monitor()
+        self.slit_lastfile = ktl.cache('nids', 'LASTFILE')
         self.go = ktl.cache('nids', 'GO')
         self.go.monitor()
 
@@ -175,20 +176,20 @@ class FitsViewer(QtGui.QMainWindow):
         hw = QtGui.QWidget()
         hw.setLayout(buttons_vbox_left)
         buttons_hbox.addWidget(hw)
-        # buttons_vbox_cent = QtGui.QVBoxLayout()
-        # buttons_vbox_cent.setObjectName("buttons_vbox_cent")
-        # self.wstartscan = QtGui.QPushButton("Start Scan")
-        # self.wstartscan.setObjectName("wstartscan")
-        # self.wstartscan.clicked.connect(self.start_scan)
-        # buttons_vbox_cent.addWidget(self.wstartscan)
+        buttons_vbox_cent = QtGui.QVBoxLayout()
+        buttons_vbox_cent.setObjectName("buttons_vbox_cent")
+        self.wsdiff = QtGui.QPushButton("SDiff")
+        self.wsdiff.setObjectName("wsdiff")
+        self.wsdiff.clicked.connect(self.sdiff)
+        buttons_vbox_cent.addWidget(self.wsdiff)
         # self.wstopscan = QtGui.QPushButton("Stop Scan")
         # self.wstopscan.setObjectName("wstopscan")
         # self.wstopscan.clicked.connect(self.stop_scan)
         # self.wstopscan.setEnabled(False)
         # buttons_vbox_cent.addWidget(self.wstopscan)
-        # hw = QtGui.QWidget()
-        # hw.setLayout(buttons_vbox_cent)
-        # buttons_hbox.addWidget(hw)
+        hw = QtGui.QWidget()
+        hw.setLayout(buttons_vbox_cent)
+        buttons_hbox.addWidget(hw)
         buttons_vbox_right = QtGui.QVBoxLayout()
         buttons_vbox_right.setObjectName("buttons_vbox_right")
         self.wopen = QtGui.QPushButton("Open File")
@@ -353,6 +354,16 @@ class FitsViewer(QtGui.QMainWindow):
         if len(fileName) != 0:
             self.load_file(fileName)
 
+    def sdiff(self):
+        image = self.fitsimage.get_image()
+        data = fits.getData(image)
+        header = fits.getheader(image)
+        previous = fits.getdata('/s/sdata1500/nires3/2023sep29//v230929_0035.fits')
+        # previous = fits.getdata(str(self.previous_image))
+        subtracted = data - previous
+        self.load_data(header, subtracted)
+
+
     # def load_sky(self):
     #     res = QtGui.QFileDialog.getOpenFileName(self, "Open Sky file",
     #                                             str(self.nightpath()))
@@ -378,6 +389,7 @@ class FitsViewer(QtGui.QMainWindow):
     def scan(self, file_callback):
         while self.scanning:
             if (self.go == 1) and ("v" in self.slit_filename):
+                self.previous_image = self.slit_lastfile.read()
                 print("Taking image")
                 self.waitForFileToBeUnlocked(0.5)
                 file_callback.emit(str(self.slit_filename.read()))

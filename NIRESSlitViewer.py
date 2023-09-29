@@ -339,12 +339,12 @@ class FitsViewer(QtGui.QMainWindow):
         self.file_info.setText(text)
         if recenter == True:
             self.recenter()
+        print(f"Loaded {filepath}")
     
 
     def open_file(self):
         res = QtGui.QFileDialog.getOpenFileName(self, "Open FITS file",
                                                 str(self.nightpath()))
-        print(res)
         if isinstance(res, tuple):
             fileName = res[0]
         else:

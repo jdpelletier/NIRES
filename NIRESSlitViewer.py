@@ -105,7 +105,7 @@ class FitsViewer(QtGui.QMainWindow):
         fi.set_autocut_params('zscale')
         fi.enable_autozoom('off')
         fi.enable_autocenter('off')
-        fi.set_color_map('YlOrBr_r')
+        # fi.set_color_map('YlOrBr_r')
         # fi.set_callback('drag-drop', self.drop_file)
         # fi.set_bg(0.2, 0.2, 0.2)
         fi.ui_set_active(True)

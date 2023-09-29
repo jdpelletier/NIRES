@@ -357,12 +357,12 @@ class FitsViewer(QtGui.QMainWindow):
     def sdiff(self):
         image = self.fitsimage.get_image()
         data = image.get_data()
-        header = image.get_header()
-        print(header)
+        # header = image.get_header()
         previous = fits.getdata('/s/sdata1500/nires3/2023sep29//v230929_0035.fits')
         # previous = fits.getdata(str(self.previous_image))
         subtracted = data - previous
-        self.load_file(self.writeFits(header, subtracted))
+        self.img.load_data(subtracted)
+        # self.load_file(self.writeFits(header, subtracted))
         # load_data(subtracted)
 
 

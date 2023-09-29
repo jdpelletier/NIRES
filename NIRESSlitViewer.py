@@ -303,7 +303,6 @@ class FitsViewer(QtGui.QMainWindow):
         # except OSError:
         #     os.remove('procImage.fits')
         #     hdu.writeto('procImage.fits')
-        self.cachedFiles = self.walkDirectory()
         print("scan started...")
         scanner = Scanner(self.scan)
         scanner.signals.load.connect(self.load_file)
@@ -537,7 +536,6 @@ class FitsViewer(QtGui.QMainWindow):
         # self.pickstar(self.fitsimage)
 
 def main():
-    ##Write dummy file so walkDirectory caches it in the beginning
 
     app = QtGui.QApplication([])
 

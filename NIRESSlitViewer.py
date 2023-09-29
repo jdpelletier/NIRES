@@ -317,6 +317,8 @@ class FitsViewer(QtGui.QMainWindow):
         self.wstopscan.setEnabled(False)
 
     def load_file(self, filepath):
+        image = self.fitsimage.get_image()
+        print(image)
         image = load_data(filepath, logger=self.logger)
         self.fitsimage.set_image(image)
         # self.setWindowTitle(filepath)

@@ -388,7 +388,7 @@ class FitsViewer(QtGui.QMainWindow):
             locked = False
         return locked
 
-    def waitForFileToBeUnlocked(self, filename, wait_time):
+    def waitForFileToBeUnlocked(self, wait_time):
         while self.fileIsCurrentlyLocked(filename):
             time.sleep(wait_time)
 

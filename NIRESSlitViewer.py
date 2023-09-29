@@ -361,7 +361,7 @@ class FitsViewer(QtGui.QMainWindow):
         previous = fits.getdata('/s/sdata1500/nires3/2023sep29//v230929_0035.fits')
         # previous = fits.getdata(str(self.previous_image))
         subtracted = data - previous
-        load_data(header, subtracted)
+        load_data(subtracted)
 
 
     # def load_sky(self):

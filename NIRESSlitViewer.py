@@ -378,7 +378,7 @@ class FitsViewer(QtGui.QMainWindow):
         while self.scanning:
             if (self.go == 1) and ("v" in self.slit_filename):
                 print("Taking image")
-                self.waitForFileToBeUnlocked(1)
+                self.waitForFileToBeUnlocked(0.5)
                 file_callback.emit(str(self.slit_filename.read()))
             time.sleep(1)
 

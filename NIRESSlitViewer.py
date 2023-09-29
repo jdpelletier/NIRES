@@ -135,7 +135,7 @@ class FitsViewer(QtGui.QMainWindow):
         for name in cmap.get_names():
             self.wcmap.addItem(name)
         self.wcmap.currentIndexChanged.connect(self.cmap_change)
-        self.wcut.setCurrentText('gray')
+        self.wcmap.setCurrentText('gray')
         readout_hbox.addWidget(self.wcmap)
         self.wcut = QtGui.QComboBox()
         for name in fi.get_autocut_methods():

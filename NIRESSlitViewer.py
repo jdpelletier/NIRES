@@ -14,7 +14,7 @@ from astropy.stats import gaussian_sigma_to_fwhm
 from astropy.modeling import models, fitting
 import PIL.Image as PILimage
 
-from ginga import Bindings
+from ginga import Bindings, cmap
 from ginga.misc import log
 from ginga.qtw.QtHelp import QtGui, QtCore
 from ginga.qtw.ImageViewQt import CanvasView, ScrolledView
@@ -87,6 +87,7 @@ class FitsViewer(QtGui.QMainWindow):
         #KTL stuff
         #Cache KTL keywords
         self.slit_filename = ktl.cache('nids', 'FILENAME')
+        self.slit_filename.monitor()
         self.go = ktl.cache('nids', 'GO')
         self.go.monitor()
 
@@ -130,6 +131,11 @@ class FitsViewer(QtGui.QMainWindow):
         self.readout.setObjectName("readout")
         self.readout.setMinimumSize(QtCore.QSize(350, 0))
         readout_hbox.addWidget(self.readout)
+        self.wcmap = QtGui.QComboBox()
+        for name in cmap.get_names():
+            self.wcmap.addItem(name)
+        self.wcmap.currentIndexChanged.connect(self.cmap_change)
+        readout_hbox.addWidget(self.wcmap)
         self.wcut = QtGui.QComboBox()
         for name in fi.get_autocut_methods():
             self.wcut.addItem(name)
@@ -226,7 +232,7 @@ class FitsViewer(QtGui.QMainWindow):
         self.updating = False
 
     def update_gui(self):
-        name = self.slit_filename.read()
+        name = self.slit_filename
         self.file_info.setText(f"Name: {name}")
 
     def add_canvas(self, tag=None):
@@ -237,6 +243,8 @@ class FitsViewer(QtGui.QMainWindow):
         # return RecCanvas, CompCanvas
         return RecCanvas
 
+    def cmap_change(self):
+        self.fitsimage.set_color_map(self.wcmap.currentText())
 
     def cut_change(self):
         self.fitsimage.set_autocut_params(self.wcut.currentText())
@@ -363,10 +371,10 @@ class FitsViewer(QtGui.QMainWindow):
 
     def scan(self, file_callback):
         while self.scanning:
-            if self.go == 1:
+            if (self.go == 1) and ("v" in self.slit_filename):
                 print("Taking image")
                 self.waitForFileToBeUnlocked(1)
-                file_callback.emit(self.slit_filename.read())
+                file_callback.emit(self.slit_filename)
             time.sleep(1)
 
     def fileIsCurrentlyLocked(self, filepath):
@@ -380,7 +388,7 @@ class FitsViewer(QtGui.QMainWindow):
             time.sleep(wait_time)
 
     def nightpath(self):
-        file = self.slit_filename.read()
+        file = self.slit_filename
         dir = file.split("//")
         path = dir[0]
         nightly = Path(path)

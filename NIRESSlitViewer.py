@@ -141,6 +141,7 @@ class FitsViewer(QtGui.QMainWindow):
         for name in fi.get_autocut_methods():
             self.wcut.addItem(name)
         self.wcut.currentIndexChanged.connect(self.cut_change)
+        self.wcut.setCurrentText('zscale')
         readout_hbox.addWidget(self.wcut)
         self.wcolor = QtGui.QComboBox()
         for name in fi.get_color_algorithms():

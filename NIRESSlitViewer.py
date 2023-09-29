@@ -389,6 +389,7 @@ class FitsViewer(QtGui.QMainWindow):
 
     def nightpath(self):
         file = self.slit_filename
+        print(self.slit_filename)
         dir = file.split("//")
         path = dir[0]
         nightly = Path(path)

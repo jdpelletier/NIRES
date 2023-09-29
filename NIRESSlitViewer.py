@@ -317,8 +317,8 @@ class FitsViewer(QtGui.QMainWindow):
         self.wstopscan.setEnabled(False)
 
     def load_file(self, filepath):
-        image = self.fitsimage.get_image()
-        print(image)
+        if self.fitsimage.get_image() == None:
+            recenter = True
         image = load_data(filepath, logger=self.logger)
         self.fitsimage.set_image(image)
         # self.setWindowTitle(filepath)
@@ -336,6 +336,8 @@ class FitsViewer(QtGui.QMainWindow):
         name = 'tmp'
         text = f"Image: {name}"
         self.file_info.setText(text)
+        if recenter == True:
+            self.recenter()
     
 
     def open_file(self):

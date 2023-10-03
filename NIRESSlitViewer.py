@@ -234,6 +234,7 @@ class FitsViewer(QtGui.QMainWindow):
 
         self.sky = ""
         self.curentfile = ""
+        self.sdiff_done = False
 
         self.start_updating()
 
@@ -354,6 +355,7 @@ class FitsViewer(QtGui.QMainWindow):
         print(f"Loaded {filepath}")
         self.wsky.setEnabled(True)
         self.wsdiff.setEnabled(True)
+        self.sdiff_done = False
         if self.sky != "":
             self.subtract_sky(self.sky)
 
@@ -386,12 +388,18 @@ class FitsViewer(QtGui.QMainWindow):
             self.load_file(fileName)
 
     def sdiff(self):
-        image = self.fitsimage.get_image()
-        data = image.get_data()
-        # previous = fits.getdata('/s/sdata1500/nires3/2023sep29//v230929_0035.fits')
-        previous = fits.getdata(str(self.previous_image))
-        subtracted = data - previous
-        self.fitsimage.set_data(subtracted)
+        if self.sdiff_done == False:
+            image = self.fitsimage.get_image()
+            data = image.get_data()
+            # previous = fits.getdata('/s/sdata1500/nires3/2023sep29//v230929_0035.fits')
+            previous = fits.getdata(str(self.previous_image))
+            subtracted = data - previous
+            self.fitsimage.set_data(subtracted)
+            self.sdiff_done = True
+        else:
+            image = load_data(self.currentfile, logger=self.logger)
+            self.fitsimage.set_image(image)
+            self.sdiff_done = False
 
     def subtract_sky(self, file):
         image = self.fitsimage.get_image()

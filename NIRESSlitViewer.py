@@ -250,7 +250,8 @@ class FitsViewer(QtGui.QMainWindow):
 
     def update_gui(self):
         name = self.slit_filename
-        self.file_info.setText(f"Name: {name}")
+        self.file_info.setText(f"File: {name}")
+        self.sky_info.setText(f"Sky: {self.sky}")
 
     def add_canvas(self, tag=None):
         # add a canvas to the view
@@ -369,6 +370,8 @@ class FitsViewer(QtGui.QMainWindow):
         if len(fileName) != 0:
             self.sky = fileName
             self.subtract_sky(self.sky)
+            text = f"Image: {name}"
+            self.sky_info.setText(text)
     
 
     def open_file(self):

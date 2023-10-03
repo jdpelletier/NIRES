@@ -356,7 +356,7 @@ class FitsViewer(QtGui.QMainWindow):
         if recenter == True:
             self.recenter()
         print(f"Loaded {filepath}")
-        if self.skyset != "":
+        if self.sky != "":
             self.subtract_sky(self.sky)
 
     def load_sky(self):

@@ -360,8 +360,8 @@ class FitsViewer(QtGui.QMainWindow):
             self.subtract_sky(self.sky)
 
     def load_sky(self):
-        res = QtGui.QFileDialog.getOpenFileName(self, "Open Sky file",
-                                                str(self.nightpath()), "FITS files (*.fits)")
+        res = QtGui.QFileDialog.getOpenFileName(self, "Load Sky file",
+                                                str(self.nightpath()))
         if isinstance(res, tuple):
             fileName = res[0]
         else:
@@ -394,8 +394,11 @@ class FitsViewer(QtGui.QMainWindow):
         data = image.get_data()
         # previous = fits.getdata('/s/sdata1500/nires3/2023sep29//v230929_0035.fits')
         sky = fits.getdata(file)
-        subtracted = data - sky
-        self.fitsimage.set_data(subtracted)
+        try:
+            subtracted = data - sky
+            self.fitsimage.set_data(subtracted)
+        except ValueError:
+            self.fitsimage.set_data(data)
 
 
     # def load_sky(self):

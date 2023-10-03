@@ -416,10 +416,10 @@ class FitsViewer(QtGui.QMainWindow):
             time.sleep(1)
 
     def fileIsCurrentlyLocked(self):
-        print(f'{self.go} locked')
+        print(f'go {self.go} test {self.test} locked')
         locked = True
-        if int(self.go.read()) == 0:
-            print(f'{self.go} unlocked')
+        if int(self.go.read()) == 0 and int(self.test.read() == 0):
+            print(f'go {self.go} test {self.test} unlocked')
             locked = False
         return locked
 

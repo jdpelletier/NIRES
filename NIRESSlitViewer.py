@@ -196,7 +196,7 @@ class FitsViewer(QtGui.QMainWindow):
         self.wsky.clicked.connect(self.load_sky)
         self.wsky.setEnabled(False)
         buttons_vbox_cent.addWidget(self.wsky)
-        self.wclearsky = QtGui.QPushButton("SDiff")
+        self.wclearsky = QtGui.QPushButton("Clear Sky")
         self.wclearsky.setObjectName("wclearsky")
         self.wclearsky.clicked.connect(self.clearsky)
         self.wclearsky.setEnabled(False)

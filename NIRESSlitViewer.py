@@ -181,19 +181,25 @@ class FitsViewer(QtGui.QMainWindow):
         self.wrecenter.setObjectName("wrecenter")
         self.wrecenter.clicked.connect(self.recenter)
         buttons_vbox_left.addWidget(self.wrecenter)
+        self.wsdiff = QtGui.QPushButton("SDiff")
+        self.wsdiff.setObjectName("wsdiff")
+        self.wsdiff.clicked.connect(self.sdiff)
+        buttons_vbox_left.addWidget(self.wsdiff)
         hw = QtGui.QWidget()
         hw.setLayout(buttons_vbox_left)
         buttons_hbox.addWidget(hw)
         buttons_vbox_cent = QtGui.QVBoxLayout()
         buttons_vbox_cent.setObjectName("buttons_vbox_cent")
-        self.wsdiff = QtGui.QPushButton("SDiff")
-        self.wsdiff.setObjectName("wsdiff")
-        self.wsdiff.clicked.connect(self.sdiff)
-        buttons_vbox_cent.addWidget(self.wsdiff)
         self.wsky = QtGui.QPushButton("Load Sky")
         self.wsky.setObjectName("wsky")
         self.wsky.clicked.connect(self.load_sky)
+        self.wsky.setEnabled(False)
         buttons_vbox_cent.addWidget(self.wsky)
+        self.wclearsky = QtGui.QPushButton("SDiff")
+        self.wclearsky.setObjectName("wclearsky")
+        self.wclearsky.clicked.connect(self.clearsky)
+        self.wclearsky.setEnabled(False)
+        buttons_vbox_cent.addWidget(self.wclearsky)
         # self.wstopscan = QtGui.QPushButton("Stop Scan")
         # self.wstopscan.setObjectName("wstopscan")
         # self.wstopscan.clicked.connect(self.stop_scan)
@@ -345,15 +351,10 @@ class FitsViewer(QtGui.QMainWindow):
             self.fitsimage.get_canvas().delete_object_by_tag(self.picktag)
         except KeyError:
             pass
-        # width, height = image.get_size()
-        # data_x, data_y = width / 2.0, height / 2.0
-        # # x, y = self.fitsimage.get_canvas_xy(data_x, data_y)
-        # radius = float(max(width, height)) / 20
-        # self.fitsimage.get_canvas().add(self.compdc(data_x, data_y, radius, color='skyblue',
-        #                                fontsize=8))
         if recenter == True:
             self.recenter()
         print(f"Loaded {filepath}")
+        self.wsky.setEnabled(True)
         if self.sky != "":
             self.subtract_sky(self.sky)
 
@@ -366,8 +367,11 @@ class FitsViewer(QtGui.QMainWindow):
             fileName = str(res)
         if len(fileName) != 0:
             self.sky = fileName
+            self.wclearsky.setEnabled(True)
             self.subtract_sky(self.sky)
     
+    def clearsky(self):
+        self.sky = ""
 
     def open_file(self):
         res = QtGui.QFileDialog.getOpenFileName(self, "Open FITS file",

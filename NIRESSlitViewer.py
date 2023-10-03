@@ -351,7 +351,6 @@ class FitsViewer(QtGui.QMainWindow):
         # radius = float(max(width, height)) / 20
         # self.fitsimage.get_canvas().add(self.compdc(data_x, data_y, radius, color='skyblue',
         #                                fontsize=8))
-        self.file_info.setText(text)
         if recenter == True:
             self.recenter()
         print(f"Loaded {filepath}")
@@ -368,7 +367,6 @@ class FitsViewer(QtGui.QMainWindow):
         if len(fileName) != 0:
             self.sky = fileName
             self.subtract_sky(self.sky)
-            text = f"Image: {name}"
             self.sky_info.setText(text)
     
 

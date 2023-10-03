@@ -412,7 +412,7 @@ class FitsViewer(QtGui.QMainWindow):
             if (self.go == 1) and ("v" in self.slit_filename):
                 self.previous_image = self.slit_lastfile.read()
                 print("Taking image")
-                self.waitForFileToBeUnlocked(0.5)
+                self.waitForFileToBeUnlocked(0.1)
                 file_callback.emit(str(self.slit_filename.read()))
             time.sleep(1)
 

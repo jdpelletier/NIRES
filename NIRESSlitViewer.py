@@ -287,20 +287,6 @@ class FitsViewer(QtGui.QMainWindow):
 
         fits_x, fits_y = data_x, data_y
 
-        # Calculate WCS RA
-        # try:
-        #     # NOTE: image function operates on DATA space coords
-        #     image = viewer.get_image()
-        #     if image is None:
-        #         # No image loaded
-        #         return
-        #     ra_txt, dec_txt = image.pixtoradec(fits_x, fits_y,
-        #                                        format='str', coords='fits')
-        # except Exception as e:
-        #     self.logger.warning("Bad coordinate conversion: %s" % (
-        #         str(e)))
-        #     ra_txt = 'BAD WCS'
-        #     dec_txt = 'BAD WCS'
         if (fits_x > 2048 or fits_x <0) or (fits_y > 2048 or fits_y <0):
             text = "X: Y:  Value:"
             self.readout.setText(text)
@@ -395,10 +381,12 @@ class FitsViewer(QtGui.QMainWindow):
             previous = fits.getdata(str(self.previous_image))
             subtracted = data - previous
             self.fitsimage.set_data(subtracted)
+            self.wsdiff.setText("Undo SDiff")
             self.sdiff_done = True
         else:
             image = load_data(self.currentfile, logger=self.logger)
             self.fitsimage.set_image(image)
+            self.wsdiff.setText("SDiff")
             self.sdiff_done = False
 
     def subtract_sky(self, file):
@@ -411,27 +399,6 @@ class FitsViewer(QtGui.QMainWindow):
             self.fitsimage.set_data(subtracted)
         except ValueError:
             self.fitsimage.set_data(data)
-
-
-    # def load_sky(self):
-    #     res = QtGui.QFileDialog.getOpenFileName(self, "Open Sky file",
-    #                                             str(self.nightpath()))
-    #     if isinstance(res, tuple):
-    #         fileName = res[0]
-    #     else:
-    #         fileName = str(res)
-    #     if len(fileName) != 0:
-    #         self.subtract_sky(fileName)
-
-    # def subtract_sky(self, filename):
-    #     skyname, skyheader, skyfitsData, skyfilter = self.addWcs(filename)
-    #     name, header, fitsData, filter = self.addWcs(self.rawfile)
-    #     with_sky = fitsData - skyfitsData
-    #     mask = fits.getdata('/kroot/rel/ao/qfix/data/Trick/BadPix_1014Hz.fits', ext=0)
-    #     text = f"Sky: {skyname}"
-    #     self.sky_info.setText(text)
-    #     self.load_file(self.writeFits(header, np.multiply(with_sky, mask)))
-
 
     ##Start of image find and processing code
 
@@ -462,57 +429,7 @@ class FitsViewer(QtGui.QMainWindow):
         dir = str(file).split("//")
         path = dir[0]
         nightly = Path(path)
-        # date = datetime.datetime.utcnow()
-        # year, month, day = str(date.strftime("%y")), str(date.strftime("%m")), str(date.strftime("%d"))
-        # nightly = nightly / year / month / day / 'Trick'
         return nightly
-
-    # def processData(self, filename):
-    #     self.rawfile = filename
-    #     name, header, fitsData, filter = self.addWcs(filename)
-        # mask = fits.getdata('/kroot/rel/ao/qfix/data/Trick/BadPix_1014Hz.fits', ext=0)
-        # if filter == 'H':
-        #     background = fits.getdata('/kroot/rel/ao/qfix/data/Trick/sky_H.fits')
-        #     self.sky_info.setText('Sky: sky_H.fits')
-        # else:
-        #     background = fits.getdata('/kroot/rel/ao/qfix/data/Trick/sky_Ks.fits')
-        #     self.sky_info.setText('sky_Ks.fits')
-        # subtracted_data = fitsData-background
-        # self.load_file(self.writeFits(header, np.multiply(subtracted_data, mask)))
-    #     self.load_file(self.writeFits(header, fitsData))
-    #     text = f"Image: {name}"
-    #     self.image_info.setText(text)
-    #     text = f"Filter: {filter}"
-    #     self.filt_info.setText(text)
-    #     self.wsky.setEnabled(True)
-
-    # def addWcs(self, filen):
-    #     w = wcs.WCS(naxis=2)
-    #     fitsData = fits.getdata(filen, ext=0)
-    #     header = fits.getheader(filen)
-    #     ht, wd = fitsData.shape[:2]
-    #     y = ht//2
-    #     x = wd//2
-    #     name = header['DATAFILE']
-    #     ra = float(header['RA'])
-    #     dec = float(header['DEC'])
-    #     rot = float(header['ROTPOSN'])
-    #     filter = header['TRFWNAME']
-    #     w.wcs.crpix = [y, x]
-    #     w.wcs.cdelt = np.array([-0.05, 0.05])
-    #     w.wcs.crota = np.array([0.05, rot])
-    #     w.wcs.crval = [ra, dec]
-    #     w.wcs.ctype = ["RA---TAN", "DEC--TAN"]
-    #     pixcrd = np.array([[0, 0], [24, 38], [45, 98]], dtype=np.float64)
-    #     world = w.wcs_pix2world(pixcrd, 0)
-    #     # Convert the same coordinates back to pixel coordinates.
-    #     pixcrd2 = w.wcs_world2pix(world, 0)
-    #     # These should be the same as the original pixel coordinates, modulo
-    #     # some floating-point error.
-    #     assert np.max(np.abs(pixcrd - pixcrd2)) < 1e-6
-    #     # Now, write out the WCS object as a FITS header
-    #     header = w.to_header()
-    #     return name, header, fitsData, filter
 
     def writeFits(self, headerinfo, image_data):
         hdu = fits.PrimaryHDU(header=headerinfo, data=image_data)

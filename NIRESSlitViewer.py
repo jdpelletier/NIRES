@@ -233,6 +233,7 @@ class FitsViewer(QtGui.QMainWindow):
         self.picktag = "pick-box"
 
         self.sky = ""
+        self.curentfile = ""
 
         self.start_updating()
 
@@ -336,6 +337,7 @@ class FitsViewer(QtGui.QMainWindow):
         # self.wstopscan.setEnabled(False)
 
     def load_file(self, filepath):
+        self.currentfile = filepath
         recenter = False
         if self.fitsimage.get_image() == None:
             recenter = True
@@ -369,7 +371,9 @@ class FitsViewer(QtGui.QMainWindow):
     
     def clearsky(self):
         self.sky = ""
-        self.wsky.setEnabled(False)
+        image = load_data(self.currentfile, logger=self.logger)
+        self.fitsimage.set_image(image)
+        self.wclearsky.setEnabled(False)
 
     def open_file(self):
         res = QtGui.QFileDialog.getOpenFileName(self, "Open FITS file",

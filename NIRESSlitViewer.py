@@ -361,7 +361,7 @@ class FitsViewer(QtGui.QMainWindow):
 
     def load_sky(self):
         res = QtGui.QFileDialog.getOpenFileName(self, "Open Sky file",
-                                                str(self.nightpath()), "JPG files (*.jpg)")
+                                                str(self.nightpath()), "Images (*.jpg)")
         if isinstance(res, tuple):
             fileName = res[0]
         else:

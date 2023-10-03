@@ -184,6 +184,7 @@ class FitsViewer(QtGui.QMainWindow):
         self.wsdiff = QtGui.QPushButton("SDiff")
         self.wsdiff.setObjectName("wsdiff")
         self.wsdiff.clicked.connect(self.sdiff)
+        self.wsdiff.setEnabled(False)
         buttons_vbox_left.addWidget(self.wsdiff)
         hw = QtGui.QWidget()
         hw.setLayout(buttons_vbox_left)
@@ -200,11 +201,6 @@ class FitsViewer(QtGui.QMainWindow):
         self.wclearsky.clicked.connect(self.clearsky)
         self.wclearsky.setEnabled(False)
         buttons_vbox_cent.addWidget(self.wclearsky)
-        # self.wstopscan = QtGui.QPushButton("Stop Scan")
-        # self.wstopscan.setObjectName("wstopscan")
-        # self.wstopscan.clicked.connect(self.stop_scan)
-        # self.wstopscan.setEnabled(False)
-        # buttons_vbox_cent.addWidget(self.wstopscan)
         hw = QtGui.QWidget()
         hw.setLayout(buttons_vbox_cent)
         buttons_hbox.addWidget(hw)
@@ -355,6 +351,7 @@ class FitsViewer(QtGui.QMainWindow):
             self.recenter()
         print(f"Loaded {filepath}")
         self.wsky.setEnabled(True)
+        self.wsdiff.setEnabled(True)
         if self.sky != "":
             self.subtract_sky(self.sky)
 

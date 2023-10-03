@@ -367,7 +367,6 @@ class FitsViewer(QtGui.QMainWindow):
         if len(fileName) != 0:
             self.sky = fileName
             self.subtract_sky(self.sky)
-            self.sky_info.setText(text)
     
 
     def open_file(self):

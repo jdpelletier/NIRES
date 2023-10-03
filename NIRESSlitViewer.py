@@ -351,8 +351,6 @@ class FitsViewer(QtGui.QMainWindow):
         # radius = float(max(width, height)) / 20
         # self.fitsimage.get_canvas().add(self.compdc(data_x, data_y, radius, color='skyblue',
         #                                fontsize=8))
-        name = 'tmp'
-        text = f"Image: {name}"
         self.file_info.setText(text)
         if recenter == True:
             self.recenter()

@@ -91,6 +91,8 @@ class FitsViewer(QtGui.QMainWindow):
         self.slit_lastfile = ktl.cache('nids', 'LASTFILE')
         self.go = ktl.cache('nids', 'GO')
         self.go.monitor()
+        self.test = ktl.cache('nids', 'test')
+        self.test.monitor()
 
         self.rawfile = ''
         self.mode = ''
@@ -405,7 +407,7 @@ class FitsViewer(QtGui.QMainWindow):
     def scan(self, file_callback):
         self.previous_image = self.slit_lastfile.read() #TODO this is to get first previous image, might remove.
         while self.scanning:
-            if (self.go == 1) and ("v" in self.slit_filename or "TEMP" in self.slit_filename):
+            if (self.go == 1 or self.test == 1) and ("v" in self.slit_filename or "TEMP" in self.slit_filename):
                 self.previous_image = self.slit_lastfile.read()
                 print("Taking image")
                 self.waitForFileToBeUnlocked(0.5)

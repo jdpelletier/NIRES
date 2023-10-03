@@ -372,6 +372,7 @@ class FitsViewer(QtGui.QMainWindow):
     
     def clearsky(self):
         self.sky = ""
+        self.wsky.setEnabled(False)
 
     def open_file(self):
         res = QtGui.QFileDialog.getOpenFileName(self, "Open FITS file",

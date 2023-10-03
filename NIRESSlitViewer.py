@@ -357,15 +357,10 @@ class FitsViewer(QtGui.QMainWindow):
     def sdiff(self):
         image = self.fitsimage.get_image()
         data = image.get_data()
-        # header = image.get_header()
-        previous = fits.getdata('/s/sdata1500/nires3/2023sep29//v230929_0035.fits')
-        # previous = fits.getdata(str(self.previous_image))
+        # previous = fits.getdata('/s/sdata1500/nires3/2023sep29//v230929_0035.fits')
+        previous = fits.getdata(str(self.previous_image))
         subtracted = data - previous
-        # new_img = self.img.set_data(subtracted)
-        # print(new_img)
         self.fitsimage.set_data(subtracted)
-        # self.load_file(self.writeFits(header, subtracted))
-        # load_data(subtracted)
 
 
     # def load_sky(self):

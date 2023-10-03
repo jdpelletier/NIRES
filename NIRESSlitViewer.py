@@ -418,7 +418,7 @@ class FitsViewer(QtGui.QMainWindow):
     def fileIsCurrentlyLocked(self):
         print(f'go {self.go} test {self.test} locked')
         locked = True
-        if int(self.go.read()) == 0 and int(self.test.read() == 0):
+        if int(self.go.read()) == 0 and int(self.test.read()) == 0:
             print(f'go {self.go} test {self.test} unlocked')
             locked = False
         return locked

@@ -154,7 +154,7 @@ class FitsViewer(QtGui.QMainWindow):
         vbox.addWidget(hw)
         file_hbox = QtGui.QHBoxLayout()
         file_hbox.setObjectName("file_hbox")
-        self.file_info = QtGui.QLabel("file: ")
+        self.file_info = QtGui.QLabel("Name: ")
         self.file_info.setObjectName("file_info")
         file_hbox.addWidget(self.file_info)
         self.box_readout = QtGui.QLabel("Amplitude:                  FWHM: ")
@@ -163,6 +163,14 @@ class FitsViewer(QtGui.QMainWindow):
         file_hbox.addWidget(self.box_readout)
         hw = QtGui.QWidget()
         hw.setLayout(file_hbox)
+        vbox.addWidget(hw)
+        sky_hbox = QtGui.QHBoxLayout()
+        file_hbox.setObjectName("sky_hbox")
+        self.sky_info = QtGui.QLabel("Sky: ")
+        self.sky_info.setObjectName("sky_info")
+        sky_hbox.addWidget(self.sky_info)
+        hw = QtGui.QWidget()
+        hw.setLayout(sky_hbox)
         vbox.addWidget(hw)
         buttons_hbox = QtGui.QHBoxLayout()
         buttons_hbox.setObjectName("buttons_hbox")
@@ -182,6 +190,11 @@ class FitsViewer(QtGui.QMainWindow):
         self.wsdiff.setObjectName("wsdiff")
         self.wsdiff.clicked.connect(self.sdiff)
         buttons_vbox_cent.addWidget(self.wsdiff)
+        self.wsky = QtGui.QPushButton("Load Sky")
+        self.wsky.clicked.connect(self.load_sky)
+        self.wsky.setVisible(False)
+        self.wsky.setVisible(False)
+        buttons_vbox_cent.addWidget(self.wsky)
         # self.wstopscan = QtGui.QPushButton("Stop Scan")
         # self.wstopscan.setObjectName("wstopscan")
         # self.wstopscan.clicked.connect(self.stop_scan)
@@ -217,6 +230,8 @@ class FitsViewer(QtGui.QMainWindow):
         # self.recdc, self.compdc = self.add_canvas()
         self.recdc = self.add_canvas()
         self.picktag = "pick-box"
+
+        self.sky = ""
 
         self.start_updating()
 
@@ -342,6 +357,19 @@ class FitsViewer(QtGui.QMainWindow):
         if recenter == True:
             self.recenter()
         print(f"Loaded {filepath}")
+        if self.skyset != "":
+            self.subtract_sky(self.sky)
+
+    def load_sky(self):
+        res = QtGui.QFileDialog.getOpenFileName(self, "Open Sky file",
+                                                str(self.nightpath()))
+        if isinstance(res, tuple):
+            fileName = res[0]
+        else:
+            fileName = str(res)
+        if len(fileName) != 0:
+            self.sky = fileName
+            self.subtract_sky(self.sky)
     
 
     def open_file(self):
@@ -360,6 +388,14 @@ class FitsViewer(QtGui.QMainWindow):
         # previous = fits.getdata('/s/sdata1500/nires3/2023sep29//v230929_0035.fits')
         previous = fits.getdata(str(self.previous_image))
         subtracted = data - previous
+        self.fitsimage.set_data(subtracted)
+
+    def subtract_sky(self, file):
+        image = self.fitsimage.get_image()
+        data = image.get_data()
+        # previous = fits.getdata('/s/sdata1500/nires3/2023sep29//v230929_0035.fits')
+        sky = fits.getdata(file)
+        subtracted = data - sky
         self.fitsimage.set_data(subtracted)
 
 

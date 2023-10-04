@@ -398,7 +398,7 @@ class FitsViewer(QtGui.QMainWindow):
         # previous = fits.getdata('/s/sdata1500/nires3/2023sep29//v230929_0035.fits')
         sky = fits.getdata(file)
         try:
-            subtracted = sky - data
+            subtracted = data - sky
             self.fitsimage.set_data(subtracted)
         except ValueError:
             self.fitsimage.set_data(data)

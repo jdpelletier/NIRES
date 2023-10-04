@@ -345,6 +345,7 @@ class FitsViewer(QtGui.QMainWindow):
         self.wsky.setEnabled(True)
         self.wsdiff.setEnabled(True)
         self.sdiff_done = False
+        self.wsdiff.setText("SDiff")
         if self.sky != "":
             self.subtract_sky(self.sky)
 

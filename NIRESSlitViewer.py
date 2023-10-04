@@ -410,11 +410,11 @@ class FitsViewer(QtGui.QMainWindow):
         while self.scanning:
             # if (self.go == 1 or self.test == 1) and ("v" in self.slit_filename or "TEMP" in self.slit_filename):
             if (self.go == 1) and ("v" in self.slit_filename):
-                # self.previous_image = self.slit_lastfile.read()
+                previm = self.slit_lastfile.read()
                 print("Taking image")
                 self.waitForFileToBeUnlocked(0.5)
                 file_callback.emit(str(self.slit_filename.read()))
-                self.previous_image = self.slit_lastfile.read()
+                self.previous_image = previm
             time.sleep(1)
 
     def fileIsCurrentlyLocked(self):

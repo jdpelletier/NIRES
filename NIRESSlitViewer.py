@@ -382,7 +382,7 @@ class FitsViewer(QtGui.QMainWindow):
             data = image.get_data()
             # previous = fits.getdata('/s/sdata1500/nires3/2023sep29//v230929_0035.fits')
             previous = fits.getdata(str(self.previous_image))
-            subtracted = data - previous
+            subtracted = previous - data
             self.fitsimage.set_data(subtracted)
             self.wsdiff.setText("Undo SDiff")
             self.sdiff_done = True
@@ -398,7 +398,7 @@ class FitsViewer(QtGui.QMainWindow):
         # previous = fits.getdata('/s/sdata1500/nires3/2023sep29//v230929_0035.fits')
         sky = fits.getdata(file)
         try:
-            subtracted = data - sky
+            subtracted = sky - data
             self.fitsimage.set_data(subtracted)
         except ValueError:
             self.fitsimage.set_data(data)

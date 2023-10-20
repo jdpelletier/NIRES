@@ -426,7 +426,7 @@ class FitsViewer(QtGui.QMainWindow):
         locked = True
         # if int(self.go.read()) == 0 and int(self.test.read()) == 0:
         if int(self.display2.read()) == 0:
-            print(f'go {self.disply2} unlocked')
+            print(f'go {self.display2} unlocked')
             locked = False
         return locked
 

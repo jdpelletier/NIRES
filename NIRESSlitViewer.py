@@ -438,8 +438,8 @@ class FitsViewer(QtGui.QMainWindow):
         file = self.dispname2
         # dir = str(file).split("//")
         dir = str(file) - 'sdiff.fits'
-        path = dir[0]
-        nightly = Path(path)
+        # path = dir[0]
+        nightly = Path(dir)
         return nightly
 
     def writeFits(self, headerinfo, image_data):

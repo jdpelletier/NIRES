@@ -438,6 +438,7 @@ class FitsViewer(QtGui.QMainWindow):
         file = self.dispname2
         # dir = str(file).split("//")
         dir = str(file).replace('sdiff.fits', '')
+        print(dir)
         # path = dir[0]
         nightly = Path(dir)
         return nightly

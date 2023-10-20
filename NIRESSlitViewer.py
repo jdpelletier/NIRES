@@ -1,18 +1,18 @@
 import os, time, sys, threading, math
-from os import listdir
-from os.path import abspath, isfile, join
+# from os import listdir
+# from os.path import abspath, isfile, join
 from pathlib import Path
-import datetime
-import csv
-import copy
+# import datetime
+# import csv
+# import copy
 
 import numpy as np
 from astropy.io import fits
 # from astropy import wcs
 import astropy.units as u
-from astropy.stats import gaussian_sigma_to_fwhm
+# from astropy.stats import gaussian_sigma_to_fwhm
 from astropy.modeling import models, fitting
-import PIL.Image as PILimage
+# import PIL.Image as PILimage
 
 from ginga import Bindings, cmap
 from ginga.misc import log
@@ -86,13 +86,18 @@ class FitsViewer(QtGui.QMainWindow):
         self.cachedFiles = None
         #KTL stuff
         #Cache KTL keywords
-        self.slit_filename = ktl.cache('nids', 'FILENAME')
-        self.slit_filename.monitor()
-        self.slit_lastfile = ktl.cache('nids', 'LASTFILE')
-        self.go = ktl.cache('nids', 'GO')
-        self.go.monitor()
-        self.test = ktl.cache('nids', 'test')
-        self.test.monitor()
+        # self.slit_filename = ktl.cache('nids', 'FILENAME')
+        # self.slit_filename.monitor()
+        # self.slit_lastfile = ktl.cache('nids', 'LASTFILE')
+        # self.slit_sdiff = ktl.cache('nids', 'LASTFILE')
+        # self.go = ktl.cache('nids', 'GO')
+        # self.go.monitor()
+        # self.test = ktl.cache('nids', 'test')
+        # self.test.monitor()
+        self.display2 = ktl.cache('nids', 'display2')
+        self.display2.monitor()
+        self.dispname2 = ktl.cache('nids', 'dispname2')
+        self.dispname2.monitor()
 
         self.rawfile = ''
         self.mode = ''
@@ -166,14 +171,14 @@ class FitsViewer(QtGui.QMainWindow):
         hw = QtGui.QWidget()
         hw.setLayout(file_hbox)
         vbox.addWidget(hw)
-        sky_hbox = QtGui.QHBoxLayout()
-        file_hbox.setObjectName("sky_hbox")
-        self.sky_info = QtGui.QLabel("Sky: ")
-        self.sky_info.setObjectName("sky_info")
-        sky_hbox.addWidget(self.sky_info)
-        hw = QtGui.QWidget()
-        hw.setLayout(sky_hbox)
-        vbox.addWidget(hw)
+        # sky_hbox = QtGui.QHBoxLayout()
+        # file_hbox.setObjectName("sky_hbox")
+        # self.sky_info = QtGui.QLabel("Sky: ")
+        # self.sky_info.setObjectName("sky_info")
+        # sky_hbox.addWidget(self.sky_info)
+        # hw = QtGui.QWidget()
+        # hw.setLayout(sky_hbox)
+        # vbox.addWidget(hw)
         buttons_hbox = QtGui.QHBoxLayout()
         buttons_hbox.setObjectName("buttons_hbox")
         buttons_vbox_left = QtGui.QVBoxLayout()
@@ -183,29 +188,29 @@ class FitsViewer(QtGui.QMainWindow):
         self.wrecenter.setObjectName("wrecenter")
         self.wrecenter.clicked.connect(self.recenter)
         buttons_vbox_left.addWidget(self.wrecenter)
-        self.wsdiff = QtGui.QPushButton("SDiff")
-        self.wsdiff.setObjectName("wsdiff")
-        self.wsdiff.clicked.connect(self.sdiff)
-        self.wsdiff.setEnabled(False)
-        buttons_vbox_left.addWidget(self.wsdiff)
+        # self.wsdiff = QtGui.QPushButton("SDiff")
+        # self.wsdiff.setObjectName("wsdiff")
+        # self.wsdiff.clicked.connect(self.sdiff)
+        # self.wsdiff.setEnabled(False)
+        # buttons_vbox_left.addWidget(self.wsdiff)
         hw = QtGui.QWidget()
         hw.setLayout(buttons_vbox_left)
         buttons_hbox.addWidget(hw)
-        buttons_vbox_cent = QtGui.QVBoxLayout()
-        buttons_vbox_cent.setObjectName("buttons_vbox_cent")
-        self.wsky = QtGui.QPushButton("Load Sky")
-        self.wsky.setObjectName("wsky")
-        self.wsky.clicked.connect(self.load_sky)
-        self.wsky.setEnabled(False)
-        buttons_vbox_cent.addWidget(self.wsky)
-        self.wclearsky = QtGui.QPushButton("Clear Sky")
-        self.wclearsky.setObjectName("wclearsky")
-        self.wclearsky.clicked.connect(self.clearsky)
-        self.wclearsky.setEnabled(False)
-        buttons_vbox_cent.addWidget(self.wclearsky)
-        hw = QtGui.QWidget()
-        hw.setLayout(buttons_vbox_cent)
-        buttons_hbox.addWidget(hw)
+        # buttons_vbox_cent = QtGui.QVBoxLayout()
+        # buttons_vbox_cent.setObjectName("buttons_vbox_cent")
+        # self.wsky = QtGui.QPushButton("Load Sky")
+        # self.wsky.setObjectName("wsky")
+        # self.wsky.clicked.connect(self.load_sky)
+        # self.wsky.setEnabled(False)
+        # buttons_vbox_cent.addWidget(self.wsky)
+        # self.wclearsky = QtGui.QPushButton("Clear Sky")
+        # self.wclearsky.setObjectName("wclearsky")
+        # self.wclearsky.clicked.connect(self.clearsky)
+        # self.wclearsky.setEnabled(False)
+        # buttons_vbox_cent.addWidget(self.wclearsky)
+        # hw = QtGui.QWidget()
+        # hw.setLayout(buttons_vbox_cent)
+        # buttons_hbox.addWidget(hw)
         buttons_vbox_right = QtGui.QVBoxLayout()
         buttons_vbox_right.setObjectName("buttons_vbox_right")
         self.wopen = QtGui.QPushButton("Open File")
@@ -342,30 +347,30 @@ class FitsViewer(QtGui.QMainWindow):
         if recenter == True:
             self.recenter()
         print(f"Loaded {filepath}")
-        self.wsky.setEnabled(True)
-        self.wsdiff.setEnabled(True)
-        self.sdiff_done = False
-        self.wsdiff.setText("SDiff")
-        if self.sky != "":
-            self.subtract_sky(self.sky)
+        # self.wsky.setEnabled(True)
+        # self.wsdiff.setEnabled(True)
+        # self.sdiff_done = False
+        # self.wsdiff.setText("SDiff")
+        # if self.sky != "":
+        #     self.subtract_sky(self.sky)
 
-    def load_sky(self):
-        res = QtGui.QFileDialog.getOpenFileName(self, "Load Sky file",
-                                                str(self.nightpath()))
-        if isinstance(res, tuple):
-            fileName = res[0]
-        else:
-            fileName = str(res)
-        if len(fileName) != 0:
-            self.sky = fileName
-            self.wclearsky.setEnabled(True)
-            self.subtract_sky(self.sky)
+    # def load_sky(self):
+    #     res = QtGui.QFileDialog.getOpenFileName(self, "Load Sky file",
+    #                                             str(self.nightpath()))
+    #     if isinstance(res, tuple):
+    #         fileName = res[0]
+    #     else:
+    #         fileName = str(res)
+    #     if len(fileName) != 0:
+    #         self.sky = fileName
+    #         self.wclearsky.setEnabled(True)
+    #         self.subtract_sky(self.sky)
     
-    def clearsky(self):
-        self.sky = ""
-        image = load_data(self.currentfile, logger=self.logger)
-        self.fitsimage.set_image(image)
-        self.wclearsky.setEnabled(False)
+    # def clearsky(self):
+    #     self.sky = ""
+    #     image = load_data(self.currentfile, logger=self.logger)
+    #     self.fitsimage.set_image(image)
+    #     self.wclearsky.setEnabled(False)
 
     def open_file(self):
         res = QtGui.QFileDialog.getOpenFileName(self, "Open FITS file",
@@ -377,53 +382,51 @@ class FitsViewer(QtGui.QMainWindow):
         if len(fileName) != 0:
             self.load_file(fileName)
 
-    def sdiff(self):
-        if self.sdiff_done == False:
-            image = self.fitsimage.get_image()
-            data = image.get_data()
-            # previous = fits.getdata('/s/sdata1500/nires3/2023sep29//v230929_0035.fits')
-            previous = fits.getdata(str(self.previous_image))
-            subtracted = data - previous
-            self.fitsimage.set_data(subtracted)
-            self.wsdiff.setText("Undo SDiff")
-            self.sdiff_done = True
-        else:
-            image = load_data(self.currentfile, logger=self.logger)
-            self.fitsimage.set_image(image)
-            self.wsdiff.setText("SDiff")
-            self.sdiff_done = False
+    # def sdiff(self):
+    #     if self.sdiff_done == False:
+    #         image = self.fitsimage.get_image()
+    #         data = image.get_data()
+    #         previous = fits.getdata(str(self.previous_image))
+    #         subtracted = data - previous
+    #         self.fitsimage.set_data(subtracted)
+    #         self.wsdiff.setText("Undo SDiff")
+    #         self.sdiff_done = True
+    #     else:
+    #         image = load_data(self.currentfile, logger=self.logger)
+    #         self.fitsimage.set_image(image)
+    #         self.wsdiff.setText("SDiff")
+    #         self.sdiff_done = False
 
-    def subtract_sky(self, file):
-        image = self.fitsimage.get_image()
-        data = image.get_data()
-        # previous = fits.getdata('/s/sdata1500/nires3/2023sep29//v230929_0035.fits')
-        sky = fits.getdata(file)
-        try:
-            subtracted = data - sky
-            self.fitsimage.set_data(subtracted)
-        except ValueError:
-            self.fitsimage.set_data(data)
+    # def subtract_sky(self, file):
+    #     image = self.fitsimage.get_image()
+    #     data = image.get_data()
+    #     sky = fits.getdata(file)
+    #     try:
+    #         subtracted = data - sky
+    #         self.fitsimage.set_data(subtracted)
+    #     except ValueError:
+    #         self.fitsimage.set_data(data)
 
     ##Start of image find and processing code
 
     def scan(self, file_callback):
         self.previous_image = self.slit_lastfile.read() #TODO this is to get first previous image, might remove.
         while self.scanning:
-            # if (self.go == 1 or self.test == 1) and ("v" in self.slit_filename or "TEMP" in self.slit_filename):
-            if (self.go == 1) and ("v" in self.slit_filename):
-                previm = self.slit_lastfile.read()
+            # if (self.go == 1 or self.test == 1 or self.display2 == 1) and ("v" in self.slit_filename or "TEMP" in self.slit_filename):
+            if self.display2 == 1:
+                # previm = self.slit_lastfile.read()
                 print("Taking image")
                 self.waitForFileToBeUnlocked(0.5)
-                file_callback.emit(str(self.slit_filename.read()))
-                self.previous_image = previm
+                file_callback.emit(str(self.dispname2.read()))
+                # self.previous_image = previm
             time.sleep(1)
 
     def fileIsCurrentlyLocked(self):
-        print(f'go {self.go} test {self.test} locked')
+        print(f'display2 {self.display2} locked')
         locked = True
         # if int(self.go.read()) == 0 and int(self.test.read()) == 0:
-        if int(self.go.read()) == 0:
-            print(f'go {self.go} test {self.test} unlocked')
+        if int(self.display2.read()) == 0:
+            print(f'go {self.disply2} unlocked')
             locked = False
         return locked
 

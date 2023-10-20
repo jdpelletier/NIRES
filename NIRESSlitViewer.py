@@ -240,7 +240,7 @@ class FitsViewer(QtGui.QMainWindow):
         self.picktag = "pick-box"
 
         # self.sky = ""
-        # self.curentfile = ""
+        self.curentfile = ""
         # self.sdiff_done = False
 
         self.start_updating()
@@ -260,9 +260,9 @@ class FitsViewer(QtGui.QMainWindow):
         self.updating = False
 
     def update_gui(self):
-        name = self.slit_filename
+        name = self.dispname2
         self.file_info.setText(f"File: {name}")
-        self.sky_info.setText(f"Sky: {self.sky}")
+        # self.sky_info.setText(f"Sky: {self.sky}")
 
     def add_canvas(self, tag=None):
         # add a canvas to the view

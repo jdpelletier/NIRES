@@ -98,8 +98,8 @@ class FitsViewer(QtGui.QMainWindow):
         self.display2.monitor()
         self.dispname2 = ktl.cache('nids', 'dispname2')
         self.dispname2.monitor()
-        self.tempsky2 = ktl.cache('nids', 'TEMPSKY2')
-        self.tempsky2.monitor()
+        # self.tempsky2 = ktl.cache('nids', 'TEMPSKY2')
+        # self.tempsky2.monitor()
 
         self.rawfile = ''
         self.mode = ''
@@ -268,9 +268,9 @@ class FitsViewer(QtGui.QMainWindow):
 
     def update_gui(self):
         name = self.dispname2
-        sky = self.tempsky2
+        # sky = self.tempsky2
         self.file_info.setText(f"File: {name}")
-        self.sky_info.setText(f"Sky: {sky}")
+        # self.sky_info.setText(f"Sky: {sky}")
 
     def add_canvas(self, tag=None):
         # add a canvas to the view

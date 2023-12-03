@@ -98,6 +98,8 @@ class FitsViewer(QtGui.QMainWindow):
         self.display2.monitor()
         self.dispname2 = ktl.cache('nids', 'dispname2')
         self.dispname2.monitor()
+        self.tempsky2 = ktl.cache('nids', 'TEMPSKY2')
+        self.tempsky2.monitor()
 
         self.rawfile = ''
         self.mode = ''
@@ -161,7 +163,7 @@ class FitsViewer(QtGui.QMainWindow):
         vbox.addWidget(hw)
         file_hbox = QtGui.QHBoxLayout()
         file_hbox.setObjectName("file_hbox")
-        self.file_info = QtGui.QLabel("Name: ")
+        self.file_info = QtGui.QLabel("File: ")
         self.file_info.setObjectName("file_info")
         file_hbox.addWidget(self.file_info)
         self.box_readout = QtGui.QLabel("Amplitude:                  FWHM: ")
@@ -170,6 +172,11 @@ class FitsViewer(QtGui.QMainWindow):
         file_hbox.addWidget(self.box_readout)
         hw = QtGui.QWidget()
         hw.setLayout(file_hbox)
+        sky_hbox = QtGui.QHBoxLayout()
+        sky_hbox.setObjectName("sky_hbox")
+        self.file_info = QtGui.QLabel("Sky: ")
+        self.file_info.setObjectName("sky_info")
+        sky_hbox.addWidget(self.file_info)
         vbox.addWidget(hw)
         # sky_hbox = QtGui.QHBoxLayout()
         # file_hbox.setObjectName("sky_hbox")
@@ -261,8 +268,9 @@ class FitsViewer(QtGui.QMainWindow):
 
     def update_gui(self):
         name = self.dispname2
+        sky = self.tempsky2
         self.file_info.setText(f"File: {name}")
-        # self.sky_info.setText(f"Sky: {self.sky}")
+        self.sky_info.setText(f"Sky: {sky}")
 
     def add_canvas(self, tag=None):
         # add a canvas to the view

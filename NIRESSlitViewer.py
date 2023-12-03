@@ -416,8 +416,9 @@ class FitsViewer(QtGui.QMainWindow):
             if self.display2 == 1:
                 # previm = self.slit_lastfile.read()
                 print("Taking image")
-                self.waitForFileToBeUnlocked(0.5)
+                # self.waitForFileToBeUnlocked(0.5)
                 file_callback.emit(str(self.dispname2.read()))
+                self.waitForZero(0.25)
                 # self.previous_image = previm
             time.sleep(0.25)
 
@@ -429,6 +430,11 @@ class FitsViewer(QtGui.QMainWindow):
             print(f'display2 {self.display2} unlocked')
             locked = False
         return locked
+    
+    def waitForZero(self, wait_time):
+        while self.display2 == 1:
+            time.sleep(wait_time)
+        print(f'display2 {self.display2}')
 
     def waitForFileToBeUnlocked(self, wait_time):
         while self.fileIsCurrentlyLocked():

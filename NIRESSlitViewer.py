@@ -419,7 +419,7 @@ class FitsViewer(QtGui.QMainWindow):
                 self.waitForFileToBeUnlocked(0.5)
                 file_callback.emit(str(self.dispname2.read()))
                 # self.previous_image = previm
-            time.sleep(1)
+            time.sleep(0.25)
 
     def fileIsCurrentlyLocked(self):
         print(f'display2 {self.display2} locked')

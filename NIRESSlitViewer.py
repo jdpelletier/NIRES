@@ -271,9 +271,12 @@ class FitsViewer(QtGui.QMainWindow):
 
     def update_gui(self):
         name = self.dispname2
-        # sky = self.tempsky2
+        try:
+            sky = os.path.realpath(os.readlink("TEMPSKY2.fits"))
+        except FileNotFoundError:
+            sky = "None"
         self.file_info.setText(f"File: {name}")
-        # self.sky_info.setText(f"Sky: {sky}")
+        self.sky_info.setText(f"Sky: {sky}")
 
     def add_canvas(self, tag=None):
         # add a canvas to the view

@@ -270,12 +270,10 @@ class FitsViewer(QtGui.QMainWindow):
         self.updating = False
 
     def update_gui(self):
-        name = self.dispname2
         try:
             sky = os.path.realpath(os.readlink("TEMPSKY2.fits"))
         except FileNotFoundError:
             sky = "None"
-        self.file_info.setText(f"File: {name}")
         self.sky_info.setText(f"Sky: {sky}")
 
     def add_canvas(self, tag=None):
@@ -361,6 +359,8 @@ class FitsViewer(QtGui.QMainWindow):
         if recenter == True:
             self.recenter()
         print(f"Loaded {filepath}")
+        name = self.dispname2
+        self.file_info.setText(f"File: {name}")
         # self.wsky.setEnabled(True)
         # self.wsdiff.setEnabled(True)
         # self.sdiff_done = False

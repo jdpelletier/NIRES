@@ -359,8 +359,7 @@ class FitsViewer(QtGui.QMainWindow):
         if recenter == True:
             self.recenter()
         print(f"Loaded {filepath}")
-        name = self.dispname2
-        self.file_info.setText(f"File: {name}")
+        self.file_info.setText(f"File: {filepath}")
         # self.wsky.setEnabled(True)
         # self.wsdiff.setEnabled(True)
         # self.sdiff_done = False

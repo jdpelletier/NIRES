@@ -597,14 +597,13 @@ class FitsViewer(QtGui.QMainWindow):
                 self.movAuto(data_x, data_y)
                 self.movSlitCursor = False
                 self.autoCenter = False
-                self.wmovSlitCent.setEnabled(True)
                 self.clickinfo.setText("Click image to pan.")
                 self.wmovSlitCent.setText("Center on Slit")
             elif self.second_click == True:
                 self.movManual(self.init_x, self.init_y, data_x, data_y)
                 self.movSlitCursor = False
                 self.autoCenter = False
-                self.wmovSlitCent.setEnabled(True)
+                self.second_click = False
                 self.clickinfo.setText("Click image to pan.")
                 self.wmovObj.setText("Move Object")
             else:

@@ -198,11 +198,10 @@ class FitsViewer(QtGui.QMainWindow):
         self.wrecenter.setObjectName("wrecenter")
         self.wrecenter.clicked.connect(self.recenter)
         buttons_vbox_left.addWidget(self.wrecenter)
-        # self.wsdiff = QtGui.QPushButton("SDiff")
-        # self.wsdiff.setObjectName("wsdiff")
-        # self.wsdiff.clicked.connect(self.sdiff)
-        # self.wsdiff.setEnabled(False)
-        # buttons_vbox_left.addWidget(self.wsdiff)
+        self.wmovSlitCent = QtGui.QPushButton("Center on Slit")
+        self.wmovSlitCent.setObjectName("wmovSlitCent")
+        self.wmovSlitCent.clicked.connect(self.movSlitCent)
+        buttons_vbox_left.addWidget(self.wmovSlitCent)
         hw = QtGui.QWidget()
         hw.setLayout(buttons_vbox_left)
         buttons_hbox.addWidget(hw)
@@ -241,6 +240,9 @@ class FitsViewer(QtGui.QMainWindow):
         vw = QtGui.QWidget()
         self.setCentralWidget(vw)
         vw.setLayout(vbox)
+
+        self.movSlitCursor = False
+        self.autoCenter = False
 
         fi.set_callback('cursor-changed', self.motion_cb)
         fi.add_callback('cursor-down', self.btndown)
@@ -542,12 +544,28 @@ class FitsViewer(QtGui.QMainWindow):
     
     def recenter(self):
         self.fitsimage.zoom_fit()
+    
+    def movSlitCent(self):
+        self.movSlitCursor = True
+        self.autoCenter = True
         
     def btndown(self, canvas, event, data_x, data_y):
-        self.xclick = data_x
-        self.yclick = data_y
-        self.fitsimage.set_pan(data_x, data_y)
-        # self.pickstar(self.fitsimage)
+        if self.movSlitCursor == True:
+            try:
+                self.fitsimage.get_canvas().get_object_by_tag(self.picktag)
+                self.fitsimage.get_canvas().delete_object_by_tag(self.picktag)
+                self.pickbox = self.recdc(self.xclick-30, self.yclick-30, self.xclick+30, self.yclick+30, color='red')
+                self.fitsimage.get_canvas().add(self.pickbox, tag=self.picktag, redraw=True)
+            except KeyError:
+                self.pickbox = self.recdc(self.xclick-30, self.yclick-30, self.xclick+30, self.yclick+30, color='red')
+                self.fitsimage.get_canvas().add(self.pickbox, tag=self.picktag, redraw=True)
+            self.movSlitCursor = False
+            self.autoCenter = False
+        else:
+            self.xclick = data_x
+            self.yclick = data_y
+            self.fitsimage.set_pan(data_x, data_y)
+            # self.pickstar(self.fitsimage)
 
 def main():
 

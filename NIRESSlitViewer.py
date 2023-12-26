@@ -559,10 +559,16 @@ class FitsViewer(QtGui.QMainWindow):
         self.fitsimage.zoom_fit()
     
     def movSlitCent(self):
-        self.movSlitCursor = True
-        self.autoCenter = True
-        self.wmovSlitCent.setEnabled(False)
-        self.clickinfo.setText(f"Click star to center on slit.")
+        if self.movSlitCursor == False:
+            self.movSlitCursor = True
+            self.autoCenter = True
+            self.clickinfo.setText("Click star to center on slit.")
+            self.wmovSlitCent.setText("Cancel Slit Center")
+        else:
+            self.movSlitCursor = False
+            self.autoCenter = False
+            self.clickinfo.setText("Click image to pan.")
+            self.wmovSlitCent.setText("Center on Slit")
         
     def btndown(self, canvas, event, data_x, data_y):
         self.xclick = data_x
@@ -579,7 +585,7 @@ class FitsViewer(QtGui.QMainWindow):
             self.movSlitCursor = False
             self.autoCenter = False
             self.wmovSlitCent.setEnabled(True)
-            self.clickinfo.setText(f"Click image to pan.")
+            self.clickinfo.setText("Click image to pan.")
         else:
             self.fitsimage.set_pan(data_x, data_y)
             # self.pickstar(self.fitsimage)

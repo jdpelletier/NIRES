@@ -218,7 +218,7 @@ class FitsViewer(QtGui.QMainWindow):
         buttons_vbox_left.addWidget(self.wmovSlitCent)
         self.wmovObj = QtGui.QPushButton("Move Object")
         self.wmovObj.setObjectName("wmovObj")
-        self.wmovObj.clicked.connect(self.movManual)
+        self.wmovObj.clicked.connect(self.movObj)
         buttons_vbox_left.addWidget(self.wmovObj)
         hw = QtGui.QWidget()
         hw.setLayout(buttons_vbox_left)
@@ -578,7 +578,7 @@ class FitsViewer(QtGui.QMainWindow):
             self.clickinfo.setText("Click image to pan.")
             self.wmovSlitCent.setText("Center on Slit")
     
-    def movStar(self):
+    def movObj(self):
         if self.movSlitCursor == False:
             self.movSlitCursor = True
             self.clickinfo.setText("Click star you want to move.")

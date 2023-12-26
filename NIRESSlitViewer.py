@@ -609,7 +609,7 @@ class FitsViewer(QtGui.QMainWindow):
             else:
                 self.init_x = data_x
                 self.init_y = data_y
-                self.second_click == True
+                self.second_click = True
                 self.clickinfo.setText("Click where you want to move the object.")
         else:
             self.fitsimage.set_pan(data_x, data_y)

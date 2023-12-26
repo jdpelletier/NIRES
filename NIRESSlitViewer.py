@@ -550,6 +550,8 @@ class FitsViewer(QtGui.QMainWindow):
         self.autoCenter = True
         
     def btndown(self, canvas, event, data_x, data_y):
+        self.xclick = data_x
+        self.yclick = data_y
         if self.movSlitCursor == True:
             try:
                 self.fitsimage.get_canvas().get_object_by_tag(self.picktag)
@@ -562,8 +564,6 @@ class FitsViewer(QtGui.QMainWindow):
             self.movSlitCursor = False
             self.autoCenter = False
         else:
-            self.xclick = data_x
-            self.yclick = data_y
             self.fitsimage.set_pan(data_x, data_y)
             # self.pickstar(self.fitsimage)
 

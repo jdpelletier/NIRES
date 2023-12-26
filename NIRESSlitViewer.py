@@ -135,6 +135,14 @@ class FitsViewer(QtGui.QMainWindow):
         hw = QtGui.QWidget()
         hw.setLayout(viewer_hbox)
         vbox.addWidget(hw)
+        click_hbox = QtGui.QHBoxLayout()
+        click_hbox.setObjectName("click_hbox")
+        self.clickinfo = QtGui.QLabel("Click the image to pan.")
+        self.clickinfo.setObjectName("clickinfo")
+        click_hbox.addWidget(self.clickinfo)
+        hw = QtGui.QWidget()
+        hw.setLayout(click_hbox)
+        vbox.addWidget(hw)
         readout_hbox = QtGui.QHBoxLayout()
         readout_hbox.setObjectName("readout_hbox")
         self.readout = QtGui.QLabel("X:                 Y:                    Value:")
@@ -549,6 +557,7 @@ class FitsViewer(QtGui.QMainWindow):
         self.movSlitCursor = True
         self.autoCenter = True
         self.wmovSlitCent.setEnabled(False)
+        self.clickinfo.setText(f"Click star to center on slit.")
         
     def btndown(self, canvas, event, data_x, data_y):
         self.xclick = data_x
@@ -565,6 +574,7 @@ class FitsViewer(QtGui.QMainWindow):
             self.movSlitCursor = False
             self.autoCenter = False
             self.wmovSlitCent.setEnabled(True)
+            self.clickinfo.setText(f"Click image to pan.")
         else:
             self.fitsimage.set_pan(data_x, data_y)
             # self.pickstar(self.fitsimage)

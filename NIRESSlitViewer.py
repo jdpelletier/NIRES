@@ -548,6 +548,7 @@ class FitsViewer(QtGui.QMainWindow):
     def movSlitCent(self):
         self.movSlitCursor = True
         self.autoCenter = True
+        self.wmovSlitCent.setEnabled(False)
         
     def btndown(self, canvas, event, data_x, data_y):
         self.xclick = data_x
@@ -563,6 +564,7 @@ class FitsViewer(QtGui.QMainWindow):
                 self.fitsimage.get_canvas().add(self.pickbox, tag=self.picktag, redraw=True)
             self.movSlitCursor = False
             self.autoCenter = False
+            self.wmovSlitCent.setEnabled(True)
         else:
             self.fitsimage.set_pan(data_x, data_y)
             # self.pickstar(self.fitsimage)

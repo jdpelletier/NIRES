@@ -100,6 +100,7 @@ class FitsViewer(QtGui.QMainWindow):
         self.dispname2.monitor()
         # self.tempsky2 = ktl.cache('nids', 'TEMPSKY2')
         # self.tempsky2.monitor()
+        self.dcs = ktl.Service('dcs')
 
         self.rawfile = ''
         self.mode = ''
@@ -207,7 +208,7 @@ class FitsViewer(QtGui.QMainWindow):
         buttons_vbox_left = QtGui.QVBoxLayout()
         buttons_vbox_left.setContentsMargins(QtCore.QMargins(0, 0, 10, 0))
         buttons_vbox_left.setObjectName("buttons_vbox_left")
-        self.wrecenter = QtGui.QPushButton("Re-center")
+        self.wrecenter = QtGui.QPushButton("Re-center Image")
         self.wrecenter.setObjectName("wrecenter")
         self.wrecenter.clicked.connect(self.recenter)
         buttons_vbox_left.addWidget(self.wrecenter)
@@ -215,6 +216,10 @@ class FitsViewer(QtGui.QMainWindow):
         self.wmovSlitCent.setObjectName("wmovSlitCent")
         self.wmovSlitCent.clicked.connect(self.movSlitCent)
         buttons_vbox_left.addWidget(self.wmovSlitCent)
+        self.wmovObj = QtGui.QPushButton("Move Object")
+        self.wmovObj.setObjectName("wmovObj")
+        self.wmovObj.clicked.connect(self.movManual)
+        buttons_vbox_left.addWidget(self.wmovObj)
         hw = QtGui.QWidget()
         hw.setLayout(buttons_vbox_left)
         buttons_hbox.addWidget(hw)
@@ -256,6 +261,9 @@ class FitsViewer(QtGui.QMainWindow):
 
         self.movSlitCursor = False
         self.autoCenter = False
+        self.init_x = 0.0
+        self.init_y = 0.0
+        self.second_click =False
 
         fi.set_callback('cursor-changed', self.motion_cb)
         fi.add_callback('cursor-down', self.btndown)
@@ -569,27 +577,58 @@ class FitsViewer(QtGui.QMainWindow):
             self.autoCenter = False
             self.clickinfo.setText("Click image to pan.")
             self.wmovSlitCent.setText("Center on Slit")
+    
+    def movStar(self):
+        if self.movSlitCursor == False:
+            self.movSlitCursor = True
+            self.clickinfo.setText("Click star you want to move.")
+            self.wmovObj.setText("Cancel Object Move")
+        else:
+            self.movSlitCursor = False
+            self.autoCenter = False
+            self.clickinfo.setText("Click image to pan.")
+            self.wmovObj.setText("Move Object")
         
     def btndown(self, canvas, event, data_x, data_y):
         self.xclick = data_x
         self.yclick = data_y
         if self.movSlitCursor == True:
-            try:
-                self.fitsimage.get_canvas().get_object_by_tag(self.picktag)
-                self.fitsimage.get_canvas().delete_object_by_tag(self.picktag)
-                self.pickbox = self.recdc(self.xclick-30, self.yclick-30, self.xclick+30, self.yclick+30, color='red')
-                self.fitsimage.get_canvas().add(self.pickbox, tag=self.picktag, redraw=True)
-            except KeyError:
-                self.pickbox = self.recdc(self.xclick-30, self.yclick-30, self.xclick+30, self.yclick+30, color='red')
-                self.fitsimage.get_canvas().add(self.pickbox, tag=self.picktag, redraw=True)
-            self.movSlitCursor = False
-            self.autoCenter = False
-            self.wmovSlitCent.setEnabled(True)
-            self.clickinfo.setText("Click image to pan.")
-            self.wmovSlitCent.setText("Center on Slit")
+            if self.autoCenter == True:
+                self.movAuto(data_x, data_y)
+                self.movSlitCursor = False
+                self.autoCenter = False
+                self.wmovSlitCent.setEnabled(True)
+                self.clickinfo.setText("Click image to pan.")
+                self.wmovSlitCent.setText("Center on Slit")
+            elif self.second_click == True:
+                self.movManual(self.init_x, self.init_y, data_x, data_y)
+                self.movSlitCursor = False
+                self.autoCenter = False
+                self.wmovSlitCent.setEnabled(True)
+                self.clickinfo.setText("Click image to pan.")
+                self.wmovObj.setText("Move Object")
+            else:
+                self.init_x = data_x
+                self.init_y = data_y
+                self.second_click == True
+                self.clickinfo.setText("Click where you want to move the object.")
         else:
             self.fitsimage.set_pan(data_x, data_y)
             # self.pickstar(self.fitsimage)
+    
+    def movAuto(self, data_x, data_y):
+        pscale = 0.123
+        dx = (data_x - 121.8) * pscale 
+        dy = (data_y - 464.3) * pscale
+        # self.dcs['instxoff'].write(dx, rel2curr = 't')
+        # self.dcs['instyoff'].write(dy, rel2curr = 't')
+
+    def movManual(self, x1, y1, x2, y2):
+        pscale = 0.123
+        dx = (x1 - x2) * pscale 
+        dy = (y1 - y2) * pscale
+        # self.dcs['instxoff'].write(dx, rel2curr = 't')
+        # self.dcs['instyoff'].write(dy, rel2curr = 't')
 
 def main():
 

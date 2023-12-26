@@ -586,6 +586,7 @@ class FitsViewer(QtGui.QMainWindow):
             self.autoCenter = False
             self.wmovSlitCent.setEnabled(True)
             self.clickinfo.setText("Click image to pan.")
+            self.wmovSlitCent.setText("Center on Slit")
         else:
             self.fitsimage.set_pan(data_x, data_y)
             # self.pickstar(self.fitsimage)

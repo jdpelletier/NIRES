@@ -140,6 +140,7 @@ class FitsViewer(QtGui.QMainWindow):
         self.clickinfo = QtGui.QLabel("Click the image to pan.")
         self.clickinfo.setObjectName("clickinfo")
         click_hbox.addWidget(self.clickinfo)
+        click_hbox.setContentsMargins(QtCore.QMargins(0,0,0,0))
         hw = QtGui.QWidget()
         hw.setLayout(click_hbox)
         vbox.addWidget(hw)

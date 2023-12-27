@@ -485,12 +485,14 @@ class FitsViewer(QtGui.QMainWindow):
             time.sleep(wait_time)
 
     def nightpath(self):
-        file = self.dispname2
-        dir = str(file).split("//")
-        # dir = str(file).replace('sdiff.fits', '')
-        dir = dir[0] + "/"
-        # path = dir[0]
-        nightly = Path(dir)
+        dir = str(self.dispname2)
+        if "//" in str(dir):
+            dir = str(dir).split("//")
+            dir = dir[0] + "/"
+            nightly = Path(dir)
+        else: 
+            dir = Path(dir)
+            nightly = dir.parent
         return nightly
 
     def writeFits(self, headerinfo, image_data):

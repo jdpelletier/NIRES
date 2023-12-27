@@ -294,7 +294,7 @@ class FitsViewer(QtGui.QMainWindow):
 
     def update_gui(self):
         try:
-            sky = os.path.realpath(os.readlink("TEMPSKY2.fits@"))
+            sky = os.path.realpath(os.readlink("TEMPSKY2.fits"))
         except FileNotFoundError:
             sky = "None"
         self.sky_info.setText(f"Sky: {sky}")

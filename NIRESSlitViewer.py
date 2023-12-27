@@ -485,7 +485,7 @@ class FitsViewer(QtGui.QMainWindow):
             time.sleep(wait_time)
 
     def nightpath(self):
-        file = self.dispname2
+        dir = str(self.dispname2)
         # dir = str(file).split("//")
         # dir = str(file).replace('sdiff.fits', '')
         dir = dir[0] + "/"

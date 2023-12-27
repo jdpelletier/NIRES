@@ -18,7 +18,7 @@ from ginga import Bindings, cmap
 from ginga.misc import log
 from ginga.qtw.QtHelp import QtGui, QtCore
 from ginga.qtw.ImageViewQt import CanvasView, ScrolledView
-from ginga.util import iqcalc
+from ginga.util import iqcalc, io_fits
 from ginga.util.loader import load_data
 from ginga.AstroImage import AstroImage
 
@@ -371,18 +371,22 @@ class FitsViewer(QtGui.QMainWindow):
         recenter = False
         if self.fitsimage.get_image() == None:
             recenter = True
-        image = load_data(filepath, logger=self.logger)
-        self.fitsimage.set_image(image)
-        # self.setWindowTitle(filepath)
         try:
-            self.fitsimage.get_canvas().get_object_by_tag(self.picktag)
-            self.fitsimage.get_canvas().delete_object_by_tag(self.picktag)
-        except KeyError:
-            pass
-        if recenter == True:
-            self.recenter()
-        print(f"Loaded {filepath}")
-        self.file_info.setText(f"File: {filepath}")
+            image = load_data(filepath, logger=self.logger)
+            self.fitsimage.set_image(image)
+            # self.setWindowTitle(filepath)
+            try:
+                self.fitsimage.get_canvas().get_object_by_tag(self.picktag)
+                self.fitsimage.get_canvas().delete_object_by_tag(self.picktag)
+            except KeyError:
+                pass
+            if recenter == True:
+                self.recenter()
+            print(f"Loaded {filepath}")
+            self.file_info.setText(f"File: {filepath}")
+        except io_fits.FITSError:
+            self.file_info.setText(f"File: error loading, wait for next image")
+
         # self.wsky.setEnabled(True)
         # self.wsdiff.setEnabled(True)
         # self.sdiff_done = False

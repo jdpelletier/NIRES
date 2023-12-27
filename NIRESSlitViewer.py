@@ -371,6 +371,7 @@ class FitsViewer(QtGui.QMainWindow):
 
     def load_file(self, filepath):
         self.currentfile = filepath
+        print(filepath)
         recenter = False
         if self.fitsimage.get_image() == None:
             recenter = True

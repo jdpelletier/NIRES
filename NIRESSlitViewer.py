@@ -191,7 +191,7 @@ class FitsViewer(QtGui.QMainWindow):
         self.sky_info = QtGui.QLabel("Sky: ")
         self.sky_info.setObjectName("sky_info")
         sky_hbox.addWidget(self.sky_info)
-        sky_hbox.setContentsMargins(QtCore.QMargins(8,1,8,1))
+        sky_hbox.setContentsMargins(QtCore.QMargins(4,1,4,1))
         hw = QtGui.QWidget()
         hw.setLayout(sky_hbox)
         vbox.addWidget(hw)

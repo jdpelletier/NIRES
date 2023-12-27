@@ -299,6 +299,8 @@ class FitsViewer(QtGui.QMainWindow):
             sky = os.path.realpath(os.readlink(tempsky))
         except FileNotFoundError:
             sky = "None"
+        except NotADirectoryError:
+            sky = "None"
         self.sky_info.setText(f"Sky: {sky}")
 
     def add_canvas(self, tag=None):

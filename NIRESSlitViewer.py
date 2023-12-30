@@ -100,7 +100,7 @@ class FitsViewer(QtGui.QMainWindow):
         self.dispname2.monitor()
         # self.tempsky2 = ktl.cache('nids', 'TEMPSKY2')
         # self.tempsky2.monitor()
-        self.dcs = ktl.Service('dcs')
+        self.dcs = ktl.Service('dcs2')
 
         self.rawfile = ''
         self.mode = ''

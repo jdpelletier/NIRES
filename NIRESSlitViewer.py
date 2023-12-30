@@ -628,8 +628,9 @@ class FitsViewer(QtGui.QMainWindow):
         pscale = 0.123
         dx = (data_x - 121.8) * pscale 
         dy = (data_y - 464.3) * pscale
-        self.dcs['instxoff'].write(dx, rel2curr = 't')
-        self.dcs['instyoff'].write(dy, rel2curr = 't')
+        print(f"{dx}, {dy}")
+        self.dcs['instxoff'].write(dx)
+        self.dcs['instyoff'].write(dy)
 
     def movManual(self, x1, y1, x2, y2):
         pscale = 0.123

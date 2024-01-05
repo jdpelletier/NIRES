@@ -1,4 +1,4 @@
-import os, time, sys, threading, math
+import os, time, sys, subprocess
 # from os import listdir
 # from os.path import abspath, isfile, join
 from pathlib import Path
@@ -100,7 +100,7 @@ class FitsViewer(QtGui.QMainWindow):
         self.dispname2.monitor()
         # self.tempsky2 = ktl.cache('nids', 'TEMPSKY2')
         # self.tempsky2.monitor()
-        self.dcs = ktl.Service('dcs2')
+        # self.dcs = ktl.Service('dcs2')
 
         self.rawfile = ''
         self.mode = ''
@@ -629,15 +629,25 @@ class FitsViewer(QtGui.QMainWindow):
         dx = (data_x - 121.8) * pscale 
         dy = (data_y - 464.3) * pscale
         print(f"{dx}, {dy}")
-        self.dcs['instxoff'].write(dx)
-        self.dcs['instyoff'].write(dy)
+        user = "nires1"
+        host = "niresserver1"
+        cmd = f"modify -s dcs silent instxoff={dx} instyoff={dy} rel2curr=t"
+        subprocess.Popen(f"ssh {user}@{host} {cmd}", shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE).communicate()
+        # self.dcs['instxoff'].write(dx)
+        # self.dcs['instyoff'].write(dy)
 
     def movManual(self, x1, y1, x2, y2):
         pscale = 0.123
         dx = (x1 - x2) * pscale 
         dy = (y1 - y2) * pscale
-        self.dcs['instxoff'].write(dx, rel2curr = 't')
-        self.dcs['instyoff'].write(dy, rel2curr = 't')
+        print(f"{dx}, {dy}")
+        user = "nires1"
+        host = "niresserver1"
+        cmd = f"modify -s dcs silent instxoff={dx} instyoff={dy} rel2curr=t"
+        subprocess.Popen(f"ssh {user}@{host} {cmd}", shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE).communicate()
+        # self.dcs['instxoff'].write(dx)
+        # self.dcs['instyoff'].write(dy)
+
 def main():
 
     app = QtGui.QApplication([])

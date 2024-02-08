@@ -79,9 +79,9 @@ class UpdateControlWindow(QtCore.QRunnable):
 ##Cuts
 class Cuts(QtGui.QWidget):
 
-    def __init__(self, fv, fitsimage):
+    def __init__(self,fitsimage):
         
-        super(Cuts, self).__init__(fv, fitsimage)
+        super(Cuts, self).__init__(fitsimage)
 
         self.layertag = 'cuts-canvas'
         self._new_cut = 'New Cut'
@@ -104,7 +104,7 @@ class Cuts(QtGui.QWidget):
         self.tine_spacing_px = 100
 
         # get Cuts preferences
-        prefs = self.fv.get_preferences()
+        prefs = fitsimage.get_preferences()
         self.settings = prefs.create_category('plugin_Cuts')
         self.settings.add_defaults(select_new_cut=True, draw_then_move=True,
                                    label_cuts=True, colors=cut_colors,
@@ -113,7 +113,7 @@ class Cuts(QtGui.QWidget):
         self.settings.load(onError='silent')
         self.colors = self.settings.get('colors', cut_colors)
 
-        self.dc = fv.get_draw_classes()
+        self.dc = fitsimage.get_draw_classes()
         canvas = self.dc.DrawingCanvas()
         canvas.enable_draw(True)
         canvas.enable_edit(True)
@@ -472,11 +472,6 @@ class Cuts(QtGui.QWidget):
             if move_flag:
                 self.set_mode('move')
 
-    def close(self):
-        #self.set_mode('move')
-        self.fv.stop_local_plugin(self.chname, str(self))
-        return True
-
     def start(self):
         # start line cuts operation
         self.cuts_plot.set_titles(rtitle="Cuts")
@@ -503,7 +498,7 @@ class Cuts(QtGui.QWidget):
         self.modes_off()
 
         self.canvas.ui_set_active(True, viewer=self.fitsimage)
-        self.fv.show_status("Draw a line with the right mouse button")
+        self.fitsimage.show_status("Draw a line with the right mouse button")
         self.replot_all()
         if self.use_slit:
             self.cuts_image = self.fitsimage.get_image()
@@ -514,7 +509,7 @@ class Cuts(QtGui.QWidget):
         # remove the canvas from the image
         p_canvas = self.fitsimage.get_canvas()
         p_canvas.delete_object_by_tag(self.layertag)
-        self.fv.show_status("")
+        self.fitsimage.show_status("")
 
     def redo(self):
         """This is called when a new image arrives or the data in the
@@ -735,7 +730,7 @@ class Cuts(QtGui.QWidget):
         self.cuts_plot.draw()
 
         self.canvas.redraw(whence=3)
-        self.fv.show_status(
+        self.fitsimage.show_status(
             "Click or drag left mouse button to reposition cuts")
         return True
 
@@ -1461,7 +1456,7 @@ class FitsViewer(QtGui.QMainWindow):
             self.load_file(fileName)
 
     def cuts_popup(self):
-        self.c = Cuts(CanvasView(self.logger, render='widget'), self.fitsimage)
+        self.c = Cuts(self.fitsimage, )
         self.c.show()
 
     # def sdiff(self):

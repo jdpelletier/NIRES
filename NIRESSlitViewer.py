@@ -79,9 +79,9 @@ class UpdateControlWindow(QtCore.QRunnable):
 ##Cuts
 class Cuts(QtGui.QWidget):
 
-    def __init__(self):
+    def __init__(self, fv, fitsimage):
         
-        super().__init__()
+        super(Cuts, self).__init__(fv, fitsimage)
 
         self.layertag = 'cuts-canvas'
         self._new_cut = 'New Cut'

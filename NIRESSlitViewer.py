@@ -15,7 +15,7 @@ from astropy.modeling import models, fitting
 # import PIL.Image as PILimage
 
 from ginga import Bindings, cmap
-from ginga.misc import log, settings
+from ginga.misc import log, Settings
 from ginga.qtw.QtHelp import QtGui, QtCore
 from ginga.qtw.ImageViewQt import CanvasView, ScrolledView
 from ginga.util import iqcalc, io_fits
@@ -105,7 +105,7 @@ class Cuts(QtGui.QWidget):
 
         # get Cuts preferences
         self.fitsimage = CanvasView(self.logger, render='widget')
-        prefs = settings.get_preferences()
+        prefs = Settings.get_preferences()
         self.settings = prefs.create_category('plugin_Cuts')
         self.settings.add_defaults(select_new_cut=True, draw_then_move=True,
                                    label_cuts=True, colors=cut_colors,

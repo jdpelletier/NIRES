@@ -81,7 +81,7 @@ class Cuts(QtGui.QWidget):
 
     def __init__(self,fitsimage):
         
-        super().__init__(fitsimage)
+        super(Cuts, self).__init__(fitsimage)
 
         self.layertag = 'cuts-canvas'
         self._new_cut = 'New Cut'

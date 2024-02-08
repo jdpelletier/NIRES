@@ -105,14 +105,14 @@ class Cuts(QtGui.QWidget):
 
         # get Cuts preferences
         self.fitsimage = CanvasView(self.logger, render='widget')
-        prefs = self.fitsimage.get_preferences()
-        self.settings = prefs.create_category('plugin_Cuts')
-        self.settings.add_defaults(select_new_cut=True, draw_then_move=True,
-                                   label_cuts=True, colors=cut_colors,
-                                   drag_update=False,
-                                   show_cuts_legend=False, enable_slit=False)
-        self.settings.load(onError='silent')
-        self.colors = self.settings.get('colors', cut_colors)
+        # prefs = self.fitsimage.get_preferences()
+        # self.settings = prefs.create_category('plugin_Cuts')
+        # self.settings.add_defaults(select_new_cut=True, draw_then_move=True,
+        #                            label_cuts=True, colors=cut_colors,
+        #                            drag_update=False,
+        #                            show_cuts_legend=False, enable_slit=False)
+        # self.settings.load(onError='silent')
+        # self.colors = self.settings.get('colors', cut_colors)
 
         self.dc = self.fitsimage.get_draw_classes()
         canvas = self.dc.DrawingCanvas()

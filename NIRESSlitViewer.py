@@ -1271,7 +1271,7 @@ class FitsViewer(QtGui.QMainWindow):
         buttons_vbox_right.setObjectName("buttons_vbox_right")
         self.wcutting = QtGui.QPushButton("Cuts")
         self.wcutting.setObjectName("wcutting")
-        self.wtrickcontrol.clicked.connect(self.cuts_popup)
+        self.wcutting.clicked.connect(self.cuts_popup)
         self.wopen = QtGui.QPushButton("Open File")
         self.wopen.setObjectName("wopen")
         self.wopen.clicked.connect(self.open_file)

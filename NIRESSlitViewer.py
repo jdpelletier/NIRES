@@ -1459,7 +1459,7 @@ class FitsViewer(QtGui.QMainWindow):
         if len(fileName) != 0:
             self.load_file(fileName)
 
-    def control_popup(self):
+    def cuts_popup(self):
         self.c = Cuts()
         self.c.show()
 

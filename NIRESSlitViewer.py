@@ -1272,6 +1272,7 @@ class FitsViewer(QtGui.QMainWindow):
         self.wcutting = QtGui.QPushButton("Cuts")
         self.wcutting.setObjectName("wcutting")
         self.wcutting.clicked.connect(self.cuts_popup)
+        buttons_vbox_right.addWidget(self.wcutting)
         self.wopen = QtGui.QPushButton("Open File")
         self.wopen.setObjectName("wopen")
         self.wopen.clicked.connect(self.open_file)

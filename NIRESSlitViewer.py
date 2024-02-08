@@ -105,7 +105,7 @@ class Cuts(QtGui.QWidget):
 
         # get Cuts preferences
         self.fitsimage = CanvasView(self.logger, render='widget')
-        prefs = Settings.Preferences.get_preferences()
+        prefs = Settings.Preferences
         self.settings = prefs.create_category('plugin_Cuts')
         self.settings.add_defaults(select_new_cut=True, draw_then_move=True,
                                    label_cuts=True, colors=cut_colors,

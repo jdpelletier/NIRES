@@ -79,9 +79,9 @@ class UpdateControlWindow(QtCore.QRunnable):
 ##Cuts
 class Cuts(QtGui.QWidget):
 
-    def __init__(self):
-        
-        super().__init__()
+    def __init__(self, logger):
+        super(Cuts, self).__init__()
+        self.logger = logger
 
         self.layertag = 'cuts-canvas'
         self._new_cut = 'New Cut'
@@ -1457,7 +1457,7 @@ class FitsViewer(QtGui.QMainWindow):
             self.load_file(fileName)
 
     def cuts_popup(self):
-        self.c = Cuts()
+        self.c = Cuts(self.logger)
         self.c.show()
 
     # def sdiff(self):

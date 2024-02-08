@@ -79,9 +79,9 @@ class UpdateControlWindow(QtCore.QRunnable):
 ##Cuts
 class Cuts(QtGui.QWidget):
 
-    def __init__(self,fitsimage):
+    def __init__(self):
         
-        super(Cuts, self).__init__(fitsimage)
+        super().__init__()
 
         self.layertag = 'cuts-canvas'
         self._new_cut = 'New Cut'
@@ -104,7 +104,8 @@ class Cuts(QtGui.QWidget):
         self.tine_spacing_px = 100
 
         # get Cuts preferences
-        prefs = fitsimage.get_preferences()
+        self.fitsimage = CanvasView(self.logger, render='widget')
+        prefs = self.fitsimage.get_preferences()
         self.settings = prefs.create_category('plugin_Cuts')
         self.settings.add_defaults(select_new_cut=True, draw_then_move=True,
                                    label_cuts=True, colors=cut_colors,
@@ -113,7 +114,7 @@ class Cuts(QtGui.QWidget):
         self.settings.load(onError='silent')
         self.colors = self.settings.get('colors', cut_colors)
 
-        self.dc = fitsimage.get_draw_classes()
+        self.dc = self.fitsimage.get_draw_classes()
         canvas = self.dc.DrawingCanvas()
         canvas.enable_draw(True)
         canvas.enable_edit(True)
@@ -1456,7 +1457,7 @@ class FitsViewer(QtGui.QMainWindow):
             self.load_file(fileName)
 
     def cuts_popup(self):
-        self.c = Cuts(self.fitsimage)
+        self.c = Cuts()
         self.c.show()
 
     # def sdiff(self):

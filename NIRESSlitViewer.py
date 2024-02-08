@@ -114,7 +114,7 @@ class Cuts(QtGui.QWidget):
         # self.settings.load(onError='silent')
         # self.colors = self.settings.get('colors', cut_colors)
 
-        self.dc = self.fitsimage.get_draw_classes()
+        self.dc = self.fitsimage.get_canvas().get_draw_classes()
         canvas = self.dc.DrawingCanvas()
         canvas.enable_draw(True)
         canvas.enable_edit(True)

@@ -1456,7 +1456,7 @@ class FitsViewer(QtGui.QMainWindow):
             self.load_file(fileName)
 
     def cuts_popup(self):
-        self.c = Cuts(self.fitsimage, )
+        self.c = Cuts(self.fitsimage)
         self.c.show()
 
     # def sdiff(self):

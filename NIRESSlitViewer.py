@@ -388,7 +388,7 @@ class Cuts(Widgets.Box):
         # self.modes_off()
 
         self.canvas.ui_set_active(True, viewer=self.fitsimage)
-        self.fitsimage.show_status("Draw a line with the right mouse button")
+        # self.fitsimage.show_status("Draw a line with the right mouse button")
         self.replot_all()
 
     def stop(self):
@@ -397,7 +397,7 @@ class Cuts(Widgets.Box):
         # remove the canvas from the image
         p_canvas = self.fitsimage.get_canvas()
         p_canvas.delete_object_by_tag(self.layertag)
-        self.fitsimage.show_status("")
+        # self.fitsimage.show_status("")
 
     def redo(self):
         """This is called when a new image arrives or the data in the
@@ -561,8 +561,8 @@ class Cuts(Widgets.Box):
         self.cuts_plot.draw()
 
         self.canvas.redraw(whence=3)
-        self.fitsimage.show_status(
-            "Click or drag left mouse button to reposition cuts")
+        # self.fitsimage.show_status(
+        #     "Click or drag left mouse button to reposition cuts")
         return True
 
     def _create_cut(self, x, y, count, x1, y1, x2, y2, color='cyan'):

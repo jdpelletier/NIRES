@@ -837,8 +837,8 @@ class Cuts(Widgets.Box):
         self.canvas.redraw(whence=3)
 
     def dismiss(self, event):
-
-        self.hide()
+        
+        self.delete()
 # END
 
 
@@ -1072,8 +1072,6 @@ class FitsViewer(QtGui.QMainWindow):
         except NotADirectoryError:
             sky = "None"
         self.sky_info.setText(f"Sky: {sky}")
-        if self.c == None:
-            self.fitsimage.set_callback(self.btndown)
 
     def add_canvas(self, tag=None):
         # add a canvas to the view

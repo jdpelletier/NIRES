@@ -1200,10 +1200,10 @@ class FitsViewer(QtGui.QMainWindow):
             self.load_file(fileName)
 
     def cuts_popup(self):
-        print(self.c)
-        if self.c == None:
-            self.c = Cuts(self.logger, self.fitsimage)
-            self.c.show()
+        if self.c != None:
+            self.c.delete()
+        self.c = Cuts(self.logger, self.fitsimage)
+        self.c.show()
 
     # def sdiff(self):
     #     if self.sdiff_done == False:

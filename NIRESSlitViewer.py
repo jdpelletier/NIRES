@@ -81,7 +81,7 @@ class UpdateControlWindow(QtCore.QRunnable):
 class Cuts(Widgets.Box):
 
     def __init__(self, logger, fitsimage):
-        super(Cuts, self).__init__(logger, fitsimage)
+        super(Cuts, self).__init__(fitsimage)
         self.logger = logger
 
         self.layertag = 'cuts-canvas'

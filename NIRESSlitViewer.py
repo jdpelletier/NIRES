@@ -148,6 +148,10 @@ class Cuts(Widgets.Box):
         ax = self.cuts_plot.add_axis()
         ax.grid(True)
         vbox.add_widget(self.plot)
+        self.deleteall = QtGui.QPushButton("Delete All")
+        self.deleteall.setObjectName("deleteall")
+        self.deleteall.clicked.connect(self.delete_all_cb)
+        vbox.add_widget(self.deleteall)
         self.add_widget(vbox)
         self.start()
 

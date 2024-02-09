@@ -555,7 +555,7 @@ class Cuts(Widgets.Box):
             self._replot(lines)
             self.save_cuts.set_enabled(True)
             # self.w.delete_all.set_enabled(True)
-        self._replot(lines)
+        # self._replot(lines)
 
         # force mpl redraw
         self.cuts_plot.draw()

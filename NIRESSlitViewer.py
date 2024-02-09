@@ -671,7 +671,7 @@ class Cuts(Widgets.Box):
         return True
 
     def buttonup_cb(self, canvas, event, data_x, data_y, viewer):
-        self.delete_all_cb()
+        self.delete_all_cb(event)
         if self.cutstag == self._new_cut:
             return True
         obj = self.canvas.get_object_by_tag(self.cutstag)

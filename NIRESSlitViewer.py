@@ -366,7 +366,7 @@ class Cuts(Widgets.Box):
         # start line cuts operation
         self.cuts_plot.set_titles(rtitle="Cuts")
 
-        self.drag_update = self.settings.get('drag_update', False)
+        # self.drag_update = self.settings.get('drag_update', False)
 
         # insert canvas, if not already
         p_canvas = self.fitsimage.get_canvas()

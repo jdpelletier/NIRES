@@ -1201,7 +1201,7 @@ class FitsViewer(QtGui.QMainWindow):
 
     def cuts_popup(self):
         if self.c != None:
-            self.c.dismiss()
+            self.c.dismiss(None)
         self.c = Cuts(self.logger, self.fitsimage)
         self.c.show()
 

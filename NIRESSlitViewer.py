@@ -680,6 +680,10 @@ class Cuts(Widgets.Box):
         # Assume first element of this compound object is the reference obj
         obj = obj.objects[0]
         obj.move_to_pt((data_x, data_y))
+        self.canvas.delete_all_objects()
+        # self.w.cuts.clear()
+        self.tags = [self._new_cut]
+        self.cutstag = self._new_cut
 
         self.replot_all()
         return True

@@ -371,6 +371,7 @@ class Cuts(Widgets.Box):
 
     def start(self):
         # start line cuts operation
+        self.canvas.enable_draw(True)
         self.cuts_plot.set_titles(rtitle="Cuts")
 
         # self.drag_update = self.settings.get('drag_update', False)

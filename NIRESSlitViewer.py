@@ -401,7 +401,7 @@ class Cuts(Widgets.Box):
 
     def stop(self):
         self.gui_up = False
-        self._split_sizes = self.w.splitter.get_sizes()
+        # self._split_sizes = self.w.splitter.get_sizes()
         # remove the canvas from the image
         p_canvas = self.fitsimage.get_canvas()
         p_canvas.delete_object_by_tag(self.layertag)

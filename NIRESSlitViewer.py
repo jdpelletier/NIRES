@@ -1200,7 +1200,7 @@ class FitsViewer(QtGui.QMainWindow):
             self.load_file(fileName)
 
     def cuts_popup(self):
-        if self.c != None:
+        if self.c is not None:
             self.c.dismiss(None)
         self.c = Cuts(self.logger, self.fitsimage)
         self.c.show()

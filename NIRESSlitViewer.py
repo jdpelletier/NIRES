@@ -130,7 +130,7 @@ class Cuts(Widgets.Box):
         canvas.set_surface(self.fitsimage)
         self.canvas = canvas
 
-        self.cuts_image = self.fitsimage.get_image()
+        self.cuts_image = None
 
         self.gui_up = False
 
@@ -673,6 +673,7 @@ class Cuts(Widgets.Box):
         return True
 
     def keydown(self, canvas, event, data_x, data_y, viewer):
+        print(event.key)
         if event.key == 'n':
             self.select_cut(self._new_cut)
             return True

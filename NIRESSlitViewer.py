@@ -154,9 +154,6 @@ class Cuts(Widgets.Box):
         self.closebtn.add_callback('activated', self.dismiss)
         vbox.add_widget(self.closebtn)
         self.add_widget(vbox)
-
-        self.fitsimage.add_callback('cursor-down', self.btndown)
-
         self.start()
 
         # btn = b.delete_all
@@ -838,9 +835,6 @@ class Cuts(Widgets.Box):
                 continue
             self._update_tines(obj)
         self.canvas.redraw(whence=3)
-
-    def btndown(self, canvas, event, data_x, data_y):
-        self.delete_all_cb(event)
 
     def dismiss(self, event):
         self.stop()

@@ -661,9 +661,8 @@ class Cuts(Widgets.Box):
         return self.motion_cb(canvas, event, data_x, data_y, viewer)
 
     def motion_cb(self, canvas, event, data_x, data_y, viewer):
-        self.delete_all_cb(event)
         if self.cutstag == self._new_cut:
-            return True
+            return self.delete_all_cb(event)
         obj = self.canvas.get_object_by_tag(self.cutstag)
         # Assume first element of this compound object is the reference obj
         obj = obj.objects[0]
@@ -672,7 +671,7 @@ class Cuts(Widgets.Box):
 
         if self.drag_update:
             self.replot_all()
-        return True
+        return self.delete_all_cb(event)
 
     def buttonup_cb(self, canvas, event, data_x, data_y, viewer):
         if self.cutstag == self._new_cut:

@@ -21,7 +21,7 @@ from ginga.qtw.ImageViewQt import CanvasView, ScrolledView
 from ginga.util import iqcalc, io_fits, plots
 from ginga.util.loader import load_data
 from ginga.AstroImage import AstroImage
-from ginga.gw import Plot
+from ginga.gw import Plot, Widgets
 
 import ktl
 
@@ -134,7 +134,7 @@ class Cuts(QtGui.QWidget):
 
         self.gui_up = False
 
-        vbox = QtGui.QVBoxLayout()
+        vbox = Widgets.VBox()
 
         self.cuts_plot = plots.CutsPlot(logger=self.logger,
                                         width=400, height=400)
@@ -142,7 +142,7 @@ class Cuts(QtGui.QWidget):
         self.plot.resize(400, 400)
         ax = self.cuts_plot.add_axis()
         ax.grid(True)
-        vbox.addWidget(self.cuts_plot)
+        vbox.add_widget(self.plot)
         self.setLayout(vbox)
 
         # btn = b.delete_all

@@ -523,11 +523,10 @@ class Cuts(Widgets.Box):
 
         return np.array(coords)
 
-    def _replot(self, lines, colors):
+    def _replot(self, lines):
         for idx in range(len(lines)):
-            line, color = lines[idx], colors[idx]
-            line.color = color
-            self._plotpoints(line, color)
+            line= lines[idx]
+            self._plotpoints(line, "cyan")
 
         return True
 
@@ -537,25 +536,26 @@ class Cuts(Widgets.Box):
         # self.save_cuts.set_enabled(False)
 
         # idx = 0
-        # for cutstag in self.tags:
-        #     if cutstag == self._new_cut:
-        #         continue
-        #     obj = self.canvas.get_object_by_tag(cutstag)
-        #     if obj.kind != 'compound':
-        #         continue
-        #     lines = self._getlines(obj)
-        #     n = len(lines)
-        #     count = obj.get_data('count', self.count)
-        #     idx = (count + n) % len(self.colors)
-        #     colors = self.colors[idx:idx + n]
-        #     # text should take same color as first line in line set
-        #     text = obj.objects[1]
-        #     if text.kind == 'text':
-        #         text.color = colors[0]
-        #     #text.color = color
-        #     self._replot(lines, colors)
-        #     self.save_cuts.set_enabled(True)
-        #     # self.w.delete_all.set_enabled(True)
+        for cutstag in self.tags:
+            if cutstag == self._new_cut:
+                continue
+            obj = self.canvas.get_object_by_tag(cutstag)
+            if obj.kind != 'compound':
+                continue
+            lines = self._getlines(obj)
+            # n = len(lines)
+            # count = obj.get_data('count', self.count)
+            # idx = (count + n) % len(self.colors)
+            # colors = self.colors[idx:idx + n]
+            # # text should take same color as first line in line set
+            # text = obj.objects[1]
+            # if text.kind == 'text':
+            #     text.color = colors[0]
+            #text.color = color
+            self._replot(lines)
+            self.save_cuts.set_enabled(True)
+            # self.w.delete_all.set_enabled(True)
+        self._replot(lines)
 
         # force mpl redraw
         self.cuts_plot.draw()

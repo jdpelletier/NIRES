@@ -473,9 +473,8 @@ class Cuts(Widgets.Box):
 
         points = np.array(points)
 
-        rgb = colors.lookup_color(color)
         self.cuts_plot.cuts(points, xtitle="Line Index", ytitle="Pixel Value",
-                            color=rgb)
+                            color=color)
 
         if self.settings.get('show_cuts_legend', False):
             self.add_legend()

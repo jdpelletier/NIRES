@@ -78,7 +78,7 @@ class UpdateControlWindow(QtCore.QRunnable):
         self.fn(*self.args, **self.kwargs)
 
 ##Cuts
-class Cuts(Widgets.box):
+class Cuts(Widgets.Box):
 
     def __init__(self, logger):
         super().__init__()

@@ -152,7 +152,7 @@ class Cuts(Widgets.Box):
         self.deleteall.add_callback('activated', self.delete_all_cb)
         vbox.add_widget(self.deleteall)
         self.closebtn = Widgets.Button("Close")
-        self.closebtn.add_callback('activated', self.dismiss())
+        self.closebtn.add_callback('activated', self.dismiss)
         vbox.add_widget(self.closebtn)
         self.add_widget(vbox)
         self.start()
@@ -837,7 +837,7 @@ class Cuts(Widgets.Box):
         self.canvas.redraw(whence=3)
 
     def dismiss(self):
-        self.close()
+        self.hide()
 # END
 
 

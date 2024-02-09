@@ -526,7 +526,7 @@ class Cuts(Widgets.Box):
     def _replot(self, lines):
         for idx in range(len(lines)):
             line= lines[idx]
-            self._plotpoints(line, "cyan")
+            self._plotpoints(line, "blue")
 
         return True
 

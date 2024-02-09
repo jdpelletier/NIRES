@@ -476,8 +476,8 @@ class Cuts(Widgets.Box):
         self.cuts_plot.cuts(points, xtitle="Line Index", ytitle="Pixel Value",
                             color=color)
 
-        if self.settings.get('show_cuts_legend', False):
-            self.add_legend()
+        # if self.settings.get('show_cuts_legend', False):
+        self.add_legend()
 
     def add_legend(self):
         """Add or update Cuts plot legend."""

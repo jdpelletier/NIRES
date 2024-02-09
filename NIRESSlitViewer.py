@@ -154,6 +154,9 @@ class Cuts(Widgets.Box):
         self.closebtn.add_callback('activated', self.dismiss)
         vbox.add_widget(self.closebtn)
         self.add_widget(vbox)
+
+        self.fitsimage.add_callback('cursor-down', self.btndown)
+
         self.start()
 
         # btn = b.delete_all
@@ -662,7 +665,7 @@ class Cuts(Widgets.Box):
 
     def motion_cb(self, canvas, event, data_x, data_y, viewer):
         if self.cutstag == self._new_cut:
-            return self.delete_all_cb(event)
+            return True
         obj = self.canvas.get_object_by_tag(self.cutstag)
         # Assume first element of this compound object is the reference obj
         obj = obj.objects[0]
@@ -671,7 +674,7 @@ class Cuts(Widgets.Box):
 
         if self.drag_update:
             self.replot_all()
-        return self.delete_all_cb(event)
+        return True
 
     def buttonup_cb(self, canvas, event, data_x, data_y, viewer):
         if self.cutstag == self._new_cut:
@@ -835,6 +838,9 @@ class Cuts(Widgets.Box):
                 continue
             self._update_tines(obj)
         self.canvas.redraw(whence=3)
+
+    def btndown(self, canvas, event, data_x, data_y):
+        self.delete_all_cb(event)
 
     def dismiss(self, event):
         self.stop()

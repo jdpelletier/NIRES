@@ -555,7 +555,7 @@ class Cuts(Widgets.Box):
             #text.color = color
             self._replot(lines, colors)
             self.save_cuts.set_enabled(True)
-            self.w.delete_all.set_enabled(True)
+            # self.w.delete_all.set_enabled(True)
 
         # force mpl redraw
         self.cuts_plot.draw()
@@ -815,9 +815,9 @@ class Cuts(Widgets.Box):
 
     def set_mode(self, mode):
         self.canvas.set_draw_mode(mode)
-        self.w.btn_move.set_state(mode == 'move')
-        self.w.btn_draw.set_state(mode == 'draw')
-        self.w.btn_edit.set_state(mode == 'edit')
+        # self.w.btn_move.set_state(mode == 'move')
+        # self.w.btn_draw.set_state(mode == 'draw')
+        # self.w.btn_edit.set_state(mode == 'edit')
 
     def redraw_cuts(self):
         """Redraws cuts with tines (for cuts with a 'width')."""

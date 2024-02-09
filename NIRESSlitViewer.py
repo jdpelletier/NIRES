@@ -694,20 +694,20 @@ class Cuts(Widgets.Box):
 
     def _get_new_count(self):
         counts = set([])
-        for cutstag in self.tags:
-            try:
-                obj = self.canvas.get_object_by_tag(cutstag)
-            except KeyError:
-                continue
-            counts.add(obj.get_data('count', 0))
-        ncounts = set(range(len(self.colors)))
-        avail = list(ncounts.difference(counts))
-        avail.sort()
-        if len(avail) > 0:
-            count = avail[0]
-        else:
-            self.count += 1
-            count = self.count
+        # for cutstag in self.tags:
+        #     try:
+        #         obj = self.canvas.get_object_by_tag(cutstag)
+        #     except KeyError:
+        #         continue
+        #     counts.add(obj.get_data('count', 0))
+        # ncounts = set(range(len(self.colors)))
+        # avail = list(ncounts.difference(counts))
+        # avail.sort()
+        # if len(avail) > 0:
+        #     count = avail[0]
+        # else:
+        self.count += 1
+        count = self.count
         return count
 
     def _get_cut_index(self):

@@ -674,16 +674,13 @@ class Cuts(Widgets.Box):
         return True
 
     def buttonup_cb(self, canvas, event, data_x, data_y, viewer):
+        self.delete_all_cb(event)
         if self.cutstag == self._new_cut:
             return True
         obj = self.canvas.get_object_by_tag(self.cutstag)
         # Assume first element of this compound object is the reference obj
         obj = obj.objects[0]
         obj.move_to_pt((data_x, data_y))
-        self.canvas.delete_all_objects()
-        # self.w.cuts.clear()
-        self.tags = [self._new_cut]
-        self.cutstag = self._new_cut
 
         self.replot_all()
         return True

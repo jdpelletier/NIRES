@@ -18,9 +18,10 @@ from ginga import Bindings, cmap
 from ginga.misc import log, Settings
 from ginga.qtw.QtHelp import QtGui, QtCore
 from ginga.qtw.ImageViewQt import CanvasView, ScrolledView
-from ginga.util import iqcalc, io_fits
+from ginga.util import iqcalc, io_fits, plots
 from ginga.util.loader import load_data
 from ginga.AstroImage import AstroImage
+from ginga.gw import Plot
 
 import ktl
 
@@ -105,14 +106,14 @@ class Cuts(QtGui.QWidget):
 
         # get Cuts preferences
         self.fitsimage = CanvasView(self.logger, render='widget')
-        prefs = Settings.Preferences()
-        self.settings = prefs.create_category('plugin_Cuts')
-        self.settings.add_defaults(select_new_cut=True, draw_then_move=True,
-                                   label_cuts=True, colors=cut_colors,
-                                   drag_update=False,
-                                   show_cuts_legend=False, enable_slit=False)
-        self.settings.load(onError='silent')
-        self.colors = self.settings.get('colors', cut_colors)
+        # prefs = Settings.Preferences()
+        # self.settings = prefs.create_category('plugin_Cuts')
+        # self.settings.add_defaults(select_new_cut=True, draw_then_move=True,
+        #                            label_cuts=True, colors=cut_colors,
+        #                            drag_update=False,
+        #                            show_cuts_legend=False, enable_slit=False)
+        # self.settings.load(onError='silent')
+        # self.colors = self.settings.get('colors', cut_colors)
 
         self.dc = self.fitsimage.get_canvas().get_draw_classes()
         canvas = self.dc.DrawingCanvas()
@@ -129,29 +130,12 @@ class Cuts(QtGui.QWidget):
         canvas.set_surface(self.fitsimage)
         self.canvas = canvas
 
-        self.use_slit = self.settings.get('enable_slit', False)
         self.cuts_image = None
 
         self.gui_up = False
 
-        if not have_mpl:
-            raise ImportError('Install matplotlib to use this plugin')
-
-        top = Widgets.VBox()
-        top.set_border_width(4)
-
-        # Make the cuts plot
-        box, sw, orientation = Widgets.get_oriented_box(container,
-                                                        orientation=self.settings.get('orientation', None))
-        box.set_margins(4, 4, 4, 4)
-        box.set_spacing(2)
-
-        paned = Widgets.Splitter(orientation=orientation)
-        self.w.splitter = paned
-
-        # Add Tab Widget
-        nb = Widgets.TabWidget(tabpos='top')
-        paned.add_widget(Widgets.hadjust(nb, orientation))
+        vbox = QtGui.QVBoxLayout()
+        vbox.set_border_width(4)
 
         self.cuts_plot = plots.CutsPlot(logger=self.logger,
                                         width=400, height=400)
@@ -159,192 +143,104 @@ class Cuts(QtGui.QWidget):
         self.plot.resize(400, 400)
         ax = self.cuts_plot.add_axis()
         ax.grid(True)
-
-        self.slit_plot = plots.Plot(logger=self.logger,
-                                    width=400, height=400)
-        self.slit_plot.add_axis(facecolor='black')
-        self.plot2 = Plot.PlotWidget(self.slit_plot)
-        self.plot2.resize(400, 400)
-
-        captions = (('Cut:', 'label', 'Cut', 'combobox',
-                     'New Cut Type:', 'label', 'Cut Type', 'combobox'),
-                    ('Delete Cut', 'button', 'Delete All', 'button'),
-                    ('Save', 'button', 'Copy Cut', 'button'),
-                    )
-        w, b = Widgets.build_info(captions, orientation=orientation)
-        self.w.update(b)
-
-        # control for selecting a cut
-        combobox = b.cut
-        for tag in self.tags:
-            combobox.append_text(tag)
-        combobox.show_text(self.cutstag)
-        combobox.add_callback('activated', self.cut_select_cb)
-        self.w.cuts = combobox
-        combobox.set_tooltip("Select a cut to redraw or delete")
-
-        # control for selecting cut type
-        combobox = b.cut_type
-        for cuttype in self.cuttypes:
-            combobox.append_text(cuttype)
-        self.w.cuts_type = combobox
-        index = self.cuttypes.index(self.cuttype)
-        combobox.set_index(index)
-        combobox.add_callback('activated', self.set_cutsdrawtype_cb)
-        combobox.set_tooltip("Choose the cut type to draw")
-
-        self.save_cuts = b.save
-        self.save_cuts.set_tooltip("Save cuts plot and data")
-        self.save_cuts.add_callback('activated',
-                                    lambda w: self.save_cb(mode='cuts'))
-        self.save_cuts.set_enabled(self.save_enabled)
-
-        btn = b.copy_cut
-        btn.add_callback('activated', self.copy_cut_cb)
-        btn.set_tooltip("Copy selected cut")
-
-        btn = b.delete_cut
-        btn.add_callback('activated', self.delete_cut_cb)
-        btn.set_tooltip("Delete selected cut")
-
-        btn = b.delete_all
-        btn.add_callback('activated', self.delete_all_cb)
-        btn.set_tooltip("Clear all cuts")
-
-        fr = Widgets.Frame("Cuts")
-        fr.set_widget(w)
-
-        box.add_widget(fr, stretch=0)
-
-        exp = Widgets.Expander("Cut Width")
-
-        captions = (('Width Type:', 'label', 'Width Type', 'combobox',
-                     'Width radius:', 'label', 'Width radius', 'spinbutton'),
-                    )
-        w, b = Widgets.build_info(captions, orientation=orientation)
-        self.w.update(b)
-
-        # control for selecting width cut type
-        combobox = b.width_type
-        for atype in self.widthtypes:
-            combobox.append_text(atype)
-        index = self.widthtypes.index(self.widthtype)
-        combobox.set_index(index)
-        combobox.add_callback('activated', self.set_width_type_cb)
-        combobox.set_tooltip("Direction of summation orthogonal to cut")
-
-        sb = b.width_radius
-        sb.add_callback('value-changed', self.width_radius_changed_cb)
-        sb.set_tooltip("Radius of cut width")
-        sb.set_limits(1, 100)
-        sb.set_value(self.width_radius)
-
-        fr = Widgets.Frame()
-        fr.set_widget(w)
-        exp.set_widget(fr)
-
-        box.add_widget(exp, stretch=0)
-        box.add_widget(Widgets.Label(''), stretch=1)
-        paned.add_widget(sw)
-        paned.set_sizes(self._split_sizes)
-
-        top.add_widget(paned, stretch=5)
-
-        mode = self.canvas.get_draw_mode()
-        hbox = Widgets.HBox()
-        btn1 = Widgets.RadioButton("Move")
-        btn1.set_state(mode == 'move')
-        btn1.add_callback('activated',
-                          lambda w, val: self.set_mode_cb('move', val))
-        btn1.set_tooltip("Choose this to position cuts")
-        self.w.btn_move = btn1
-        hbox.add_widget(btn1)
-
-        btn2 = Widgets.RadioButton("Draw", group=btn1)
-        btn2.set_state(mode == 'draw')
-        btn2.add_callback('activated',
-                          lambda w, val: self.set_mode_cb('draw', val))
-        btn2.set_tooltip("Choose this to draw a new or replacement cut")
-        self.w.btn_draw = btn2
-        hbox.add_widget(btn2)
-
-        btn3 = Widgets.RadioButton("Edit", group=btn1)
-        btn3.set_state(mode == 'edit')
-        btn3.add_callback('activated',
-                          lambda w, val: self.set_mode_cb('edit', val))
-        btn3.set_tooltip("Choose this to edit a cut")
-        self.w.btn_edit = btn3
-        hbox.add_widget(btn3)
-
-        hbox.add_widget(Widgets.Label(''), stretch=1)
-        top.add_widget(hbox, stretch=0)
-
-        # Add Cuts plot to its tab
-        vbox_cuts = Widgets.VBox()
         vbox_cuts.add_widget(self.plot, stretch=1)
-        nb.add_widget(vbox_cuts, title="Cuts")
+        self.setLayout(vbox)
 
-        captions = (("Enable Slit", 'checkbutton',
-                     "Transpose Plot", 'checkbutton', "Save", 'button'),
-                    )
-        w, b = Widgets.build_info(captions, orientation=orientation)
-        self.w.update(b)
+        # btn = b.delete_all
+        # btn.add_callback('activated', self.delete_all_cb)
+        # btn.set_tooltip("Clear all cuts")
 
-        def chg_enable_slit(w, val):
-            self.use_slit = val
-            if val:
-                self.build_axes()
-            return True
-        b.enable_slit.set_state(self.use_slit)
-        b.enable_slit.set_tooltip("Enable the slit function")
-        b.enable_slit.add_callback('activated', chg_enable_slit)
+        # fr = Widgets.Frame("Cuts")
+        # fr.set_widget(w)
 
-        self.t_btn = b.transpose_plot
-        self.t_btn.set_tooltip("Flip the plot")
-        self.t_btn.set_state(self.transpose_enabled)
-        self.t_btn.add_callback('activated', self.transpose_plot)
+        # box.add_widget(fr, stretch=0)
 
-        self.save_slit = b.save
-        self.save_slit.set_tooltip("Save slit plot and data")
-        self.save_slit.add_callback('activated',
-                                    lambda w: self.save_cb(mode='slit'))
-        self.save_slit.set_enabled(self.save_enabled)
+        # exp = Widgets.Expander("Cut Width")
 
-        # Add frame to hold the slit controls
-        fr = Widgets.Frame("Axes controls")
-        self.hbox_axes = Widgets.HBox()
-        self.hbox_axes.set_border_width(4)
-        self.hbox_axes.set_spacing(1)
-        fr.set_widget(self.hbox_axes)
+        # captions = (('Width Type:', 'label', 'Width Type', 'combobox',
+        #              'Width radius:', 'label', 'Width radius', 'spinbutton'),
+        #             )
+        # w, b = Widgets.build_info(captions, orientation=orientation)
+        # self.w.update(b)
 
-        # Add Slit plot and controls to its tab
-        vbox_slit = Widgets.VBox()
-        vbox_slit.add_widget(self.plot2, stretch=1)
-        vbox_slit.add_widget(w)
-        vbox_slit.add_widget(fr)
-        nb.add_widget(vbox_slit, title="Slit")
+        # # control for selecting width cut type
+        # combobox = b.width_type
+        # for atype in self.widthtypes:
+        #     combobox.append_text(atype)
+        # index = self.widthtypes.index(self.widthtype)
+        # combobox.set_index(index)
+        # combobox.add_callback('activated', self.set_width_type_cb)
+        # combobox.set_tooltip("Direction of summation orthogonal to cut")
 
-        btns = Widgets.HBox()
-        btns.set_border_width(4)
-        btns.set_spacing(3)
+        # sb = b.width_radius
+        # sb.add_callback('value-changed', self.width_radius_changed_cb)
+        # sb.set_tooltip("Radius of cut width")
+        # sb.set_limits(1, 100)
+        # sb.set_value(self.width_radius)
 
-        btn = Widgets.Button("Close")
-        btn.add_callback('activated', lambda w: self.close())
-        btns.add_widget(btn, stretch=0)
-        btn = Widgets.Button("Help")
-        btn.add_callback('activated', lambda w: self.help())
-        btns.add_widget(btn, stretch=0)
-        btns.add_widget(Widgets.Label(''), stretch=1)
+        # fr = Widgets.Frame()
+        # fr.set_widget(w)
+        # exp.set_widget(fr)
 
-        top.add_widget(btns, stretch=0)
+        # box.add_widget(exp, stretch=0)
+        # box.add_widget(Widgets.Label(''), stretch=1)
+        # paned.add_widget(sw)
+        # paned.set_sizes(self._split_sizes)
 
-        container.add_widget(top, stretch=1)
+        # top.add_widget(paned, stretch=5)
 
-        self.select_cut(self.cutstag)
+        # mode = self.canvas.get_draw_mode()
+        # hbox = Widgets.HBox()
+        # btn1 = Widgets.RadioButton("Move")
+        # btn1.set_state(mode == 'move')
+        # btn1.add_callback('activated',
+        #                   lambda w, val: self.set_mode_cb('move', val))
+        # btn1.set_tooltip("Choose this to position cuts")
+        # self.w.btn_move = btn1
+        # hbox.add_widget(btn1)
+
+        # btn2 = Widgets.RadioButton("Draw", group=btn1)
+        # btn2.set_state(mode == 'draw')
+        # btn2.add_callback('activated',
+        #                   lambda w, val: self.set_mode_cb('draw', val))
+        # btn2.set_tooltip("Choose this to draw a new or replacement cut")
+        # self.w.btn_draw = btn2
+        # hbox.add_widget(btn2)
+
+        # btn3 = Widgets.RadioButton("Edit", group=btn1)
+        # btn3.set_state(mode == 'edit')
+        # btn3.add_callback('activated',
+        #                   lambda w, val: self.set_mode_cb('edit', val))
+        # btn3.set_tooltip("Choose this to edit a cut")
+        # self.w.btn_edit = btn3
+        # hbox.add_widget(btn3)
+
+        # hbox.add_widget(Widgets.Label(''), stretch=1)
+        # top.add_widget(hbox, stretch=0)
+
+        # # Add Cuts plot to its tab
+        # vbox_cuts = Widgets.VBox()
+        # vbox_cuts.add_widget(self.plot, stretch=1)
+        # nb.add_widget(vbox_cuts, title="Cuts")
+
+        # btns = Widgets.HBox()
+        # btns.set_border_width(4)
+        # btns.set_spacing(3)
+
+        # btn = Widgets.Button("Close")
+        # btn.add_callback('activated', lambda w: self.close())
+        # btns.add_widget(btn, stretch=0)
+        # btn = Widgets.Button("Help")
+        # btn.add_callback('activated', lambda w: self.help())
+        # btns.add_widget(btn, stretch=0)
+        # btns.add_widget(Widgets.Label(''), stretch=1)
+
+        # top.add_widget(btns, stretch=0)
+
+        # container.add_widget(top, stretch=1)
+
+        # self.select_cut(self.cutstag)
         self.gui_up = True
-
-        if self.use_slit:
-            self.build_axes()
 
     def build_axes(self):
         self.selected_axis = None
@@ -367,8 +263,6 @@ class Cuts(QtGui.QWidget):
                 # Add callback
                 self.axes_callback_handler(chkbox, i)
 
-            self.redraw_slit('clear')
-
     def axes_callback_handler(self, chkbox, pos):
         chkbox.add_callback('activated',
                             lambda w, tf: self.axis_toggle_cb(w, tf, pos))
@@ -384,9 +278,6 @@ class Cuts(QtGui.QWidget):
             self.w.btn_move.set_enabled(False)
             self.w.btn_edit.set_enabled(False)
             self.set_mode('draw')
-
-            if self.use_slit:
-                self.redraw_slit('clear')
         else:
             self.w.copy_cut.set_enabled(True)
             self.w.delete_cut.set_enabled(True)
@@ -396,9 +287,6 @@ class Cuts(QtGui.QWidget):
 
             if self.w.btn_edit.get_state():
                 self.edit_select_cuts()
-
-            if self.use_slit:
-                self._plot_slit()
 
     def cut_select_cb(self, w, index):
         tag = self.tags[index]
@@ -443,8 +331,6 @@ class Cuts(QtGui.QWidget):
         self.select_cut(tag)
         if tag == self._new_cut:
             self.save_cuts.set_enabled(False)
-            if self.use_slit and self.gui_up:
-                self.save_slit.set_enabled(False)
         # plot cleared in replot_all() if no more cuts
         self.replot_all()
 
@@ -456,8 +342,6 @@ class Cuts(QtGui.QWidget):
         self.w.cuts.append_text(self._new_cut)
         self.select_cut(self._new_cut)
         self.save_cuts.set_enabled(False)
-        if self.use_slit and self.gui_up:
-            self.save_slit.set_enabled(False)
         # plot cleared in replot_all() if no more cuts
         self.replot_all()
 
@@ -501,8 +385,6 @@ class Cuts(QtGui.QWidget):
         self.canvas.ui_set_active(True, viewer=self.fitsimage)
         self.fitsimage.show_status("Draw a line with the right mouse button")
         self.replot_all()
-        if self.use_slit:
-            self.cuts_image = self.fitsimage.get_image()
 
     def stop(self):
         self.gui_up = False
@@ -516,11 +398,6 @@ class Cuts(QtGui.QWidget):
         """This is called when a new image arrives or the data in the
         existing image changes.
         """
-        if self.use_slit:
-            image = self.fitsimage.get_image()
-            if image != self.cuts_image:
-                self.cuts_image = image
-                self.build_axes()
 
         self.replot_all()
 
@@ -638,51 +515,8 @@ class Cuts(QtGui.QWidget):
         # Exclude points outside boundaries
         coords = [(coord[0], coord[1]) for coord in coords
                   if (0 <= coord[0] < shape[1] and 0 <= coord[1] < shape[0])]
-        if not coords:
-            self.redraw_slit('clear')
-            return
 
         return np.array(coords)
-
-    def get_slit_data(self, coords):
-        image = self.fitsimage.get_image()
-        data = image.get_mddata()
-        naxes = data.ndim
-
-        # Small correction
-        selected_axis = abs(self.selected_axis - naxes)
-
-        spatial_axes = [naxes - 1, naxes - 2]
-
-        # Build N-dim slice
-        axes_slice = image.revnaxis + [0, 0]
-
-        # Slice data according to axis
-        for i, sa in enumerate(spatial_axes):
-            axes_slice[sa] = coords[:, i]
-        axes_slice[selected_axis] = slice(None, None, None)
-
-        self.slit_data = data[tuple(axes_slice)]
-
-    def _plot_slit(self):
-        if not self.selected_axis:
-            return
-
-        obj = self.canvas.get_object_by_tag(self.cutstag)
-        line = self._getlines(obj)
-
-        coords = self.get_coords(line[0])
-        self.get_slit_data(coords)
-
-        if self.transpose_enabled:
-            self.redraw_slit('transpose')
-
-        else:
-            self.slit_plot.ax.imshow(
-                self.slit_data, interpolation='nearest',
-                origin='lower', aspect='auto').set_cmap('gray')
-            self.set_labels()
-            self.slit_plot.draw()
 
     def _replot(self, lines, colors):
         for idx in range(len(lines)):
@@ -696,8 +530,6 @@ class Cuts(QtGui.QWidget):
         self.cuts_plot.clear()
         self.w.delete_all.set_enabled(False)
         self.save_cuts.set_enabled(False)
-        if self.use_slit and self.gui_up:
-            self.save_slit.set_enabled(False)
 
         idx = 0
         for cutstag in self.tags:
@@ -719,13 +551,6 @@ class Cuts(QtGui.QWidget):
             self._replot(lines, colors)
             self.save_cuts.set_enabled(True)
             self.w.delete_all.set_enabled(True)
-
-        # Redraw slit image for selected cut
-        if self.use_slit:
-            if self.cutstag != self._new_cut:
-                self._plot_slit()
-                if self.selected_axis and self.gui_up:
-                    self.save_slit.set_enabled(True)
 
         # force mpl redraw
         self.cuts_plot.draw()
@@ -998,104 +823,6 @@ class Cuts(QtGui.QWidget):
                 continue
             self._update_tines(obj)
         self.canvas.redraw(whence=3)
-
-    def width_radius_changed_cb(self, widget, val):
-        """Callback executed when the Width radius is changed."""
-        self.width_radius = val
-        self.redraw_cuts()
-        self.replot_all()
-        return True
-
-    def set_width_type_cb(self, widget, idx):
-        self.widthtype = self.widthtypes[idx]
-        self.redraw_cuts()
-        self.replot_all()
-        return True
-
-    def save_cb(self, mode):
-        """Save image, figure, and plot data arrays."""
-
-        # This just defines the basename.
-        # Extension has to be explicitly defined or things can get messy.
-        w = Widgets.SaveDialog(title='Save {0} data'.format(mode))
-        filename = w.get_path()
-
-        if filename is None:
-            # user canceled dialog
-            return
-
-        # TODO: This can be a user preference?
-        fig_dpi = 100
-
-        if mode == 'cuts':
-            fig, xarr, yarr = self.cuts_plot.get_data()
-
-        elif mode == 'slit':
-            fig, xarr, yarr = self.slit_plot.get_data()
-
-        figname = filename + '.png'
-        self.logger.info("saving figure as: %s" % (figname))
-        fig.savefig(figname, dpi=fig_dpi)
-
-        dataname = filename + '.npz'
-        self.logger.info("saving data as: %s" % (dataname))
-        np.savez_compressed(dataname, x=xarr, y=yarr)
-
-    def axis_toggle_cb(self, w, tf, pos):
-        children = self.hbox_axes.get_children()
-
-        # Deactivate previously selected axis
-        if self.selected_axis is not None:
-            children[self.selected_axis - 1].set_state(False)
-
-        # Check if the old axis is clicked
-        if pos == self.selected_axis:
-            self.selected_axis = None
-            if self.gui_up:
-                self.save_slit.set_enabled(False)
-            self.redraw_slit('clear')
-        else:
-            self.selected_axis = pos
-            children[pos - 1].set_state(tf)
-            if self.gui_up:
-                if self.cutstag != self._new_cut:
-                    self.save_slit.set_enabled(True)
-                    self._plot_slit()
-                else:
-                    # no cut selected ("new cut")
-                    self.redraw_slit('clear')
-
-    def redraw_slit(self, mode):
-        if mode == 'clear':
-            self.slit_plot.clear()
-        elif mode == 'transpose':
-            self.slit_data = self.slit_data.T
-            self.slit_plot.ax.imshow(
-                self.slit_data, interpolation='nearest',
-                origin='lower', aspect='auto').set_cmap('gray')
-            self.set_labels()
-
-        self.slit_plot.draw()
-
-    def transpose_plot(self, w, tf):
-        old_val = self.transpose_enabled
-        self.transpose_enabled = tf
-
-        if (old_val != tf and self.cutstag != self._new_cut and
-                self.selected_axis):
-            self.redraw_slit('transpose')
-
-    def set_labels(self):
-        image = self.fitsimage.get_image()
-        shape = image.get_mddata().shape
-
-        if (shape[0] == len(self.slit_data[0]) or
-                shape[1] == len(self.slit_data[0])):
-            self.slit_plot.ax.set_xlabel('')
-            self.slit_plot.ax.set_ylabel('Position along slit')
-        else:
-            self.slit_plot.ax.set_ylabel('')
-            self.slit_plot.ax.set_xlabel('Position along slit')
 
     def dismiss(self):
         self.close()

@@ -841,7 +841,7 @@ class Cuts(Widgets.Box):
         self.stop()
         # self.canvas.enable_draw(False)
         # self.delete_all_cb(event)
-        # self.delete()
+        self.delete()
 # END
 
 

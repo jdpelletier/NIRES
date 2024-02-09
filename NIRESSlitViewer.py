@@ -534,7 +534,7 @@ class Cuts(Widgets.Box):
     def replot_all(self):
         self.cuts_plot.clear()
         # self.w.delete_all.set_enabled(False)
-        self.save_cuts.set_enabled(False)
+        # self.save_cuts.set_enabled(False)
 
         idx = 0
         for cutstag in self.tags:

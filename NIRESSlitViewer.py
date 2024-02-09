@@ -108,6 +108,9 @@ class Cuts(Widgets.Box):
 
         # get Cuts preferences
         self.fitsimage = fitsimage
+        my_canvas = self.fitsimage.get_canvas()
+        self.crossdc = my_canvas.get_draw_class('crosshair')
+        self.fitsimage.get_canvas().add(self.crossdc(500, 500, color='blue', text=""))
         # prefs = Settings.Preferences()
         # self.settings = prefs.create_category('plugin_Cuts')
         # self.settings.add_defaults(select_new_cut=True, draw_then_move=True,

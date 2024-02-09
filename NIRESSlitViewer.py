@@ -78,7 +78,7 @@ class UpdateControlWindow(QtCore.QRunnable):
         self.fn(*self.args, **self.kwargs)
 
 ##Cuts
-class Cuts(QtGui.QWidget):
+class Cuts(Widgets):
 
     def __init__(self, logger):
         super().__init__()
@@ -143,7 +143,7 @@ class Cuts(QtGui.QWidget):
         ax = self.cuts_plot.add_axis()
         ax.grid(True)
         vbox.add_widget(self.plot)
-        self.setLayout(vbox)
+        self.set_layout(vbox)
 
         # btn = b.delete_all
         # btn.add_callback('activated', self.delete_all_cb)

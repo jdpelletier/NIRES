@@ -143,7 +143,7 @@ class Cuts(Widgets.Box):
         ax = self.cuts_plot.add_axis()
         ax.grid(True)
         vbox.add_widget(self.plot)
-        self.set_layout(vbox)
+        self.add_widget(vbox)
 
         # btn = b.delete_all
         # btn.add_callback('activated', self.delete_all_cb)

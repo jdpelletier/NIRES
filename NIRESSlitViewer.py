@@ -344,9 +344,9 @@ class Cuts(Widgets.Box):
         self.w.cuts.clear()
         self.tags = [self._new_cut]
         self.cutstag = self._new_cut
-        self.w.cuts.append_text(self._new_cut)
-        self.select_cut(self._new_cut)
-        self.save_cuts.set_enabled(False)
+        # self.w.cuts.append_text(self._new_cut)
+        # self.select_cut(self._new_cut)
+        # self.save_cuts.set_enabled(False)
         # plot cleared in replot_all() if no more cuts
         self.replot_all()
 
@@ -651,7 +651,6 @@ class Cuts(Widgets.Box):
             return []
 
     def buttondown_cb(self, canvas, event, data_x, data_y, viewer):
-        print("test")
         return self.motion_cb(canvas, event, data_x, data_y, viewer)
 
     def motion_cb(self, canvas, event, data_x, data_y, viewer):
@@ -668,6 +667,7 @@ class Cuts(Widgets.Box):
         return True
 
     def buttonup_cb(self, canvas, event, data_x, data_y, viewer):
+        self.delete_all_cb()
         if self.cutstag == self._new_cut:
             return True
         obj = self.canvas.get_object_by_tag(self.cutstag)

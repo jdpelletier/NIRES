@@ -82,6 +82,8 @@ class Cuts(Widgets.Box):
 
     def __init__(self, logger, fitsimage):
         super(Cuts, self).__init__(fitsimage)
+
+        print("open")
         self.logger = logger
 
         self.layertag = 'cuts-canvas'

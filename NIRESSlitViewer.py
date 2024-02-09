@@ -837,7 +837,7 @@ class Cuts(Widgets.Box):
         self.canvas.redraw(whence=3)
 
     def dismiss(self):
-        self.hide()
+        self.close()
 # END
 
 

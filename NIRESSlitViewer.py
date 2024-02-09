@@ -611,8 +611,8 @@ class Cuts(Widgets.Box):
 
     def _create_cut_obj(self, count, cuts_obj, color='cyan'):
         text = "cuts%d" % (count)
-        if not self.settings.get('label_cuts', False):
-            text = ''
+        # if not self.settings.get('label_cuts', False):
+        #     text = ''
         cuts_obj.showcap = False
         cuts_obj.linestyle = 'solid'
         #cuts_obj.color = color

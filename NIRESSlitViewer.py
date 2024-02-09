@@ -552,7 +552,7 @@ class Cuts(Widgets.Box):
             #     text.color = colors[0]
             #text.color = color
             self._replot(lines)
-            self.save_cuts.set_enabled(True)
+            # self.save_cuts.set_enabled(True)
             # self.w.delete_all.set_enabled(True)
         # self._replot(lines)
 

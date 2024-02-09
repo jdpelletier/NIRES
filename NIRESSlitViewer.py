@@ -151,6 +151,9 @@ class Cuts(Widgets.Box):
         self.deleteall = Widgets.Button("Delete All")
         self.deleteall.add_callback('activated', self.delete_all_cb)
         vbox.add_widget(self.deleteall)
+        self.closebtn = Widgets.Button("Close")
+        self.closebtn.add_callback('activated', lambda w: self.dismiss())
+        vbox.add_widget(self.closebtn)
         self.add_widget(vbox)
         self.start()
 
@@ -671,7 +674,6 @@ class Cuts(Widgets.Box):
         return True
 
     def buttonup_cb(self, canvas, event, data_x, data_y, viewer):
-        self.delete_all_cb(event)
         if self.cutstag == self._new_cut:
             return True
         obj = self.canvas.get_object_by_tag(self.cutstag)

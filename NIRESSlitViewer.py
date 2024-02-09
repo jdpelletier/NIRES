@@ -385,7 +385,7 @@ class Cuts(Widgets.Box):
 
     def resume(self):
         # turn off any mode user may be in
-        self.modes_off()
+        # self.modes_off()
 
         self.canvas.ui_set_active(True, viewer=self.fitsimage)
         self.fitsimage.show_status("Draw a line with the right mouse button")

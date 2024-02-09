@@ -339,9 +339,9 @@ class Cuts(Widgets.Box):
         # plot cleared in replot_all() if no more cuts
         self.replot_all()
 
-    def delete_all_cb(self, w):
+    def delete_all_cb(self):
         self.canvas.delete_all_objects()
-        self.w.cuts.clear()
+        # self.w.cuts.clear()
         self.tags = [self._new_cut]
         self.cutstag = self._new_cut
         # self.w.cuts.append_text(self._new_cut)

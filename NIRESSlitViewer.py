@@ -135,7 +135,6 @@ class Cuts(QtGui.QWidget):
         self.gui_up = False
 
         vbox = QtGui.QVBoxLayout()
-        vbox.set_border_width(4)
 
         self.cuts_plot = plots.CutsPlot(logger=self.logger,
                                         width=400, height=400)
@@ -143,7 +142,7 @@ class Cuts(QtGui.QWidget):
         self.plot.resize(400, 400)
         ax = self.cuts_plot.add_axis()
         ax.grid(True)
-        vbox_cuts.add_widget(self.plot, stretch=1)
+        vbox.add_widget(self.plot, stretch=1)
         self.setLayout(vbox)
 
         # btn = b.delete_all

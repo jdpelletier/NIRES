@@ -348,9 +348,9 @@ class Cuts(Widgets.Box):
         self.tags = [self._new_cut]
         self.cutstag = self._new_cut
         # self.w.cuts.append_text(self._new_cut)
-        self.select_cut(self._new_cut)
+        # self.select_cut(self._new_cut)
         self.save_cuts.set_enabled(False)
-        self.cuts_plot.clear()
+        # self.cuts_plot.clear()
         # plot cleared in replot_all() if no more cuts
         self.replot_all()
 

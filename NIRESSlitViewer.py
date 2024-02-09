@@ -130,7 +130,7 @@ class Cuts(Widgets.Box):
         canvas.set_surface(self.fitsimage)
         self.canvas = canvas
 
-        self.cuts_image = None
+        self.cuts_image = self.fitsimage.get_image()
 
         self.gui_up = False
 

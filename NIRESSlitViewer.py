@@ -353,14 +353,14 @@ class Cuts(Widgets.Box):
     def add_cuts_tag(self, tag):
         if tag not in self.tags:
             self.tags.append(tag)
-            self.w.cuts.append_text(tag)
+            # self.w.cuts.append_text(tag)
 
-        select_flag = self.settings.get('select_new_cut', True)
-        if select_flag:
-            self.select_cut(tag)
-            move_flag = self.settings.get('draw_then_move', True)
-            if move_flag:
-                self.set_mode('move')
+        # select_flag = self.settings.get('select_new_cut', True)
+        # if select_flag:
+        #     self.select_cut(tag)
+        #     move_flag = self.settings.get('draw_then_move', True)
+        #     if move_flag:
+        #         self.set_mode('move')
 
     def start(self):
         # start line cuts operation

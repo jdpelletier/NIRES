@@ -81,7 +81,7 @@ class UpdateControlWindow(QtCore.QRunnable):
 class Cuts(QtGui.QWidget):
 
     def __init__(self, logger):
-        super(Cuts, self).__init__()
+        super().__init__()
         self.logger = logger
 
         self.layertag = 'cuts-canvas'
@@ -142,7 +142,7 @@ class Cuts(QtGui.QWidget):
         self.plot.resize(400, 400)
         ax = self.cuts_plot.add_axis()
         ax.grid(True)
-        vbox.addWidget(self.plot, stretch=1)
+        vbox.addWidget(self.plot)
         self.setLayout(vbox)
 
         # btn = b.delete_all

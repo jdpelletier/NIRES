@@ -646,6 +646,7 @@ class Cuts(Widgets.Box):
             return []
 
     def buttondown_cb(self, canvas, event, data_x, data_y, viewer):
+        print("test")
         return self.motion_cb(canvas, event, data_x, data_y, viewer)
 
     def motion_cb(self, canvas, event, data_x, data_y, viewer):

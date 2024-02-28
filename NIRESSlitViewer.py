@@ -1413,7 +1413,7 @@ class FitsViewer(QtGui.QMainWindow):
         user = "nires1"
         host = "niresserver1"
         cmd = f"modify -s dcs2 silent instxoff={dx} instyoff={dy} rel2curr=t"
-        # subprocess.Popen(f"ssh {user}@{host} {cmd}", shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE).communicate()
+        subprocess.Popen(f"ssh {user}@{host} {cmd}", shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE).communicate()
         # self.dcs['instxoff'].write(dx)
         # self.dcs['instyoff'].write(dy)
 
@@ -1425,7 +1425,7 @@ class FitsViewer(QtGui.QMainWindow):
         user = "nires1"
         host = "niresserver1"
         cmd = f"modify -s dcs2 silent instxoff={dx} instyoff={dy} rel2curr=t"
-        # subprocess.Popen(f"ssh {user}@{host} {cmd}", shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE).communicate()
+        subprocess.Popen(f"ssh {user}@{host} {cmd}", shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE).communicate()
         # self.dcs['instxoff'].write(dx)
         # self.dcs['instyoff'].write(dy)
 

@@ -890,6 +890,22 @@ class FitsViewer(QtGui.QMainWindow):
         self.fitsimage = fi
 
         # enable some user interaction
+        menubar = self.menuBar()
+
+        filemenu = menubar.addMenu("File")
+
+        item = QtGui.QAction("Open File", menubar)
+        item.triggered.connect(self.open_file)
+        filemenu.addAction(item)
+
+        sep = QtGui.QAction(menubar)
+        sep.setSeparator(True)
+        filemenu.addAction(sep)
+
+        item = QtGui.QAction("Quit", menubar)
+        item.triggered.connect(self.quit)
+        filemenu.addAction(item)
+
         self.bd = fi.get_bindings()
         self.bd.enable_all(True)
         vbox = QtGui.QVBoxLayout()
@@ -1019,14 +1035,6 @@ class FitsViewer(QtGui.QMainWindow):
         self.wcutting.setObjectName("wcutting")
         self.wcutting.clicked.connect(self.cuts_popup)
         buttons_vbox_right.addWidget(self.wcutting)
-        self.wopen = QtGui.QPushButton("Open File")
-        self.wopen.setObjectName("wopen")
-        self.wopen.clicked.connect(self.open_file)
-        buttons_vbox_right.addWidget(self.wopen)
-        self.wquit = QtGui.QPushButton("Quit")
-        self.wquit.setObjectName("wquit")
-        self.wquit.clicked.connect(self.quit)
-        buttons_vbox_right.addWidget(self.wquit)
         hw = QtGui.QWidget()
         hw.setLayout(buttons_vbox_right)
         buttons_hbox.addWidget(hw)

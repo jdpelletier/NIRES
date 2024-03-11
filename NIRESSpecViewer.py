@@ -820,7 +820,7 @@ class FitsViewer(QtGui.QMainWindow):
         vbox.addWidget(hw)
         readout_hbox = QtGui.QHBoxLayout()
         readout_hbox.setObjectName("readout_hbox")
-        self.readout = QtGui.QLabel("X:                 Y:                    Value:                   Wavelength")
+        self.readout = QtGui.QLabel("X:                 Y:                    Value:                   Wavelength:                          ")
         self.readout.setObjectName("readout")
         self.readout.setMinimumSize(QtCore.QSize(350, 0))
         readout_hbox.addWidget(self.readout)

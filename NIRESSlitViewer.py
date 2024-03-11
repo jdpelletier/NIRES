@@ -945,6 +945,10 @@ class FitsViewer(QtGui.QMainWindow):
         self.file_info = QtGui.QLabel("File: ")
         self.file_info.setObjectName("file_info")
         file_hbox.addWidget(self.file_info)
+        self.wtoggleslit = QtGui.QPushButton("Toggle Slit")
+        self.wtoggleslit.setObjectName("wtoggleslit")
+        self.wtoggleslit.clicked.connect(self.toggleslit)
+        file_hbox.addWidget(self.wtoggleslit)
         # self.box_readout = QtGui.QLabel("Amplitude:                  FWHM: ")
         # self.box_readout.setMinimumSize(QtCore.QSize(350, 0))
         # self.box_readout.setObjectName("box_readout")
@@ -1039,9 +1043,9 @@ class FitsViewer(QtGui.QMainWindow):
         fi.set_callback('cursor-changed', self.motion_cb)
         fi.add_callback('cursor-down', self.btndown)
 
-        # self.recdc, self.compdc = self.add_canvas()
-        self.recdc = self.add_canvas()
+        self.recdc, self.compdc, self.linedc = self.add_canvas()
         self.picktag = "pick-box"
+        self.slittag = "slit-line"
 
         # self.sky = ""
         self.curentfile = ""
@@ -1355,6 +1359,14 @@ class FitsViewer(QtGui.QMainWindow):
     
     def recenter(self):
         self.fitsimage.zoom_fit()
+    
+    def toggleslit(self):
+        try:
+            self.fitsimage.get_canvas().get_object_by_tag(self.slittag)
+            self.fitsimage.get_canvas().delete_object_by_tag(self.slittag)
+        except KeyError:
+            self.slitline = self.linedc(119, 537, 124, 393, color='red')
+            self.fitsimage.get_canvas().add(self.slitline, tag=self.slittag, redraw=True)
     
     def movSlitCent(self):
         if self.movSlitCursor == False:

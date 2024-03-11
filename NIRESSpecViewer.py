@@ -853,7 +853,7 @@ class FitsViewer(QtGui.QMainWindow):
         self.wtoggleslit = QtGui.QPushButton("Toggle Slit")
         self.wtoggleslit.setObjectName("wtoggleslit")
         self.wtoggleslit.clicked.connect(self.toggleslit)
-        file_hbox.addWidget(self.toggleslit)
+        file_hbox.addWidget(self.wtoggleslit)
         # self.box_readout = QtGui.QLabel("Amplitude:                  FWHM: ")
         # self.box_readout.setMinimumSize(QtCore.QSize(350, 0))
         # self.box_readout.setObjectName("box_readout")

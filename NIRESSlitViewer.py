@@ -8,7 +8,7 @@ from pathlib import Path
 
 import numpy as np
 from astropy.io import fits
-# from astropy import wcs
+from astropy import wcs
 import astropy.units as u
 # from astropy.stats import gaussian_sigma_to_fwhm
 from astropy.modeling import models, fitting
@@ -1156,6 +1156,8 @@ class FitsViewer(QtGui.QMainWindow):
         self.currentfile = filepath
         print(filepath)
         recenter = False
+        header, fitsData = self.addWcs(filepath)
+        self.load_file(self.writeFits(header, fitsData))
         if self.fitsimage.get_image() == None:
             recenter = True
         try:
@@ -1384,6 +1386,32 @@ class FitsViewer(QtGui.QMainWindow):
             self.fitsimage.get_canvas().add(self.compass, tag=self.comptag, redraw=True)
             # self.fitsimage.get_canvas().add(self.compdc(data_x, data_y, radius, color='skyblue',
                                     #    fontsize=8))
+            
+    def addWcs(self, filen):
+        w = wcs.WCS(naxis=2)
+        fitsData = fits.getdata(filen, ext=0)
+        header = fits.getheader(filen)
+        ht, wd = fitsData.shape[:2]
+        y = ht//2
+        x = wd//2
+        ra = float(header['RA'])
+        dec = float(header['DEC'])
+        rot = float(header['ROTPOSN'])
+        w.wcs.crpix = [y, x]
+        w.wcs.cdelt = np.array([-0.05, 0.05])
+        w.wcs.crota = np.array([0.05, rot])
+        w.wcs.crval = [ra, dec]
+        w.wcs.ctype = ["RA---TAN", "DEC--TAN"]
+        pixcrd = np.array([[0, 0], [24, 38], [45, 98]], dtype=np.float64)
+        world = w.wcs_pix2world(pixcrd, 0)
+        # Convert the same coordinates back to pixel coordinates.
+        pixcrd2 = w.wcs_world2pix(world, 0)
+        # These should be the same as the original pixel coordinates, modulo
+        # some floating-point error.
+        assert np.max(np.abs(pixcrd - pixcrd2)) < 1e-6
+        # Now, write out the WCS object as a FITS header
+        header = w.to_header()
+        return name, header, fitsData, filter
 
 
     def movSlitCent(self):

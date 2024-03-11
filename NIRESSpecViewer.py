@@ -766,13 +766,10 @@ class FitsViewer(QtGui.QMainWindow):
         # self.go.monitor()
         # self.test = ktl.cache('nids', 'test')
         # self.test.monitor()
-        self.display1 = ktl.cache('nids', 'display1')
+        self.display1 = ktl.cache('nsds', 'display1')
         self.display1.monitor()
-        self.dispname1 = ktl.cache('nids', 'dispname1')
+        self.dispname1 = ktl.cache('nsds', 'dispname1')
         self.dispname1.monitor()
-        # self.tempsky2 = ktl.cache('nids', 'TEMPSKY2')
-        # self.tempsky2.monitor()
-        # self.dcs = ktl.Service('dcs2')
 
         self.rawfile = ''
         self.mode = ''

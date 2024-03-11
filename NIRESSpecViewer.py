@@ -1129,7 +1129,7 @@ class FitsViewer(QtGui.QMainWindow):
                 # previm = self.slit_lastfile.read()
                 print("Taking image")
                 # self.waitForFileToBeUnlocked(0.5)
-                file_callback.emit(str(self.dispname2.read()))
+                file_callback.emit(str(self.dispname.read()))
                 self.waitForZero(0.25)
                 # self.previous_image = previm
             time.sleep(0.25)
@@ -1153,7 +1153,7 @@ class FitsViewer(QtGui.QMainWindow):
             time.sleep(wait_time)
 
     def nightpath(self):
-        dir = str(self.dispname2)
+        dir = str(self.dispname)
         if "//" in str(dir):
             dir = str(dir).split("//")
             dir = dir[0] + "/"

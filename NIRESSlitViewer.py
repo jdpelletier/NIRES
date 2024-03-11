@@ -1043,8 +1043,10 @@ class FitsViewer(QtGui.QMainWindow):
         fi.set_callback('cursor-changed', self.motion_cb)
         fi.add_callback('cursor-down', self.btndown)
 
-        self.recdc, self.linedc = self.add_canvas()
+        self.recdc = self.add_canvas()
         self.picktag = "pick-box"
+
+        self.dc = self.fitsimage.get_canvas().get_draw_classes()
         self.slittag = "slit-line"
 
         # self.sky = ""
@@ -1365,7 +1367,7 @@ class FitsViewer(QtGui.QMainWindow):
             self.fitsimage.get_canvas().get_object_by_tag(self.slittag)
             self.fitsimage.get_canvas().delete_object_by_tag(self.slittag)
         except KeyError:
-            self.slitline = self.linedc(119, 537, 124, 393, color='red')
+            self.slitline = self.dc.Line(119, 537, 124, 393, color='red')
             self.fitsimage.get_canvas().add(self.slitline, tag=self.slittag, redraw=True)
     
     def movSlitCent(self):

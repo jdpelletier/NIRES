@@ -1048,6 +1048,7 @@ class FitsViewer(QtGui.QMainWindow):
 
         self.dc = self.fitsimage.get_canvas().get_draw_classes()
         self.slittag = "slit-line"
+        self.comptag = "compass"
 
         # self.sky = ""
         self.curentfile = ""
@@ -1369,7 +1370,18 @@ class FitsViewer(QtGui.QMainWindow):
         except KeyError:
             self.slitline = self.dc.Line(120, 537, 125, 393, color='red', linewidth=5)
             self.fitsimage.get_canvas().add(self.slitline, tag=self.slittag, redraw=True)
-    
+
+    def togglecompass(self):
+        try:
+            self.fitsimage.get_canvas().get_object_by_tag(self.comptag)
+            self.fitsimage.get_canvas().delete_object_by_tag(self.comptag)
+        except KeyError:
+            self.compass = self.dc.Compass(40, 40, 10, color='green')
+            self.fitsimage.get_canvas().add(self.compass, tag=self.comptag, redraw=True)
+            # self.fitsimage.get_canvas().add(self.compdc(data_x, data_y, radius, color='skyblue',
+                                    #    fontsize=8))
+
+
     def movSlitCent(self):
         if self.movSlitCursor == False:
             self.movSlitCursor = True

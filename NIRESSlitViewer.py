@@ -961,6 +961,7 @@ class FitsViewer(QtGui.QMainWindow):
         file_hbox.setObjectName("file_hbox")
         self.file_info = QtGui.QLabel("File: ")
         self.file_info.setObjectName("file_info")
+        self.file_info.setMinimumSize(QtCore.QSize(350, 0))
         file_hbox.addWidget(self.file_info)
         self.wtoggleslit = QtGui.QPushButton("Toggle Slit")
         self.wtoggleslit.setObjectName("wtoggleslit")

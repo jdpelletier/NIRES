@@ -1113,6 +1113,8 @@ class FitsViewer(QtGui.QMainWindow):
 
     def motion_cb(self, viewer, button, data_x, data_y):
 
+        fits_x, fits_y = data_x, data_y
+
         # Get the value under the data coordinates
          # Calculate WCS RA
         try:

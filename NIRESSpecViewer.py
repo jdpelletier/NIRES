@@ -766,10 +766,10 @@ class FitsViewer(QtGui.QMainWindow):
         # self.go.monitor()
         # self.test = ktl.cache('nids', 'test')
         # self.test.monitor()
-        self.display1 = ktl.cache('nsds', 'display')
-        self.display1.monitor()
-        self.dispname1 = ktl.cache('nsds', 'dispname')
-        self.dispname1.monitor()
+        self.display = ktl.cache('nsds', 'display')
+        self.display.monitor()
+        self.dispname = ktl.cache('nsds', 'dispname')
+        self.dispname.monitor()
 
         self.rawfile = ''
         self.mode = ''
@@ -1124,8 +1124,8 @@ class FitsViewer(QtGui.QMainWindow):
     def scan(self, file_callback):
         # self.previous_image = self.slit_lastfile.read() #TODO this is to get first previous image, might remove.
         while self.scanning:
-            # if (self.go == 1 or self.test == 1 or self.display1 == 1) and ("v" in self.slit_filename or "TEMP" in self.slit_filename):
-            if self.display1 == 1:
+            # if (self.go == 1 or self.test == 1 or self.display == 1) and ("v" in self.slit_filename or "TEMP" in self.slit_filename):
+            if self.display == 1:
                 # previm = self.slit_lastfile.read()
                 print("Taking image")
                 # self.waitForFileToBeUnlocked(0.5)
@@ -1135,18 +1135,18 @@ class FitsViewer(QtGui.QMainWindow):
             time.sleep(0.25)
 
     def fileIsCurrentlyLocked(self):
-        print(f'display1 {self.display1} locked')
+        print(f'display {self.display} locked')
         locked = True
         # if int(self.go.read()) == 0 and int(self.test.read()) == 0:
-        if int(self.display1.read()) == 0:
-            print(f'display1 {self.display1} unlocked')
+        if int(self.display.read()) == 0:
+            print(f'display {self.display} unlocked')
             locked = False
         return locked
     
     def waitForZero(self, wait_time):
-        while self.display1 == 1:
+        while self.display == 1:
             time.sleep(wait_time)
-        print(f'display1 {self.display1}')
+        print(f'display {self.display}')
 
     def waitForFileToBeUnlocked(self, wait_time):
         while self.fileIsCurrentlyLocked():

@@ -1367,7 +1367,7 @@ class FitsViewer(QtGui.QMainWindow):
             self.fitsimage.get_canvas().get_object_by_tag(self.slittag)
             self.fitsimage.get_canvas().delete_object_by_tag(self.slittag)
         except KeyError:
-            self.slitline = self.dc.Line(119, 537, 124, 393, color='red', linewidth=3)
+            self.slitline = self.dc.Line(119, 537, 124, 393, color='red', linewidth=10)
             self.fitsimage.get_canvas().add(self.slitline, tag=self.slittag, redraw=True)
     
     def movSlitCent(self):

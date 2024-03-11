@@ -766,9 +766,9 @@ class FitsViewer(QtGui.QMainWindow):
         # self.go.monitor()
         # self.test = ktl.cache('nids', 'test')
         # self.test.monitor()
-        self.display1 = ktl.cache('nsds', 'display1')
+        self.display1 = ktl.cache('nsds', 'display')
         self.display1.monitor()
-        self.dispname1 = ktl.cache('nsds', 'dispname1')
+        self.dispname1 = ktl.cache('nsds', 'dispname')
         self.dispname1.monitor()
 
         self.rawfile = ''

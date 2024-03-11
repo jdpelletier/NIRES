@@ -155,101 +155,6 @@ class Cuts(Widgets.Box):
         vbox.add_widget(self.closebtn)
         self.add_widget(vbox)
         self.start()
-
-        # btn = b.delete_all
-        # btn.add_callback('activated', self.delete_all_cb)
-        # btn.set_tooltip("Clear all cuts")
-
-        # fr = Widgets.Frame("Cuts")
-        # fr.set_widget(w)
-
-        # box.add_widget(fr, stretch=0)
-
-        # exp = Widgets.Expander("Cut Width")
-
-        # captions = (('Width Type:', 'label', 'Width Type', 'combobox',
-        #              'Width radius:', 'label', 'Width radius', 'spinbutton'),
-        #             )
-        # w, b = Widgets.build_info(captions, orientation=orientation)
-        # self.w.update(b)
-
-        # # control for selecting width cut type
-        # combobox = b.width_type
-        # for atype in self.widthtypes:
-        #     combobox.append_text(atype)
-        # index = self.widthtypes.index(self.widthtype)
-        # combobox.set_index(index)
-        # combobox.add_callback('activated', self.set_width_type_cb)
-        # combobox.set_tooltip("Direction of summation orthogonal to cut")
-
-        # sb = b.width_radius
-        # sb.add_callback('value-changed', self.width_radius_changed_cb)
-        # sb.set_tooltip("Radius of cut width")
-        # sb.set_limits(1, 100)
-        # sb.set_value(self.width_radius)
-
-        # fr = Widgets.Frame()
-        # fr.set_widget(w)
-        # exp.set_widget(fr)
-
-        # box.add_widget(exp, stretch=0)
-        # box.add_widget(Widgets.Label(''), stretch=1)
-        # paned.add_widget(sw)
-        # paned.set_sizes(self._split_sizes)
-
-        # top.add_widget(paned, stretch=5)
-
-        # mode = self.canvas.get_draw_mode()
-        # hbox = Widgets.HBox()
-        # btn1 = Widgets.RadioButton("Move")
-        # btn1.set_state(mode == 'move')
-        # btn1.add_callback('activated',
-        #                   lambda w, val: self.set_mode_cb('move', val))
-        # btn1.set_tooltip("Choose this to position cuts")
-        # self.w.btn_move = btn1
-        # hbox.add_widget(btn1)
-
-        # btn2 = Widgets.RadioButton("Draw", group=btn1)
-        # btn2.set_state(mode == 'draw')
-        # btn2.add_callback('activated',
-        #                   lambda w, val: self.set_mode_cb('draw', val))
-        # btn2.set_tooltip("Choose this to draw a new or replacement cut")
-        # self.w.btn_draw = btn2
-        # hbox.add_widget(btn2)
-
-        # btn3 = Widgets.RadioButton("Edit", group=btn1)
-        # btn3.set_state(mode == 'edit')
-        # btn3.add_callback('activated',
-        #                   lambda w, val: self.set_mode_cb('edit', val))
-        # btn3.set_tooltip("Choose this to edit a cut")
-        # self.w.btn_edit = btn3
-        # hbox.add_widget(btn3)
-
-        # hbox.add_widget(Widgets.Label(''), stretch=1)
-        # top.add_widget(hbox, stretch=0)
-
-        # # Add Cuts plot to its tab
-        # vbox_cuts = Widgets.VBox()
-        # vbox_cuts.add_widget(self.plot, stretch=1)
-        # nb.add_widget(vbox_cuts, title="Cuts")
-
-        # btns = Widgets.HBox()
-        # btns.set_border_width(4)
-        # btns.set_spacing(3)
-
-        # btn = Widgets.Button("Close")
-        # btn.add_callback('activated', lambda w: self.close())
-        # btns.add_widget(btn, stretch=0)
-        # btn = Widgets.Button("Help")
-        # btn.add_callback('activated', lambda w: self.help())
-        # btns.add_widget(btn, stretch=0)
-        # btns.add_widget(Widgets.Label(''), stretch=1)
-
-        # top.add_widget(btns, stretch=0)
-
-        # container.add_widget(top, stretch=1)
-
-        # self.select_cut(self.cutstag)
         self.gui_up = True
 
     def build_axes(self):
@@ -861,9 +766,9 @@ class FitsViewer(QtGui.QMainWindow):
         # self.go.monitor()
         # self.test = ktl.cache('nids', 'test')
         # self.test.monitor()
-        self.display1 = ktl.cache('nids', 'display2')
+        self.display1 = ktl.cache('nids', 'display1')
         self.display1.monitor()
-        self.dispname1 = ktl.cache('nids', 'dispname2')
+        self.dispname1 = ktl.cache('nids', 'dispname1')
         self.dispname1.monitor()
         # self.tempsky2 = ktl.cache('nids', 'TEMPSKY2')
         # self.tempsky2.monitor()
@@ -979,14 +884,6 @@ class FitsViewer(QtGui.QMainWindow):
         self.wrecenter.setObjectName("wrecenter")
         self.wrecenter.clicked.connect(self.recenter)
         buttons_vbox_left.addWidget(self.wrecenter)
-        self.wmovSlitCent = QtGui.QPushButton("Center on Slit")
-        self.wmovSlitCent.setObjectName("wmovSlitCent")
-        self.wmovSlitCent.clicked.connect(self.movSlitCent)
-        buttons_vbox_left.addWidget(self.wmovSlitCent)
-        self.wmovObj = QtGui.QPushButton("Move Object")
-        self.wmovObj.setObjectName("wmovObj")
-        self.wmovObj.clicked.connect(self.movObj)
-        buttons_vbox_left.addWidget(self.wmovObj)
         hw = QtGui.QWidget()
         hw.setLayout(buttons_vbox_left)
         buttons_hbox.addWidget(hw)
@@ -1029,12 +926,6 @@ class FitsViewer(QtGui.QMainWindow):
         vw = QtGui.QWidget()
         self.setCentralWidget(vw)
         vw.setLayout(vbox)
-
-        self.movSlitCursor = False
-        self.autoCenter = False
-        self.init_x = 0.0
-        self.init_y = 0.0
-        self.second_click =False
 
         fi.set_callback('cursor-changed', self.motion_cb)
         fi.add_callback('cursor-down', self.btndown)
@@ -1237,8 +1128,8 @@ class FitsViewer(QtGui.QMainWindow):
     def scan(self, file_callback):
         # self.previous_image = self.slit_lastfile.read() #TODO this is to get first previous image, might remove.
         while self.scanning:
-            # if (self.go == 1 or self.test == 1 or self.display2 == 1) and ("v" in self.slit_filename or "TEMP" in self.slit_filename):
-            if self.display2 == 1:
+            # if (self.go == 1 or self.test == 1 or self.display1 == 1) and ("v" in self.slit_filename or "TEMP" in self.slit_filename):
+            if self.display1 == 1:
                 # previm = self.slit_lastfile.read()
                 print("Taking image")
                 # self.waitForFileToBeUnlocked(0.5)
@@ -1248,18 +1139,18 @@ class FitsViewer(QtGui.QMainWindow):
             time.sleep(0.25)
 
     def fileIsCurrentlyLocked(self):
-        print(f'display2 {self.display2} locked')
+        print(f'display1 {self.display1} locked')
         locked = True
         # if int(self.go.read()) == 0 and int(self.test.read()) == 0:
-        if int(self.display2.read()) == 0:
-            print(f'display2 {self.display2} unlocked')
+        if int(self.display1.read()) == 0:
+            print(f'display1 {self.display1} unlocked')
             locked = False
         return locked
     
     def waitForZero(self, wait_time):
-        while self.display2 == 1:
+        while self.display1 == 1:
             time.sleep(wait_time)
-        print(f'display2 {self.display2}')
+        print(f'display1 {self.display1}')
 
     def waitForFileToBeUnlocked(self, wait_time):
         while self.fileIsCurrentlyLocked():
@@ -1356,78 +1247,12 @@ class FitsViewer(QtGui.QMainWindow):
     def recenter(self):
         self.fitsimage.zoom_fit()
     
-    def movSlitCent(self):
-        if self.movSlitCursor == False:
-            self.movSlitCursor = True
-            self.autoCenter = True
-            self.clickinfo.setText("Click star to center on slit.")
-            self.wmovSlitCent.setText("Cancel Slit Center")
-        else:
-            self.movSlitCursor = False
-            self.autoCenter = False
-            self.clickinfo.setText("Click image to pan.")
-            self.wmovSlitCent.setText("Center on Slit")
-    
-    def movObj(self):
-        if self.movSlitCursor == False:
-            self.movSlitCursor = True
-            self.clickinfo.setText("Click star you want to move.")
-            self.wmovObj.setText("Cancel Object Move")
-        else:
-            self.movSlitCursor = False
-            self.autoCenter = False
-            self.clickinfo.setText("Click image to pan.")
-            self.wmovObj.setText("Move Object")
         
     def btndown(self, canvas, event, data_x, data_y):
         self.xclick = data_x
         self.yclick = data_y
-        if self.movSlitCursor == True:
-            if self.autoCenter == True:
-                self.movAuto(data_x, data_y)
-                self.movSlitCursor = False
-                self.autoCenter = False
-                self.clickinfo.setText("Click image to pan.")
-                self.wmovSlitCent.setText("Center on Slit")
-            elif self.second_click == True:
-                self.movManual(self.init_x, self.init_y, data_x, data_y)
-                self.movSlitCursor = False
-                self.autoCenter = False
-                self.second_click = False
-                self.clickinfo.setText("Click image to pan.")
-                self.wmovObj.setText("Move Object")
-            else:
-                self.init_x = data_x
-                self.init_y = data_y
-                self.second_click = True
-                self.clickinfo.setText("Click where you want to move the object.")
-        else:
-            self.fitsimage.set_pan(data_x, data_y)
-            # self.pickstar(self.fitsimage)
-    
-    def movAuto(self, data_x, data_y):
-        pscale = 0.123
-        dx = (data_x - 121.8) * pscale 
-        dy = (data_y - 464.3) * pscale
-        print(f"{dx}, {dy}")
-        user = "nires1"
-        host = "niresserver1"
-        cmd = f"modify -s dcs2 silent instxoff={dx} instyoff={dy} rel2curr=t"
-        subprocess.Popen(f"ssh {user}@{host} {cmd}", shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE).communicate()
-        # self.dcs['instxoff'].write(dx)
-        # self.dcs['instyoff'].write(dy)
-
-    def movManual(self, x1, y1, x2, y2):
-        pscale = 0.123
-        dx = (x1 - x2) * pscale 
-        dy = (y1 - y2) * pscale
-        print(f"{dx}, {dy}")
-        user = "nires1"
-        host = "niresserver1"
-        cmd = f"modify -s dcs2 silent instxoff={dx} instyoff={dy} rel2curr=t"
-        subprocess.Popen(f"ssh {user}@{host} {cmd}", shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE).communicate()
-        # self.dcs['instxoff'].write(dx)
-        # self.dcs['instyoff'].write(dy)
+        self.fitsimage.set_pan(data_x, data_y)
+        # self.pickstar(self.fitsimage)
 
 def main():
 

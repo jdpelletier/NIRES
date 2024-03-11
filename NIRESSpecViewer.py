@@ -154,6 +154,9 @@ class Cuts(Widgets.Box):
         self.closebtn.add_callback('activated', self.dismiss)
         vbox.add_widget(self.closebtn)
         self.add_widget(vbox)
+
+        self.wavelength_data = fits.getdata("Wavelengths.fits")
+
         self.start()
         self.gui_up = True
 
@@ -566,6 +569,8 @@ class Cuts(Widgets.Box):
         return self.motion_cb(canvas, event, data_x, data_y, viewer)
 
     def motion_cb(self, canvas, event, data_x, data_y, viewer):
+
+
         if self.cutstag == self._new_cut:
             return True
         obj = self.canvas.get_object_by_tag(self.cutstag)
@@ -817,7 +822,7 @@ class FitsViewer(QtGui.QMainWindow):
         vbox.addWidget(hw)
         readout_hbox = QtGui.QHBoxLayout()
         readout_hbox.setObjectName("readout_hbox")
-        self.readout = QtGui.QLabel("X:                 Y:                    Value:")
+        self.readout = QtGui.QLabel("X:                 Y:                    Value:                   Wavelength")
         self.readout.setObjectName("readout")
         self.readout.setMinimumSize(QtCore.QSize(350, 0))
         readout_hbox.addWidget(self.readout)
@@ -983,11 +988,13 @@ class FitsViewer(QtGui.QMainWindow):
 
         fits_x, fits_y = data_x, data_y
 
+        wavelength = self.wavelength_data(fits_x, fits_y)
+
         if (fits_x > 2048 or fits_x <0) or (fits_y > 2048 or fits_y <0):
-            text = "X: Y:  Value:"
+            text = "X: Y: Value: Wavelength: "
             self.readout.setText(text)
         else:
-            text = f"X: {int(fits_x)} Y: {int(fits_y)}  Value: {value}"
+            text = f"X: {int(fits_x)} Y: {int(fits_y)}  Value: {value}  Wavelength: {wavelength}"
             self.readout.setText(text)
 
     def quit(self, *args):

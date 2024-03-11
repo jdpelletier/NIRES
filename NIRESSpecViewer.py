@@ -155,8 +155,6 @@ class Cuts(Widgets.Box):
         vbox.add_widget(self.closebtn)
         self.add_widget(vbox)
 
-        self.wavelength_data = fits.getdata("Wavelengths.fits")
-
         self.start()
         self.gui_up = True
 
@@ -930,6 +928,8 @@ class FitsViewer(QtGui.QMainWindow):
         self.curentfile = ""
         # self.sdiff_done = False
         self.c = None
+
+        self.wavelength_data = fits.getdata("Wavelengths.fits")
 
         self.start_updating()
 

@@ -820,9 +820,9 @@ class FitsViewer(QtGui.QMainWindow):
         vbox.addWidget(hw)
         readout_hbox = QtGui.QHBoxLayout()
         readout_hbox.setObjectName("readout_hbox")
-        self.readout = QtGui.QLabel("X:                 Y:                    Value:                   Wavelength:                          ")
+        self.readout = QtGui.QLabel("X:                 Y:                    Value:                   Wavelength:")
         self.readout.setObjectName("readout")
-        self.readout.setMinimumSize(QtCore.QSize(350, 0))
+        self.readout.setMinimumSize(QtCore.QSize(550, 0))
         readout_hbox.addWidget(self.readout)
         self.wcmap = QtGui.QComboBox()
         for name in cmap.get_names():
@@ -929,7 +929,7 @@ class FitsViewer(QtGui.QMainWindow):
         # self.sdiff_done = False
         self.c = None
 
-        self.wavelength_data = fits.getdata("Wavelengths.fits")
+        self.wavelength_data = np.rot90(fits.getdata("Wavelengths.fits"))
 
         self.start_updating()
 

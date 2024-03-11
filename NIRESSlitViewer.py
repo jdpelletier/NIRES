@@ -931,7 +931,7 @@ class FitsViewer(QtGui.QMainWindow):
         vbox.addWidget(hw)
         readout_hbox = QtGui.QHBoxLayout()
         readout_hbox.setObjectName("readout_hbox")
-        self.readout = QtGui.QLabel("X:                 Y:                    Value:")
+        self.readout = QtGui.QLabel("X: Y:  RA:  DEC: Value:")
         self.readout.setObjectName("readout")
         self.readout.setMinimumSize(QtCore.QSize(350, 0))
         readout_hbox.addWidget(self.readout)
@@ -1114,6 +1114,21 @@ class FitsViewer(QtGui.QMainWindow):
     def motion_cb(self, viewer, button, data_x, data_y):
 
         # Get the value under the data coordinates
+         # Calculate WCS RA
+        try:
+            # NOTE: image function operates on DATA space coords
+            image = viewer.get_image()
+            if image is None:
+                # No image loaded
+                return
+            ra_txt, dec_txt = image.pixtoradec(fits_x, fits_y,
+                                               format='str', coords='fits')
+        except Exception as e:
+            self.logger.warning("Bad coordinate conversion: %s" % (
+                str(e)))
+            ra_txt = 'BAD WCS'
+            dec_txt = 'BAD WCS'
+
         try:
             # We report the value across the pixel, even though the coords
             # change halfway across the pixel
@@ -1125,10 +1140,10 @@ class FitsViewer(QtGui.QMainWindow):
         fits_x, fits_y = data_x, data_y
 
         if (fits_x > 2048 or fits_x <0) or (fits_y > 2048 or fits_y <0):
-            text = "X: Y:  Value:"
+            text = "X: Y:  RA:  Dec:  Value:"
             self.readout.setText(text)
         else:
-            text = f"X: {int(fits_x)} Y: {int(fits_y)}  Value: {value}"
+            text = f"X: {int(fits_x)} Y: {int(fits_y)}  RA: {ra_txt}  Dec: {dec_txt}  Value: {value}"
             self.readout.setText(text)
 
     def quit(self, *args):

@@ -1043,9 +1043,7 @@ class FitsViewer(QtGui.QMainWindow):
         fi.set_callback('cursor-changed', self.motion_cb)
         fi.add_callback('cursor-down', self.btndown)
 
-        self.recdc = self.add_canvas()
-        self.compdc = self.add_canvas() 
-        self.linedc = self.add_canvas()
+        self.recdc, self.linedc = self.add_canvas()
         self.picktag = "pick-box"
         self.slittag = "slit-line"
 

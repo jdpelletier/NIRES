@@ -1157,11 +1157,10 @@ class FitsViewer(QtGui.QMainWindow):
         print(filepath)
         recenter = False
         header, fitsData = self.addWcs(filepath)
-        self.load_file(self.writeFits(header, fitsData))
         if self.fitsimage.get_image() == None:
             recenter = True
         try:
-            image = load_data(filepath, logger=self.logger)
+            image = load_data(self.writeFits(header, fitsData), logger=self.logger)
             self.fitsimage.set_image(image)
             # self.setWindowTitle(filepath)
             try:

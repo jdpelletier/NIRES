@@ -929,7 +929,7 @@ class FitsViewer(QtGui.QMainWindow):
         # self.sdiff_done = False
         self.c = None
 
-        self.wavelength_data = np.rot90(fits.getdata("Wavelengths.fits"))
+        self.wavelength_data = np.rot180(fits.getdata("Wavelengths.fits"))
 
         self.start_updating()
 

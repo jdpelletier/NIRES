@@ -1246,14 +1246,6 @@ class FitsViewer(QtGui.QMainWindow):
     
     def recenter(self):
         self.fitsimage.zoom_fit()
-
-    def toggleslit(self):
-        try:
-            self.fitsimage.get_canvas().get_object_by_tag(self.slittag)
-            self.fitsimage.get_canvas().delete_object_by_tag(self.slittag)
-        except KeyError:
-            self.slitline = self.linedc(119, 537, 124, 393, color='red')
-            self.fitsimage.get_canvas().add(self.slitline, tag=self.slittag, redraw=True)
     
         
     def btndown(self, canvas, event, data_x, data_y):

@@ -944,14 +944,14 @@ class FitsViewer(QtGui.QMainWindow):
 
     def update_gui(self):
         nightly = self.nightpath()
-        tempsky = str(nightly) + "/TEMPSKY2.fits"
-        try:
-            sky = os.path.realpath(os.readlink(tempsky))
-        except FileNotFoundError:
-            sky = "None"
-        except NotADirectoryError:
-            sky = "None"
-        self.sky_info.setText(f"Sky: {sky}")
+        # tempsky = str(nightly) + "/TEMPSKY2.fits"
+        # try:
+        #     sky = os.path.realpath(os.readlink(tempsky))
+        # except FileNotFoundError:
+        #     sky = "None"
+        # except NotADirectoryError:
+        #     sky = "None"
+        # self.sky_info.setText(f"Sky: {sky}")
 
     def add_canvas(self, tag=None):
         # add a canvas to the view

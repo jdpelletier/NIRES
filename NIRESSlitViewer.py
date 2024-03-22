@@ -848,10 +848,11 @@ class MathWindow(Widgets.Box):
     This "window" is a QWidget. If it has no parent, it
     will appear as a free-floating window as we want.
     """
-    def __init__(self, logger, fitsimage):
+    def __init__(self, logger, fitsimage, previm):
         super(MathWindow, self).__init__(fitsimage)
 
         self.fitsimage = fitsimage
+        self.previous_image = previm
 
         vbox = Widgets.VBox()
         # roisz_hbox = QtGui.QHBoxLayout()
@@ -1325,7 +1326,7 @@ class FitsViewer(QtGui.QMainWindow):
             self.load_file(fileName)
 
     def math_popup(self):
-        self.m = MathWindow(self.logger, self.fitsimage)
+        self.m = MathWindow(self.logger, self.fitsimage, self.previous_image)
         self.m.show()
 
     def cuts_popup(self):

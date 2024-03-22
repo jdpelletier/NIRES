@@ -886,7 +886,6 @@ class MathWindow(Widgets.Box):
         self.wreload = Widgets.Button("Reload Latest Image")
         self.wreload.add_callback('activated', self.reload)
         vbox.add_widget(self.wreload)
-        self.wsdiff.add_callback('activated', self.sdiff)
         self.wsdiff = Widgets.Button("SDiff/Undo")
         self.wsdiff.add_callback('activated', self.sdiff)
         vbox.add_widget(self.wsdiff)

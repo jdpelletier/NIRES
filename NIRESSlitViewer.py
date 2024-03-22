@@ -848,11 +848,12 @@ class MathWindow(Widgets.Box):
     This "window" is a QWidget. If it has no parent, it
     will appear as a free-floating window as we want.
     """
-    def __init__(self, logger, fitsimage, previm):
-        super(MathWindow, self).__init__(fitsimage)
+    def __init__(self, logger, fitsimage, previm, currentim):
+        super(MathWindow, self).__init__(fitsimage, previm, currentim)
 
         self.fitsimage = fitsimage
         self.previous_image = previm
+        self.currentfile = currentim
 
         vbox = Widgets.VBox()
         self.wsdiff = Widgets.Button("SDiff")
@@ -1297,7 +1298,7 @@ class FitsViewer(QtGui.QMainWindow):
             self.load_file(fileName)
 
     def math_popup(self):
-        self.m = MathWindow(self.logger, self.fitsimage, self.previous_image)
+        self.m = MathWindow(self.logger, self.fitsimage, self.previous_image, self.currentfile)
         self.m.show()
 
     def cuts_popup(self):

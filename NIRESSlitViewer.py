@@ -851,6 +851,8 @@ class MathWindow(Widgets.Box):
     def __init__(self, logger, fitsimage):
         super(MathWindow, self).__init__(fitsimage)
 
+        self.fitsimage = fitsimage
+
         vbox = Widgets.VBox()
         # roisz_hbox = QtGui.QHBoxLayout()
         # self.roisz_label = QtGui.QLabel("ROI Size: ")

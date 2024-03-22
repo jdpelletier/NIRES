@@ -881,12 +881,12 @@ class MathWindow(Widgets.Box):
         # self.coadd = QtGui.QLineEdit()
         # cpr_hbox.addWidget(self.coadd)
         # vbox.addLayout(cpr_hbox)
-        wsdiff = QtGui.QPushButton("SDiff")
-        wsdiff.clicked.connect(self.sdiff)
+        wsdiff = Widgets.Button("SDiff")
+        wsdiff.clicked.connect(self.sdiff).add_callback('activated', self.sdiff)
         vbox.add_widget(wsdiff)
-        wdismiss = QtGui.QPushButton("Dismiss")
-        wdismiss.clicked.connect(self.dismiss)
-        vbox.add_widget(wdismiss)
+        self.closebtn = Widgets.Button("Close")
+        self.closebtn.add_callback('activated', self.dismiss)
+        vbox.add_widget(self.closebtn)
         self.add_widget(vbox)
 
         self.sdiff_done = False

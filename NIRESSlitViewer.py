@@ -888,7 +888,7 @@ class MathWindow(Widgets.Box):
         wdismiss = QtGui.QPushButton("Dismiss")
         wdismiss.clicked.connect(self.dismiss)
         sdiff_hbox.addWidget(wdismiss)
-        vbox.addLayout(sdiff_hbox)
+        vbox.add_widget(sdiff_hbox)
         self.add_widget(vbox)
 
         self.sdiff_done = False

@@ -874,8 +874,7 @@ class MathWindow(Widgets.Box):
 
     def sdiff(self, event):
         if self.sdiff_done == False:
-            image = self.currentfile
-            # image = self.fitsimage.get_image()
+            image = self.fitsimage.get_image()
             data = image.get_data()
             previous = fits.getdata(str(self.previous_image))
             subtracted = data - previous

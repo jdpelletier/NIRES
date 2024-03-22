@@ -882,7 +882,7 @@ class MathWindow(Widgets.Box):
         # cpr_hbox.addWidget(self.coadd)
         # vbox.addLayout(cpr_hbox)
         wsdiff = Widgets.Button("SDiff")
-        wsdiff.clicked.connect(self.sdiff).add_callback('activated', self.sdiff)
+        wsdiff.add_callback('activated', self.sdiff)
         vbox.add_widget(wsdiff)
         self.closebtn = Widgets.Button("Close")
         self.closebtn.add_callback('activated', self.dismiss)

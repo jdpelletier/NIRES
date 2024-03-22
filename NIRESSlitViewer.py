@@ -866,6 +866,13 @@ class MathWindow(Widgets.Box):
         vbox.add_widget(self.closebtn)
         self.add_widget(vbox)
 
+        screen = QDesktopWidget().screenGeometry()
+        widget = self.geometry()
+        x = screen.width() - widget.width()
+        y = screen.height() - widget.height()
+        self.move(x, y)
+        self.resize(250, 0)
+
         self.sdiff_done = False
 
         # self.threadpool = QtCore.QThreadPool()

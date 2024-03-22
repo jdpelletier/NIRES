@@ -851,6 +851,7 @@ class MathWindow(Widgets.Box):
     def __init__(self, logger, fitsimage, previm, currentim):
         super(MathWindow, self).__init__(fitsimage)
 
+        self.logger = logger
         self.fitsimage = fitsimage
         self.previous_image = previm
         self.currentfile = currentim

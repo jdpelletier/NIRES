@@ -790,6 +790,9 @@ class MathWindow(Widgets.Box):
         function_vbox.add_widget(self.wadd)
         math_hbox.add_widget(function_vbox)
         vbox.add_widget(math_hbox)
+        self.wreload = Widgets.Button("Reload Latest Image")
+        self.wreload.add_callback('activated', self.reload)
+        vbox.add_widget(self.wreload)
         self.wsdiff = Widgets.Button("SDiff/Undo")
         self.wsdiff.add_callback('activated', self.sdiff)
         vbox.add_widget(self.wsdiff)
@@ -896,6 +899,9 @@ class MathWindow(Widgets.Box):
             self.load_file(str(self.dispname.read()))
             # self.wsdiff.set_text("SDiff")
             self.sdiff_done = False
+
+    def reload(self, event):
+        self.load_file(str(self.dispname2.read()))
 
     def stop(self):
         self.gui_up = False

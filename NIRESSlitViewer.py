@@ -879,7 +879,8 @@ class MathWindow(Widgets.Box):
             data = image.get_data()
             previous = fits.getdata(str(self.previous_image))
             subtracted = data - previous
-            image.set_data(subtracted)
+            header = image.get_header()
+            image = load_data(self.writeFits(header, subtracted), logger=self.logger)
             self.load_file(image)
             # self.wsdiff.set_text("Undo SDiff")
             self.sdiff_done = True

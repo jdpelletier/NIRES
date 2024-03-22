@@ -844,7 +844,7 @@ class Cuts(Widgets.Box):
         self.delete()
 # END
 
-class ControlWindow(QtGui.QWidget):
+class MathWindow(QtGui.QWidget):
     """
     This "window" is a QWidget. If it has no parent, it
     will appear as a free-floating window as we want.

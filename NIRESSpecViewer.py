@@ -893,8 +893,7 @@ class MathWindow(Widgets.Box):
             # self.wsdiff.set_text("Undo SDiff")
             self.sdiff_done = True
         else:
-            image = load_data(self.currentfile, logger=self.logger)
-            self.fitsimage.set_image(image)
+            self.load_file(str(self.dispname.read()))
             # self.wsdiff.set_text("SDiff")
             self.sdiff_done = False
 

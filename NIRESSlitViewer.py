@@ -861,10 +861,10 @@ class MathWindow(Widgets.Box):
         vbox = Widgets.VBox()
         math_hbox = Widgets.HBox()
         filebutton_vbox = Widgets.VBox()
-        self.wfileone = Widgets.Button("File 1")
+        self.wfileone = Widgets.Button("Open File 1")
         self.wfileone.add_callback('activated', self.openfileone)
         filebutton_vbox.add_widget(self.wfileone)
-        self.wfiletwo = Widgets.Button("File 1")
+        self.wfiletwo = Widgets.Button("Open File 2")
         self.wfiletwo.add_callback('activated', self.openfiletwo)
         filebutton_vbox.add_widget(self.wfiletwo)
         math_hbox.add_widget(filebutton_vbox)
@@ -895,7 +895,7 @@ class MathWindow(Widgets.Box):
         # x = screen.width()/2
         # y = screen.height()/2
         # self.move(x, y)
-        self.resize(250, 0)
+        # self.resize(250, 0)
 
         self.sdiff_done = False
 

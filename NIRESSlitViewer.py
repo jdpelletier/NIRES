@@ -13,6 +13,7 @@ import astropy.units as u
 # from astropy.stats import gaussian_sigma_to_fwhm
 from astropy.modeling import models, fitting
 # import PIL.Image as PILimage
+from PyQt5.QtWidgets import QDesktopWidget
 
 from ginga import Bindings, cmap
 from ginga.misc import log, Settings
@@ -843,6 +844,92 @@ class Cuts(Widgets.Box):
         self.delete()
 # END
 
+class ControlWindow(QtGui.QWidget):
+    """
+    This "window" is a QWidget. If it has no parent, it
+    will appear as a free-floating window as we want.
+    """
+    def __init__(self):
+        super().__init__()
+
+        self.util = Util()
+
+        vbox = QtGui.QVBoxLayout()
+        title_hbox = QtGui.QHBoxLayout()
+        title = QtGui.QLabel("NIRES Math")
+        title.setAlignment(QtCore.Qt.AlignHCenter)
+        title_hbox.addWidget(title)
+        vbox.addLayout(title_hbox)
+        # roisz_hbox = QtGui.QHBoxLayout()
+        # self.roisz_label = QtGui.QLabel("ROI Size: ")
+        # roisz_hbox.addWidget(self.roisz_label)
+        # self.wroisz = QtGui.QComboBox()
+        # sizes = ['2','4','8','16']
+        # for size in sizes:
+        #     self.wroisz.addItem(size)
+        # item = str(self.util.trickxsize.read())
+        # self.wroisz.setCurrentText(item)
+        # roisz_hbox.addWidget(self.wroisz)
+        # vbox.addLayout(roisz_hbox)
+        # roixy_hbox = QtGui.QHBoxLayout()
+        # self.roi_label = QtGui.QLabel("ROI")
+        # roixy_hbox.addWidget(self.roi_label)
+        # self.roix = QtGui.QLineEdit()
+        # roixy_hbox.addWidget(self.roix)
+        # self.roiy = QtGui.QLineEdit()
+        # roixy_hbox.addWidget(self.roiy)
+        # vbox.addLayout(roixy_hbox)
+        # cpr_hbox = QtGui.QHBoxLayout()
+        # self.cpr_label = QtGui.QLabel("CPR: ")
+        # cpr_hbox.addWidget(self.cpr_label)
+        # self.cpr = QtGui.QLineEdit()
+        # cpr_hbox.addWidget(self.cpr)
+        # self.coadd_label = QtGui.QLabel("Coadd: ")
+        # cpr_hbox.addWidget(self.coadd_label)
+        # self.coadd = QtGui.QLineEdit()
+        # cpr_hbox.addWidget(self.coadd)
+        # vbox.addLayout(cpr_hbox)
+        sdiff_hbox = QtGui.QHBoxLayout()
+        wsdiff = QtGui.QPushButton("Apply")
+        wsdiff.clicked.connect(self.sdiff)
+        sdiff_hbox.addWidget(wsdiff)
+        wdismiss = QtGui.QPushButton("Dismiss")
+        wdismiss.clicked.connect(self.dismiss)
+        sdiff_hbox.addWidget(wdismiss)
+        vbox.addLayout(sdiff_hbox)
+        self.setLayout(vbox)
+
+        screen = QDesktopWidget().screenGeometry()
+        widget = self.geometry()
+        x = screen.width() - widget.width()
+        y = screen.height() - widget.height()
+        self.move(x, y)
+        self.resize(250, 0)
+
+        self.sdiff_done = False
+
+        # self.threadpool = QtCore.QThreadPool()
+
+        # self.start_updating()
+
+    def sdiff(self):
+        if self.sdiff_done == False:
+            image = self.fitsimage.get_image()
+            data = image.get_data()
+            previous = fits.getdata(str(self.previous_image))
+            subtracted = data - previous
+            self.fitsimage.set_data(subtracted)
+            self.wsdiff.setText("Undo SDiff")
+            self.sdiff_done = True
+        else:
+            image = load_data(self.currentfile, logger=self.logger)
+            self.fitsimage.set_image(image)
+            self.wsdiff.setText("SDiff")
+            self.sdiff_done = False
+
+    def dismiss(self):
+        self.close()
+
 
 class FitsViewer(QtGui.QMainWindow):
 
@@ -855,8 +942,7 @@ class FitsViewer(QtGui.QMainWindow):
         #Cache KTL keywords
         # self.slit_filename = ktl.cache('nids', 'FILENAME')
         # self.slit_filename.monitor()
-        # self.slit_lastfile = ktl.cache('nids', 'LASTFILE')
-        # self.slit_sdiff = ktl.cache('nids', 'LASTFILE')
+        self.slit_lastfile = ktl.cache('nids', 'LASTFILE')
         # self.go = ktl.cache('nids', 'GO')
         # self.go.monitor()
         # self.test = ktl.cache('nids', 'test')
@@ -896,6 +982,14 @@ class FitsViewer(QtGui.QMainWindow):
 
         item = QtGui.QAction("Open File", menubar)
         item.triggered.connect(self.open_file)
+        filemenu.addAction(item)
+
+        sep = QtGui.QAction(menubar)
+        sep.setSeparator(True)
+        filemenu.addAction(sep)
+
+        item = QtGui.QAction("Math", menubar)
+        item.triggered.connect(self.math_popup)
         filemenu.addAction(item)
 
         sep = QtGui.QAction(menubar)
@@ -1066,7 +1160,7 @@ class FitsViewer(QtGui.QMainWindow):
 
         # self.sky = ""
         self.curentfile = ""
-        # self.sdiff_done = False
+        
         self.c = None
 
         self.start_updating()
@@ -1237,6 +1331,10 @@ class FitsViewer(QtGui.QMainWindow):
         if len(fileName) != 0:
             self.load_file(fileName)
 
+    def math_popup(self):
+        self.c = MathWindow()
+        self.c.show()
+
     def cuts_popup(self):
         if self.c != None:
             try:
@@ -1245,21 +1343,6 @@ class FitsViewer(QtGui.QMainWindow):
                 pass
         self.c = Cuts(self.logger, self.fitsimage)
         self.c.show()
-
-    # def sdiff(self):
-    #     if self.sdiff_done == False:
-    #         image = self.fitsimage.get_image()
-    #         data = image.get_data()
-    #         previous = fits.getdata(str(self.previous_image))
-    #         subtracted = data - previous
-    #         self.fitsimage.set_data(subtracted)
-    #         self.wsdiff.setText("Undo SDiff")
-    #         self.sdiff_done = True
-    #     else:
-    #         image = load_data(self.currentfile, logger=self.logger)
-    #         self.fitsimage.set_image(image)
-    #         self.wsdiff.setText("SDiff")
-    #         self.sdiff_done = False
 
     # def subtract_sky(self, file):
     #     image = self.fitsimage.get_image()
@@ -1278,12 +1361,12 @@ class FitsViewer(QtGui.QMainWindow):
         while self.scanning:
             # if (self.go == 1 or self.test == 1 or self.display2 == 1) and ("v" in self.slit_filename or "TEMP" in self.slit_filename):
             if self.display2 == 1:
-                # previm = self.slit_lastfile.read()
+                previm = self.slit_lastfile.read()
                 print("Taking image")
                 # self.waitForFileToBeUnlocked(0.5)
                 file_callback.emit(str(self.dispname2.read()))
                 self.waitForZero(0.25)
-                # self.previous_image = previm
+                self.previous_image = previm
             time.sleep(0.25)
 
     def fileIsCurrentlyLocked(self):

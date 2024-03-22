@@ -973,7 +973,6 @@ class MathWindow(Widgets.Box):
 
     def sdiff(self, event):
         if self.sdiff_done == False:
-            self.pastName = self.currentfile
             image_data = fits.getdata(self.currentfile)
             image_header = fits.getheader(self.currentfile)
             previous = fits.getdata(str(self.previous_image))
@@ -989,7 +988,7 @@ class MathWindow(Widgets.Box):
             # self.wsdiff.set_text("Undo SDiff")
             self.sdiff_done = True
         else:
-            image = load_data(self.pastName, logger=self.logger)
+            image = load_data(self.dispname2, logger=self.logger)
             self.fitsimage.set_image(image)
             # self.wsdiff.set_text("SDiff")
             self.sdiff_done = False

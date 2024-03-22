@@ -883,7 +883,7 @@ class MathWindow(Widgets.Box):
         function_vbox.add_widget(self.wadd)
         math_hbox.add_widget(function_vbox)
         vbox.add_widget(math_hbox)
-        self.wsdiff = Widgets.Button("SDiff")
+        self.wsdiff = Widgets.Button("SDiff/Undo")
         self.wsdiff.add_callback('activated', self.sdiff)
         vbox.add_widget(self.wsdiff)
         self.closebtn = Widgets.Button("Close")
@@ -983,12 +983,12 @@ class MathWindow(Widgets.Box):
                 os.remove(filename)
                 hdu.writeto(filename)
             self.load_file('subImage.fits')
-            self.wsdiff.settext("Undo SDiff")
+            # self.wsdiff.set_text("Undo SDiff")
             self.sdiff_done = True
         else:
             image = load_data(self.currentfile, logger=self.logger)
             self.fitsimage.set_image(image)
-            self.wsdiff.set_text("SDiff")
+            # self.wsdiff.set_text("SDiff")
             self.sdiff_done = False
 
     def stop(self):

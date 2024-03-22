@@ -895,7 +895,7 @@ class MathWindow(Widgets.Box):
         # x = screen.width()/2
         # y = screen.height()/2
         # self.move(x, y)
-        self.resize(500, 300)
+        self.resize(500, 0)
 
         self.sdiff_done = False
 

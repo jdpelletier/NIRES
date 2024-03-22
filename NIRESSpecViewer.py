@@ -751,6 +751,161 @@ class Cuts(Widgets.Box):
         self.delete()
 # END
 
+class MathWindow(Widgets.Box):
+    """
+    This "window" is a QWidget. If it has no parent, it
+    will appear as a free-floating window as we want.
+    """
+    def __init__(self, logger, fitsimage, previm, currentim, loadfile):
+        super(MathWindow, self).__init__(fitsimage)
+
+        self.logger = logger
+        self.fitsimage = fitsimage
+        self.previous_image = previm
+        self.currentfile = currentim
+        self.load_file = loadfile
+
+        vbox = Widgets.VBox()
+        math_hbox = Widgets.HBox()
+        filebutton_vbox = Widgets.VBox()
+        self.wfileone = Widgets.Button("Open File 1")
+        self.wfileone.add_callback('activated', self.openfileone)
+        filebutton_vbox.add_widget(self.wfileone)
+        self.wfiletwo = Widgets.Button("Open File 2")
+        self.wfiletwo.add_callback('activated', self.openfiletwo)
+        filebutton_vbox.add_widget(self.wfiletwo)
+        math_hbox.add_widget(filebutton_vbox)
+        filename_vbox = Widgets.VBox()
+        self.filenameone = Widgets.Label ("File one")
+        filename_vbox.add_widget(self.filenameone)
+        self.filenametwo = Widgets.Label ("File two")
+        filename_vbox.add_widget(self.filenametwo)
+        math_hbox.add_widget(filename_vbox)
+        function_vbox = Widgets.VBox()
+        self.wsubtract = Widgets.Button("Subtract")
+        self.wsubtract.add_callback('activated', self.imageSubtract)
+        function_vbox.add_widget(self.wsubtract)
+        self.wadd = Widgets.Button("Add")
+        self.wadd.add_callback('activated', self.imageAdd)
+        function_vbox.add_widget(self.wadd)
+        math_hbox.add_widget(function_vbox)
+        vbox.add_widget(math_hbox)
+        self.wsdiff = Widgets.Button("SDiff/Undo")
+        self.wsdiff.add_callback('activated', self.sdiff)
+        vbox.add_widget(self.wsdiff)
+        self.closebtn = Widgets.Button("Close")
+        self.closebtn.add_callback('activated', self.dismiss)
+        vbox.add_widget(self.closebtn)
+        self.add_widget(vbox)
+
+        # screen = QDesktopWidget().screenGeometry()
+        # x = screen.width()/2
+        # y = screen.height()/2
+        # self.move(x, y)
+        self.resize(500, 0)
+
+        self.sdiff_done = False
+
+        self.dispname2 = ktl.cache('nids', 'dispname2')
+        self.dispname2.monitor()
+
+        # self.threadpool = QtCore.QThreadPool()
+
+        # self.start_updating()
+
+    def nightpath(self):
+        dir = str(self.dispname2)
+        if "//" in str(dir):
+            dir = str(dir).split("//")
+            dir = dir[0] + "/"
+            nightly = Path(dir)
+        else: 
+            dir = Path(dir)
+            nightly = dir.parent
+        return nightly
+    
+    def openfileone(self, event):
+        res = QtGui.QFileDialog.getOpenFileName(caption="Open FITS file 1",
+                                                directory = str(self.nightpath()))
+        if isinstance(res, tuple):
+            fileName = res[0]
+        else:
+            fileName = str(res)
+        if len(fileName) != 0:
+            self.filenameone.set_text(fileName)
+        return
+    
+    def openfiletwo(self, event):
+        res = QtGui.QFileDialog.getOpenFileName(caption="Open FITS file 1",
+                                                directory = str(self.nightpath()))
+        if isinstance(res, tuple):
+            fileName = res[0]
+        else:
+            fileName = str(res)
+        if len(fileName) != 0:
+            self.filenametwo.set_text(fileName)
+        return
+
+    def imageSubtract(self, event):
+        imageone_data = fits.getdata(self.filenameone.get_text())
+        imagetwo_data = fits.getdata(self.filenametwo.get_text())
+        image_header = fits.getheader(self.filenameone.get_text())
+        subtracted = imageone_data - imagetwo_data
+        hdu = fits.PrimaryHDU(header=image_header, data=subtracted)
+        filename = 'subImage.fits'
+        try:
+            hdu.writeto(filename)
+        except OSError:
+            os.remove(filename)
+            hdu.writeto(filename)
+        self.load_file('subImage.fits')
+        return
+    
+    def imageAdd(self, event):
+        imageone_data = fits.getdata(self.filenameone.get_text())
+        imagetwo_data = fits.getdata(self.filenametwo.get_text())
+        image_header = fits.getheader(self.filenameone.get_text())
+        added = imageone_data + imagetwo_data
+        hdu = fits.PrimaryHDU(header=image_header, data=added)
+        filename = 'subImage.fits'
+        try:
+            hdu.writeto(filename)
+        except OSError:
+            os.remove(filename)
+            hdu.writeto(filename)
+        self.load_file('subImage.fits')
+        return
+
+    def sdiff(self, event):
+        if self.sdiff_done == False:
+            image_data = fits.getdata(self.currentfile)
+            image_header = fits.getheader(self.currentfile)
+            previous = fits.getdata(str(self.previous_image))
+            subtracted = image_data - previous
+            hdu = fits.PrimaryHDU(header=image_header, data=subtracted)
+            filename = 'subImage.fits'
+            try:
+                hdu.writeto(filename)
+            except OSError:
+                os.remove(filename)
+                hdu.writeto(filename)
+            self.load_file('subImage.fits')
+            # self.wsdiff.set_text("Undo SDiff")
+            self.sdiff_done = True
+        else:
+            image = load_data(self.currentfile, logger=self.logger)
+            self.fitsimage.set_image(image)
+            # self.wsdiff.set_text("SDiff")
+            self.sdiff_done = False
+
+    def stop(self):
+        self.gui_up = False
+
+    def dismiss(self, event):
+        self.stop()
+        # self.canvas.enable_draw(False)
+        # self.delete_all_cb(event)
+        self.delete()
 
 class FitsViewer(QtGui.QMainWindow):
 
@@ -928,6 +1083,7 @@ class FitsViewer(QtGui.QMainWindow):
         self.curentfile = ""
         # self.sdiff_done = False
         self.c = None
+        self.m = None
 
         self.wavelength_data = np.flip((fits.getdata("Wavelengths.fits")), 0)
 
@@ -1170,6 +1326,10 @@ class FitsViewer(QtGui.QMainWindow):
             os.remove(filename)
             hdu.writeto(filename)
         return filename
+    
+    def math_popup(self):
+        self.m = MathWindow(self.logger, self.fitsimage, self.previous_image, self.currentfile, self.load_file)
+        self.m.show()
 
     ##Find star stuff
     def cutdetail(self, image, shape_obj):

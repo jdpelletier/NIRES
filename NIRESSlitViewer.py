@@ -905,12 +905,12 @@ class MathWindow(Widgets.Box):
             previous = fits.getdata(str(self.previous_image))
             subtracted = data - previous
             self.fitsimage.set_data(subtracted)
-            self.wsdiff.setText("Undo SDiff")
+            self.wsdiff.set_text("Undo SDiff")
             self.sdiff_done = True
         else:
             image = load_data(self.currentfile, logger=self.logger)
             self.fitsimage.set_image(image)
-            self.wsdiff.setText("SDiff")
+            self.wsdiff.set_text("SDiff")
             self.sdiff_done = False
 
     def stop(self):

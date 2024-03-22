@@ -1109,7 +1109,7 @@ class FitsViewer(QtGui.QMainWindow):
         click_hbox = QtGui.QHBoxLayout()
         click_hbox.setObjectName("click_hbox")
         self.clickinfo = QtGui.QLabel("Click the image to pan.")
-        self.clickinfo.setMinimumSize(QtCore.QSize(250, 0))
+        self.clickinfo.setMinimumSize(QtCore.QSize(200, 0))
         self.clickinfo.setObjectName("clickinfo")
         click_hbox.addWidget(self.clickinfo)
         self.wrecenter = QtGui.QPushButton("Re-center Image")

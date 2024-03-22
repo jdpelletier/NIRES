@@ -879,8 +879,14 @@ class MathWindow(Widgets.Box):
             previous = fits.getdata(str(self.previous_image))
             subtracted = data - previous
             header = image.get_header()
-            image = load_data(self.writeFits(header, subtracted), logger=self.logger)
-            self.load_file(image)
+            hdu = fits.PrimaryHDU(header=header, data=subtracted)
+            filename = 'subImage.fits'
+            try:
+                hdu.writeto(filename)
+            except OSError:
+                os.remove(filename)
+                hdu.writeto(filename)
+            self.load_file('subImage.fits')
             # self.wsdiff.set_text("Undo SDiff")
             self.sdiff_done = True
         else:
@@ -1370,7 +1376,7 @@ class FitsViewer(QtGui.QMainWindow):
 
     def writeFits(self, headerinfo, image_data):
         hdu = fits.PrimaryHDU(header=headerinfo, data=image_data)
-        filename = 'procImage.fits'
+        filename = 'subImage.fits'
         try:
             hdu.writeto(filename)
         except OSError:

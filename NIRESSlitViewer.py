@@ -852,8 +852,6 @@ class MathWindow(QtGui.QWidget):
     def __init__(self):
         super().__init__()
 
-        self.util = Util()
-
         vbox = QtGui.QVBoxLayout()
         title_hbox = QtGui.QHBoxLayout()
         title = QtGui.QLabel("NIRES Math")

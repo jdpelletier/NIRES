@@ -868,9 +868,8 @@ class MathWindow(Widgets.Box):
         self.add_widget(vbox)
 
         screen = QDesktopWidget().screenGeometry()
-        widget = self.geometry()
-        x = screen.width() - widget.width()
-        y = screen.height() - widget.height()
+        x = screen.width()/2
+        y = screen.height()/2
         self.move(x, y)
         self.resize(250, 0)
 

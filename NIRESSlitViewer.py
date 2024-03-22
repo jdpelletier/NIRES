@@ -883,6 +883,10 @@ class MathWindow(Widgets.Box):
         function_vbox.add_widget(self.wadd)
         math_hbox.add_widget(function_vbox)
         vbox.add_widget(math_hbox)
+        self.wreload = Widgets.Button("Reload Latest Image")
+        self.wreload.add_callback('activated', self.reload)
+        vbox.add_widget(self.wreload)
+        self.wsdiff.add_callback('activated', self.sdiff)
         self.wsdiff = Widgets.Button("SDiff/Undo")
         self.wsdiff.add_callback('activated', self.sdiff)
         vbox.add_widget(self.wsdiff)
@@ -947,7 +951,7 @@ class MathWindow(Widgets.Box):
         image_header = fits.getheader(self.filenameone.get_text())
         subtracted = imageone_data - imagetwo_data
         hdu = fits.PrimaryHDU(header=image_header, data=subtracted)
-        filename = 'subImage.fits'
+        filename = 'subtractedImage.fits'
         try:
             hdu.writeto(filename)
         except OSError:
@@ -962,13 +966,13 @@ class MathWindow(Widgets.Box):
         image_header = fits.getheader(self.filenameone.get_text())
         added = imageone_data + imagetwo_data
         hdu = fits.PrimaryHDU(header=image_header, data=added)
-        filename = 'subImage.fits'
+        filename = 'addedImage.fits'
         try:
             hdu.writeto(filename)
         except OSError:
             os.remove(filename)
             hdu.writeto(filename)
-        self.load_file('subImage.fits')
+        self.load_file('subtractedImage.fits')
         return
 
     def sdiff(self, event):
@@ -992,6 +996,9 @@ class MathWindow(Widgets.Box):
             # self.fitsimage.set_image(image)
             # self.wsdiff.set_text("SDiff")
             self.sdiff_done = False
+
+    def reload(self, event):
+        self.load_file(str(self.dispname2.read()))
 
     def stop(self):
         self.gui_up = False

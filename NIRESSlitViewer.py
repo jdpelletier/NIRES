@@ -878,7 +878,7 @@ class MathWindow(Widgets.Box):
             data = image.get_data()
             previous = fits.getdata(str(self.previous_image))
             subtracted = data - previous
-            newheader = image.get_header()
+            newheader = fits.Header(image.get_header())
             hdu = fits.PrimaryHDU(header=newheader, data=subtracted)
             filename = 'subImage.fits'
             try:

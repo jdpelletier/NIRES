@@ -852,13 +852,13 @@ class MathWindow(Widgets.Box):
         image_header = fits.getheader(self.filenameone.get_text())
         subtracted = imageone_data - imagetwo_data
         hdu = fits.PrimaryHDU(header=image_header, data=subtracted)
-        filename = 'subImage.fits'
+        filename = 'subtractedImage.fits'
         try:
             hdu.writeto(filename)
         except OSError:
             os.remove(filename)
             hdu.writeto(filename)
-        self.load_file('subImage.fits')
+        self.load_file('subtractedImage.fits')
         return
     
     def imageAdd(self, event):
@@ -867,13 +867,13 @@ class MathWindow(Widgets.Box):
         image_header = fits.getheader(self.filenameone.get_text())
         added = imageone_data + imagetwo_data
         hdu = fits.PrimaryHDU(header=image_header, data=added)
-        filename = 'subImage.fits'
+        filename = 'addedImage.fits'
         try:
             hdu.writeto(filename)
         except OSError:
             os.remove(filename)
             hdu.writeto(filename)
-        self.load_file('subImage.fits')
+        self.load_file('addedImage.fits')
         return
 
     def sdiff(self, event):
@@ -883,13 +883,13 @@ class MathWindow(Widgets.Box):
             previous = fits.getdata(str(self.previous_image))
             subtracted = image_data - previous
             hdu = fits.PrimaryHDU(header=image_header, data=subtracted)
-            filename = 'subImage.fits'
+            filename = 'diffImage.fits'
             try:
                 hdu.writeto(filename)
             except OSError:
                 os.remove(filename)
                 hdu.writeto(filename)
-            self.load_file('subImage.fits')
+            self.load_file('diffImage.fits')
             # self.wsdiff.set_text("Undo SDiff")
             self.sdiff_done = True
         else:

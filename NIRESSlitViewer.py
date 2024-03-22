@@ -852,11 +852,6 @@ class MathWindow(Widgets.Box):
         super(MathWindow, self).__init__(fitsimage)
 
         vbox = Widgets.VBox()
-        title_hbox = QtGui.QHBoxLayout()
-        title = QtGui.QLabel("NIRES Math")
-        title.setAlignment(QtCore.Qt.AlignHCenter)
-        title_hbox.addWidget(title)
-        vbox.add_widget(title_hbox)
         # roisz_hbox = QtGui.QHBoxLayout()
         # self.roisz_label = QtGui.QLabel("ROI Size: ")
         # roisz_hbox.addWidget(self.roisz_label)

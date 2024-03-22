@@ -903,6 +903,17 @@ class MathWindow(Widgets.Box):
 
         # self.start_updating()
 
+    def nightpath(self):
+        dir = str(self.dispname2)
+        if "//" in str(dir):
+            dir = str(dir).split("//")
+            dir = dir[0] + "/"
+            nightly = Path(dir)
+        else: 
+            dir = Path(dir)
+            nightly = dir.parent
+        return nightly
+    
     def openfileone(self, event):
         res = QtGui.QFileDialog.getOpenFileName(self, "Open FITS file 1",
                                                 str(self.nightpath()))

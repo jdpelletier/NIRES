@@ -895,7 +895,7 @@ class MathWindow(Widgets.Box):
         wdismiss.clicked.connect(self.dismiss)
         sdiff_hbox.addWidget(wdismiss)
         vbox.addLayout(sdiff_hbox)
-        self.setLayout(vbox)
+        self.add_widget(vbox)
 
         screen = QDesktopWidget().screenGeometry()
         widget = self.geometry()

@@ -849,7 +849,7 @@ class MathWindow(Widgets.Box):
     will appear as a free-floating window as we want.
     """
     def __init__(self, logger, fitsimage, previm, currentim):
-        super(MathWindow, self).__init__(fitsimage, previm, currentim)
+        super(MathWindow, self).__init__(fitsimage)
 
         self.fitsimage = fitsimage
         self.previous_image = previm

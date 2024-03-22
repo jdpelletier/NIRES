@@ -870,7 +870,7 @@ class MathWindow(Widgets.Box):
         screen = QDesktopWidget().screenGeometry()
         x = screen.width()/2
         y = screen.height()/2
-        self.move(x, y)
+        # self.move(x, y)
         self.resize(250, 0)
 
         self.sdiff_done = False

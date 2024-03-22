@@ -13,7 +13,6 @@ import astropy.units as u
 # from astropy.stats import gaussian_sigma_to_fwhm
 from astropy.modeling import models, fitting
 # import PIL.Image as PILimage
-from PyQt5.QtWidgets import QDesktopWidget
 
 from ginga import Bindings, cmap
 from ginga.misc import log, Settings
@@ -852,12 +851,12 @@ class MathWindow(Widgets.Box):
     def __init__(self, logger, fitsimage):
         super(MathWindow, self).__init__(fitsimage)
 
-        vbox = QtGui.QVBoxLayout()
+        vbox = Widgets.VBox()
         title_hbox = QtGui.QHBoxLayout()
         title = QtGui.QLabel("NIRES Math")
         title.setAlignment(QtCore.Qt.AlignHCenter)
         title_hbox.addWidget(title)
-        vbox.addLayout(title_hbox)
+        vbox.add_widget(title_hbox)
         # roisz_hbox = QtGui.QHBoxLayout()
         # self.roisz_label = QtGui.QLabel("ROI Size: ")
         # roisz_hbox.addWidget(self.roisz_label)

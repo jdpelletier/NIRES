@@ -859,6 +859,29 @@ class MathWindow(Widgets.Box):
         self.load_file = loadfile
 
         vbox = Widgets.VBox()
+        math_hbox = Widgets.HBox()
+        filebutton_vbox = Widgets.VBox()
+        self.wfileone = Widgets.Button("File 1")
+        self.wfileone.add_callback('activated', self.openfileone)
+        filebutton_vbox.add_widget(self.wfileone)
+        self.wfiletwo = Widgets.Button("File 1")
+        self.wfiletwo.add_callback('activated', self.openfiletwo)
+        filebutton_vbox.add_widget(self.wfiletwo)
+        math_hbox.add_widget(filebutton_vbox)
+        filename_vbox = Widgets.VBox()
+        self.filenameone = Widgets.Label ("File one")
+        filename_vbox.add_widget(self.filenameone)
+        self.filenametwo = Widgets.Label ("File two")
+        filename_vbox.add_widget(self.filenametwo)
+        math_hbox.add_widget(filename_vbox)
+        function_vbox = Widgets.VBox()
+        self.wsubtract = Widgets.Button("Subtract")
+        self.wsubtract.add_callback('activated', self.imageSubtract)
+        function_vbox.add_widget(self.wsubtract)
+        self.wadd = Widgets.Button("Add")
+        self.wadd.add_callback('activated', self.imageAdd)
+        function_vbox.add_widget(self.wadd)
+        math_hbox.add_widget(function_vbox)
         self.wsdiff = Widgets.Button("SDiff")
         self.wsdiff.add_callback('activated', self.sdiff)
         vbox.add_widget(self.wsdiff)
@@ -867,9 +890,9 @@ class MathWindow(Widgets.Box):
         vbox.add_widget(self.closebtn)
         self.add_widget(vbox)
 
-        screen = QDesktopWidget().screenGeometry()
-        x = screen.width()/2
-        y = screen.height()/2
+        # screen = QDesktopWidget().screenGeometry()
+        # x = screen.width()/2
+        # y = screen.height()/2
         # self.move(x, y)
         self.resize(250, 0)
 
@@ -878,6 +901,12 @@ class MathWindow(Widgets.Box):
         # self.threadpool = QtCore.QThreadPool()
 
         # self.start_updating()
+
+    def imageSubtract(self, event):
+        return
+    
+    def imageAdd(self, event):
+        return
 
     def sdiff(self, event):
         if self.sdiff_done == False:

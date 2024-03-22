@@ -1351,7 +1351,7 @@ class FitsViewer(QtGui.QMainWindow):
     ##Start of image find and processing code
 
     def scan(self, file_callback):
-        # self.previous_image = self.slit_lastfile.read() #TODO this is to get first previous image, might remove.
+        self.previous_image = self.slit_lastfile.read() #TODO this is to get first previous image, might remove.
         while self.scanning:
             # if (self.go == 1 or self.test == 1 or self.display2 == 1) and ("v" in self.slit_filename or "TEMP" in self.slit_filename):
             if self.display2 == 1:

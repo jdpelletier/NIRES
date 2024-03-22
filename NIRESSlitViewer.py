@@ -895,7 +895,7 @@ class MathWindow(Widgets.Box):
 
         # self.start_updating()
 
-    def sdiff(self):
+    def sdiff(self, event):
         if self.sdiff_done == False:
             image = self.fitsimage.get_image()
             data = image.get_data()
@@ -910,8 +910,11 @@ class MathWindow(Widgets.Box):
             self.wsdiff.setText("SDiff")
             self.sdiff_done = False
 
-    def dismiss(self):
-        self.close()
+    def dismiss(self, event):
+        self.stop()
+        # self.canvas.enable_draw(False)
+        # self.delete_all_cb(event)
+        self.delete()
 
 
 class FitsViewer(QtGui.QMainWindow):

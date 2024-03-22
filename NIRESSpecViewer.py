@@ -918,7 +918,7 @@ class FitsViewer(QtGui.QMainWindow):
         #Cache KTL keywords
         # self.slit_filename = ktl.cache('nids', 'FILENAME')
         # self.slit_filename.monitor()
-        self.slit_lastfile = ktl.cache('nsds', 'LASTFILE')
+        self.spec_lastfile = ktl.cache('nsds', 'LASTFILE')
         # self.slit_sdiff = ktl.cache('nids', 'LASTFILE')
         # self.go = ktl.cache('nids', 'GO')
         # self.go.monitor()
@@ -1239,11 +1239,11 @@ class FitsViewer(QtGui.QMainWindow):
     ##Start of image find and processing code
 
     def scan(self, file_callback):
-        self.previous_image = self.slit_lastfile.read() #TODO this is to get first previous image, might remove.
+        self.previous_image = self.spec_lastfile.read() #TODO this is to get first previous image, might remove.
         while self.scanning:
             # if (self.go == 1 or self.test == 1 or self.display == 1) and ("v" in self.slit_filename or "TEMP" in self.slit_filename):
             if self.display == 1:
-                previm = self.slit_lastfile.read()
+                previm = self.spec_lastfile.read()
                 print("Taking image")
                 # self.waitForFileToBeUnlocked(0.5)
                 file_callback.emit(str(self.dispname.read()))

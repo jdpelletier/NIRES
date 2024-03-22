@@ -850,7 +850,7 @@ class MathWindow(QtGui.QWidget):
     will appear as a free-floating window as we want.
     """
     def __init__(self, logger, fitsimage):
-        super(Cuts, self).__init__(fitsimage)
+        super(MathWindow, self).__init__(fitsimage)
 
         vbox = QtGui.QVBoxLayout()
         title_hbox = QtGui.QHBoxLayout()
@@ -1161,6 +1161,8 @@ class FitsViewer(QtGui.QMainWindow):
         
         self.c = None
 
+        self.m = None
+
         self.start_updating()
 
     def start_updating(self):
@@ -1330,8 +1332,8 @@ class FitsViewer(QtGui.QMainWindow):
             self.load_file(fileName)
 
     def math_popup(self):
-        self.c = MathWindow(self.logger, self.fitsimage)
-        self.c.show()
+        self.m = MathWindow(self.logger, self.fitsimage)
+        self.m.show()
 
     def cuts_popup(self):
         if self.c != None:

@@ -902,6 +902,12 @@ class MathWindow(Widgets.Box):
 
         # self.start_updating()
 
+    def openfileone(self, event):
+        return
+    
+    def openfiletwo(self, event):
+        return
+
     def imageSubtract(self, event):
         return
     

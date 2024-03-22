@@ -904,9 +904,25 @@ class MathWindow(Widgets.Box):
         # self.start_updating()
 
     def openfileone(self, event):
+        res = QtGui.QFileDialog.getOpenFileName(self, "Open FITS file 1",
+                                                str(self.nightpath()))
+        if isinstance(res, tuple):
+            fileName = res[0]
+        else:
+            fileName = str(res)
+        if len(fileName) != 0:
+            self.filenameone.set_text(fileName)
         return
     
     def openfiletwo(self, event):
+        res = QtGui.QFileDialog.getOpenFileName(self, "Open FITS file 1",
+                                                str(self.nightpath()))
+        if isinstance(res, tuple):
+            fileName = res[0]
+        else:
+            fileName = str(res)
+        if len(fileName) != 0:
+            self.filenametwo.set_text(fileName)
         return
 
     def imageSubtract(self, event):

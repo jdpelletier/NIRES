@@ -848,13 +848,14 @@ class MathWindow(Widgets.Box):
     This "window" is a QWidget. If it has no parent, it
     will appear as a free-floating window as we want.
     """
-    def __init__(self, logger, fitsimage, previm, currentim):
+    def __init__(self, logger, fitsimage, previm, currentim, loadfile):
         super(MathWindow, self).__init__(fitsimage)
 
         self.logger = logger
         self.fitsimage = fitsimage
         self.previous_image = previm
         self.currentfile = currentim
+        self.load_file = loadfile
 
         vbox = Widgets.VBox()
         self.wsdiff = Widgets.Button("SDiff")
@@ -877,7 +878,8 @@ class MathWindow(Widgets.Box):
             data = image.get_data()
             previous = fits.getdata(str(self.previous_image))
             subtracted = data - previous
-            self.fitsimage.set_data(subtracted)
+            image.set_data(subtracted)
+            self.load_file(image)
             # self.wsdiff.set_text("Undo SDiff")
             self.sdiff_done = True
         else:

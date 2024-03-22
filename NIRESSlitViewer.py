@@ -855,35 +855,6 @@ class MathWindow(Widgets.Box):
         self.previous_image = previm
 
         vbox = Widgets.VBox()
-        # roisz_hbox = QtGui.QHBoxLayout()
-        # self.roisz_label = QtGui.QLabel("ROI Size: ")
-        # roisz_hbox.addWidget(self.roisz_label)
-        # self.wroisz = QtGui.QComboBox()
-        # sizes = ['2','4','8','16']
-        # for size in sizes:
-        #     self.wroisz.addItem(size)
-        # item = str(self.util.trickxsize.read())
-        # self.wroisz.setCurrentText(item)
-        # roisz_hbox.addWidget(self.wroisz)
-        # vbox.addLayout(roisz_hbox)
-        # roixy_hbox = QtGui.QHBoxLayout()
-        # self.roi_label = QtGui.QLabel("ROI")
-        # roixy_hbox.addWidget(self.roi_label)
-        # self.roix = QtGui.QLineEdit()
-        # roixy_hbox.addWidget(self.roix)
-        # self.roiy = QtGui.QLineEdit()
-        # roixy_hbox.addWidget(self.roiy)
-        # vbox.addLayout(roixy_hbox)
-        # cpr_hbox = QtGui.QHBoxLayout()
-        # self.cpr_label = QtGui.QLabel("CPR: ")
-        # cpr_hbox.addWidget(self.cpr_label)
-        # self.cpr = QtGui.QLineEdit()
-        # cpr_hbox.addWidget(self.cpr)
-        # self.coadd_label = QtGui.QLabel("Coadd: ")
-        # cpr_hbox.addWidget(self.coadd_label)
-        # self.coadd = QtGui.QLineEdit()
-        # cpr_hbox.addWidget(self.coadd)
-        # vbox.addLayout(cpr_hbox)
         self.wsdiff = Widgets.Button("SDiff")
         self.wsdiff.add_callback('activated', self.sdiff)
         vbox.add_widget(self.wsdiff)
@@ -905,12 +876,12 @@ class MathWindow(Widgets.Box):
             previous = fits.getdata(str(self.previous_image))
             subtracted = data - previous
             self.fitsimage.set_data(subtracted)
-            self.wsdiff.set_text("Undo SDiff")
+            # self.wsdiff.set_text("Undo SDiff")
             self.sdiff_done = True
         else:
             image = load_data(self.currentfile, logger=self.logger)
             self.fitsimage.set_image(image)
-            self.wsdiff.set_text("SDiff")
+            # self.wsdiff.set_text("SDiff")
             self.sdiff_done = False
 
     def stop(self):

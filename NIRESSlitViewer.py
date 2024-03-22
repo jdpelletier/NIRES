@@ -918,8 +918,8 @@ class MathWindow(Widgets.Box):
         return nightly
     
     def openfileone(self, event):
-        res = QtGui.QFileDialog.getOpenFileName("Open FITS file 1",
-                                                str(self.nightpath()))
+        res = QtGui.QFileDialog.getOpenFileName(parent=self, caption="Open FITS file 1",
+                                                directory = str(self.nightpath()))
         if isinstance(res, tuple):
             fileName = res[0]
         else:

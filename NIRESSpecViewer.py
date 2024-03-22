@@ -806,15 +806,15 @@ class MathWindow(Widgets.Box):
 
         self.sdiff_done = False
 
-        self.dispname2 = ktl.cache('nids', 'dispname2')
-        self.dispname2.monitor()
+        self.dispname = ktl.cache('nsds', 'dispname')
+        self.dispname.monitor()
 
         # self.threadpool = QtCore.QThreadPool()
 
         # self.start_updating()
 
     def nightpath(self):
-        dir = str(self.dispname2)
+        dir = str(self.dispname)
         if "//" in str(dir):
             dir = str(dir).split("//")
             dir = dir[0] + "/"

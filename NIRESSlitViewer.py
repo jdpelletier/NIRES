@@ -882,6 +882,7 @@ class MathWindow(Widgets.Box):
         self.wadd.add_callback('activated', self.imageAdd)
         function_vbox.add_widget(self.wadd)
         math_hbox.add_widget(function_vbox)
+        vbox.add_widget(self.math_hbox)
         self.wsdiff = Widgets.Button("SDiff")
         self.wsdiff.add_callback('activated', self.sdiff)
         vbox.add_widget(self.wsdiff)

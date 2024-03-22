@@ -899,6 +899,9 @@ class MathWindow(Widgets.Box):
 
         self.sdiff_done = False
 
+        self.dispname2 = ktl.cache('nids', 'dispname2')
+        self.dispname2.monitor()
+
         # self.threadpool = QtCore.QThreadPool()
 
         # self.start_updating()

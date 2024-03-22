@@ -910,6 +910,9 @@ class MathWindow(Widgets.Box):
             self.wsdiff.setText("SDiff")
             self.sdiff_done = False
 
+    def stop(self):
+        self.gui_up = False
+
     def dismiss(self, event):
         self.stop()
         # self.canvas.enable_draw(False)

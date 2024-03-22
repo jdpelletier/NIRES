@@ -929,8 +929,8 @@ class MathWindow(Widgets.Box):
         return
     
     def openfiletwo(self, event):
-        res = QtGui.QFileDialog.getOpenFileName(self, "Open FITS file 1",
-                                                str(self.nightpath()))
+        res = QtGui.QFileDialog.getOpenFileName(caption="Open FITS file 1",
+                                                directory = str(self.nightpath()))
         if isinstance(res, tuple):
             fileName = res[0]
         else:
@@ -940,6 +940,18 @@ class MathWindow(Widgets.Box):
         return
 
     def imageSubtract(self, event):
+        imageone_data = fits.getdata(self.filenameone.get_text())
+        imagetwo_data = fits.getdata(self.filenametwo.get_text())
+        image_header = fits.getheader(self.filenameone.get_text())
+        subtracted = imageone_data - imagetwo_data
+        hdu = fits.PrimaryHDU(header=image_header, data=subtracted)
+        filename = 'subImage.fits'
+        try:
+            hdu.writeto(filename)
+        except OSError:
+            os.remove(filename)
+            hdu.writeto(filename)
+        self.load_file('subImage.fits')
         return
     
     def imageAdd(self, event):

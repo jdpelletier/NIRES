@@ -971,12 +971,11 @@ class MathWindow(Widgets.Box):
 
     def sdiff(self, event):
         if self.sdiff_done == False:
-            image = self.fitsimage.get_image()
-            data = image.get_data()
+            image_data = fits.getdata(self.currentfile)
+            image_header = fits.getheader(self.currentfile)
             previous = fits.getdata(str(self.previous_image))
-            subtracted = data - previous
-            header = fits.getheader(self.currentfile)
-            hdu = fits.PrimaryHDU(header=header, data=subtracted)
+            subtracted = image_data - previous
+            hdu = fits.PrimaryHDU(header=image_header, data=subtracted)
             filename = 'subImage.fits'
             try:
                 hdu.writeto(filename)

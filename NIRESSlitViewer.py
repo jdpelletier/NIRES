@@ -878,8 +878,8 @@ class MathWindow(Widgets.Box):
             data = image.get_data()
             previous = fits.getdata(str(self.previous_image))
             subtracted = data - previous
-            newheader = fits.Header(image.get_header())
-            hdu = fits.PrimaryHDU(header=newheader, data=subtracted)
+            header = self.currentfile.header
+            hdu = fits.PrimaryHDU(header=header, data=subtracted)
             filename = 'subImage.fits'
             try:
                 hdu.writeto(filename)

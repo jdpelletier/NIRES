@@ -983,7 +983,7 @@ class MathWindow(Widgets.Box):
                 os.remove(filename)
                 hdu.writeto(filename)
             self.load_file('subImage.fits')
-            self.wsdiff.set_label("Undo SDiff")
+            self.wsdiff.settext("Undo SDiff")
             self.sdiff_done = True
         else:
             image = load_data(self.currentfile, logger=self.logger)

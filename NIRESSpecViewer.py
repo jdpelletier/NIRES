@@ -1226,21 +1226,6 @@ class FitsViewer(QtGui.QMainWindow):
         self.c = Cuts(self.logger, self.fitsimage)
         self.c.show()
 
-    # def sdiff(self):
-    #     if self.sdiff_done == False:
-    #         image = self.fitsimage.get_image()
-    #         data = image.get_data()
-    #         previous = fits.getdata(str(self.previous_image))
-    #         subtracted = data - previous
-    #         self.fitsimage.set_data(subtracted)
-    #         self.wsdiff.setText("Undo SDiff")
-    #         self.sdiff_done = True
-    #     else:
-    #         image = load_data(self.currentfile, logger=self.logger)
-    #         self.fitsimage.set_image(image)
-    #         self.wsdiff.setText("SDiff")
-    #         self.sdiff_done = False
-
     # def subtract_sky(self, file):
     #     image = self.fitsimage.get_image()
     #     data = image.get_data()
@@ -1254,16 +1239,16 @@ class FitsViewer(QtGui.QMainWindow):
     ##Start of image find and processing code
 
     def scan(self, file_callback):
-        # self.previous_image = self.slit_lastfile.read() #TODO this is to get first previous image, might remove.
+        self.previous_image = self.slit_lastfile.read() #TODO this is to get first previous image, might remove.
         while self.scanning:
             # if (self.go == 1 or self.test == 1 or self.display == 1) and ("v" in self.slit_filename or "TEMP" in self.slit_filename):
             if self.display == 1:
-                # previm = self.slit_lastfile.read()
+                previm = self.slit_lastfile.read()
                 print("Taking image")
                 # self.waitForFileToBeUnlocked(0.5)
                 file_callback.emit(str(self.dispname.read()))
                 self.waitForZero(0.25)
-                # self.previous_image = previm
+                self.previous_image = previm
             time.sleep(0.25)
 
     def fileIsCurrentlyLocked(self):

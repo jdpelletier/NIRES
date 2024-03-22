@@ -1145,7 +1145,7 @@ class FitsViewer(QtGui.QMainWindow):
     def quit(self, *args):
         self.logger.info("Attempting to shut down the application...")
         self.stop_scan()
-        time.sleep(2)
+        time.sleep(1)
         # self.threadpool = False
         QtGui.QApplication.instance().quit()
 

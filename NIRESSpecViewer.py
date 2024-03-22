@@ -918,7 +918,7 @@ class FitsViewer(QtGui.QMainWindow):
         #Cache KTL keywords
         # self.slit_filename = ktl.cache('nids', 'FILENAME')
         # self.slit_filename.monitor()
-        # self.slit_lastfile = ktl.cache('nids', 'LASTFILE')
+        self.slit_lastfile = ktl.cache('nsds', 'LASTFILE')
         # self.slit_sdiff = ktl.cache('nids', 'LASTFILE')
         # self.go = ktl.cache('nids', 'GO')
         # self.go.monitor()

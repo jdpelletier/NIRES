@@ -932,7 +932,6 @@ class MathWindow(Widgets.Box):
         else: 
             firstfile = firstfile.split("/")
             firstfile = firstfile[-1]
-        secondfile = str(self.previous_image)
         if "//" in secondfile:
             secondfile = secondfile.split("//")
             secondfile = secondfile[-1]

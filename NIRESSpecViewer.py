@@ -867,7 +867,7 @@ class MathWindow(Widgets.Box):
         except FileNotFoundError:
             return
         except OSError:
-            self.filenametwo.set_text("File not loaded")
+            self.filenameone.set_text("File still exposing")
             return
         try:
             imagetwo_data = fits.getdata(self.filenametwo.get_text())

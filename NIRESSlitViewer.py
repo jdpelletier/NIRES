@@ -921,6 +921,23 @@ class MathWindow(Widgets.Box):
             dir = Path(dir)
             nightly = dir.parent
         return nightly
+
+    def mathFileNames(self, firstfile, secondfile, operation):
+        if "//" in firstfile:
+            firstfile = firstfile.split("//")
+            firstfile = firstfile[-1]
+        else: 
+            firstfile = firstfile.split("/")
+            firstfile = firstfile[-1]
+        secondfile = str(self.previous_image)
+        print(secondfile)
+        if "//" in secondfile:
+            secondfile = secondfile.split("//")
+            secondfile = secondfile[-1]
+        else: 
+            secondfile = secondfile.split("/")
+            secondfile = secondfile[-1]
+        return f'{firstfile} {operation} {secondfile}.fits'
     
     def openfileone(self, event):
         res = QtGui.QFileDialog.getOpenFileName(caption="Open FITS file 1",
@@ -987,24 +1004,7 @@ class MathWindow(Widgets.Box):
             previous = fits.getdata(str(self.previous_image))
             subtracted = image_data - previous
             hdu = fits.PrimaryHDU(header=image_header, data=subtracted)
-            filename = "diffImage.fits"
-            firstfile = str(self.currentfile)
-            print(firstfile)
-            if "//" in firstfile:
-                firstfile = firstfile.split("//")
-                firstfile = firstfile[1]
-            else: 
-                firstfile = firstfile.split("/")
-                firstfile = firstfile[-1]
-            secondfile = str(self.previous_image)
-            print(secondfile)
-            if "//" in secondfile:
-                secondfile = secondfile.split("//")
-                secondfile = secondfile[-1]
-            else: 
-                secondfile = secondfile.split("/")
-                secondfile = secondfile[-1]
-            filename = f'{firstfile} - {secondfile}.fits'
+            filename = mathFileNames(str(self.currentfile), str(self.previous_image) , '-')
             try:
                 hdu.writeto(filename)
             except OSError:
@@ -1019,6 +1019,7 @@ class MathWindow(Widgets.Box):
             # self.fitsimage.set_image(image)
             # self.wsdiff.set_text("SDiff")
             self.sdiff_done = False
+
 
     def reload(self, event):
         self.load_file(str(self.dispname2.read()))

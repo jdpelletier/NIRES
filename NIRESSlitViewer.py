@@ -849,14 +849,14 @@ class MathWindow(Widgets.Box):
     This "window" is a QWidget. If it has no parent, it
     will appear as a free-floating window as we want.
     """
-    def __init__(self, logger, fitsimage, previm, currentim, loadfile):
+    def __init__(self, logger, fitsimage, loadfile, dispname2, lastfile):
         super(MathWindow, self).__init__(fitsimage)
 
         self.logger = logger
         self.fitsimage = fitsimage
-        self.previous_image = previm
-        self.currentfile = currentim
         self.load_file = loadfile
+        self.dispname2 = dispname2
+        self.lastfile = lastfile
 
         vbox = Widgets.VBox()
         math_hbox = Widgets.HBox()
@@ -902,20 +902,12 @@ class MathWindow(Widgets.Box):
 
         self.sdiff_done = False
 
-        self.dispname2 = ktl.cache('nids', 'dispname2')
-        self.dispname2.monitor()
-
-        self.lastfile = ktl.cache('nids', 'lastfile')
-        self.lastfile.monitor()
-
-        self.pastName = ""
-
         # self.threadpool = QtCore.QThreadPool()
 
         # self.start_updating()
 
     def nightpath(self):
-        dir = str(self.dispname2)
+        dir = str(self.dispname2.read())
         if "//" in str(dir):
             dir = str(dir).split("//")
             dir = dir[0] + "/"
@@ -1367,7 +1359,6 @@ class FitsViewer(QtGui.QMainWindow):
         # self.wstopscan.setEnabled(False)
 
     def load_file(self, filepath):
-        self.currentfile = filepath
         recenter = False
         header, fitsData = self.addWcs(filepath)
         if self.fitsimage.get_image() == None:
@@ -1424,7 +1415,7 @@ class FitsViewer(QtGui.QMainWindow):
             self.load_file(fileName)
 
     def math_popup(self):
-        self.m = MathWindow(self.logger, self.fitsimage, self.previous_image, self.currentfile, self.load_file)
+        self.m = MathWindow(self.logger, self.fitsimage, self.load_file)
         self.m.show()
 
     def cuts_popup(self):
@@ -1449,16 +1440,16 @@ class FitsViewer(QtGui.QMainWindow):
     ##Start of image find and processing code
 
     def scan(self, file_callback):
-        self.previous_image = self.slit_lastfile.read() #TODO this is to get first previous image, might remove.
+        # self.previous_image = self.slit_lastfile.read() #TODO this is to get first previous image, might remove.
         while self.scanning:
             # if (self.go == 1 or self.test == 1 or self.display2 == 1) and ("v" in self.slit_filename or "TEMP" in self.slit_filename):
             if self.display2 == 1:
-                previm = self.slit_lastfile.read()
+                # previm = self.slit_lastfile.read()
                 print("Taking image")
                 # self.waitForFileToBeUnlocked(0.5)
                 file_callback.emit(str(self.dispname2.read()))
                 self.waitForZero(0.25)
-                self.previous_image = previm
+                # self.previous_image = previm
             time.sleep(0.25)
 
     def fileIsCurrentlyLocked(self):

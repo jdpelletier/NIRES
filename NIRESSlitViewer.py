@@ -990,7 +990,7 @@ class MathWindow(Widgets.Box):
             firstfile = str(self.currentfile)
             if "//" in firstfile:
                 firstfile = firstfile.split("//")
-                firstfile = firstfile[-1]
+                firstfile = firstfile[1]
             else: 
                 firstfile = firstfile.split("/")
                 firstfile = firstfile[-1]

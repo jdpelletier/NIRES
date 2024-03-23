@@ -1163,7 +1163,7 @@ class FitsViewer(QtGui.QMainWindow):
 
         fits_x, fits_y = data_x, data_y
 
-        wavelength = self.wavelength_data[int(fits_x), int(fits_y)]
+        wavelength = int(self.wavelength_data[int(fits_x), int(fits_y)])
 
         if (fits_x > 2048 or fits_x <0) or (fits_y > 2048 or fits_y <0):
             text = "X: Y: Value: Wavelength: "

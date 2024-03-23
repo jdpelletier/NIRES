@@ -1328,7 +1328,7 @@ class FitsViewer(QtGui.QMainWindow):
             text = "X: Y:  RA:  Dec:  Value:"
             self.readout.setText(text)
         else:
-            text = f"X: {int(fits_x)} Y: {int(fits_y)}  RA: {ra_txt}  Dec: {dec_txt}  Value: {value}"
+            text = f"X: {int(fits_x)} Y: {int(fits_y)}  RA: {ra_txt}  Dec: {dec_txt}  Value: {int(value)}"
             self.readout.setText(text)
 
     def quit(self, *args):

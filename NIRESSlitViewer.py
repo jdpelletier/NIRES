@@ -1580,7 +1580,7 @@ class FitsViewer(QtGui.QMainWindow):
         except KeyError:
             self.compass = self.dc.Compass(120, 880, 50, color='green')
             self.fitsimage.get_canvas().add(self.compass, tag=self.comptag, redraw=True)
-            self.comptag.rotate(90)
+            self.fitsimage.get_canvas().get_object_by_tag(self.comptag).rotate(90)
             # self.fitsimage.get_canvas().add(self.compdc(data_x, data_y, radius, color='skyblue',
                                     #    fontsize=8))
             

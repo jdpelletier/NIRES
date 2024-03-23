@@ -990,21 +990,21 @@ class MathWindow(Widgets.Box):
             filename = "diffImage.fits"
             firstfile = str(self.currentfile)
             print(firstfile)
-            # if "//" in firstfile:
-            #     firstfile = firstfile.split("//")
-            #     firstfile = firstfile[1]
-            # else: 
-            #     firstfile = firstfile.split("/")
-            #     firstfile = firstfile[-1]
+            if "//" in firstfile:
+                firstfile = firstfile.split("//")
+                firstfile = firstfile[1]
+            else: 
+                firstfile = firstfile.split("/")
+                firstfile = firstfile[-1]
             secondfile = str(self.previous_image)
             print(secondfile)
-            # if "//" in secondfile:
-            #     secondfile = secondfile.split("//")
-            #     firstfile = firstfile[-1]
-            # else: 
-            #     firstfile = secondfile.split("/")
-            #     firstfile = secondfile[-1]
-            # filename = f'{firstfile} - {secondfile}.fits'
+            if "//" in secondfile:
+                secondfile = secondfile.split("//")
+                secondfile = secondfile[-1]
+            else: 
+                secondfile = secondfile.split("/")
+                secondfile = secondfile[-1]
+            filename = f'{firstfile} - {secondfile}.fits'
             try:
                 hdu.writeto(filename)
             except OSError:

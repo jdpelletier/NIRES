@@ -864,21 +864,30 @@ class MathWindow(Widgets.Box):
     def imageSubtract(self, event):
         try:
             imageone_data = fits.getdata(self.filenameone.get_text())
-            imagetwo_data = fits.getdata(self.filenametwo.get_text())
-            image_header = fits.getheader(self.filenameone.get_text())
-            subtracted = imageone_data - imagetwo_data
-            hdu = fits.PrimaryHDU(header=image_header, data=subtracted)
-            filename = self.mathFileNames(self.filenameone.get_text(), self.filenametwo.get_text(), '-')
-            try:
-                hdu.writeto(filename)
-            except OSError:
-                os.remove(filename)
-                hdu.writeto(filename)
-            self.load_file(filename)
-            os.remove(filename)
-            self.sdiff_done = False
         except FileNotFoundError:
             return
+        except OSError:
+            self.filenametwo.set_text("File not loaded")
+            return
+        try:
+            imagetwo_data = fits.getdata(self.filenametwo.get_text())
+        except FileNotFoundError:
+            return
+        except OSError:
+            self.filenametwo.set_text("File not loaded")
+            return
+        image_header = fits.getheader(self.filenameone.get_text())
+        subtracted = imageone_data - imagetwo_data
+        hdu = fits.PrimaryHDU(header=image_header, data=subtracted)
+        filename = self.mathFileNames(self.filenameone.get_text(), self.filenametwo.get_text(), '-')
+        try:
+            hdu.writeto(filename)
+        except OSError:
+            os.remove(filename)
+            hdu.writeto(filename)
+        self.load_file(filename)
+        os.remove(filename)
+        self.sdiff_done = False
         return
     
     def imageAdd(self, event):

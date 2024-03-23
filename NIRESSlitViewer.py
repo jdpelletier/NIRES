@@ -1595,7 +1595,7 @@ class FitsViewer(QtGui.QMainWindow):
         rot = float(header['ROTPOSN'])
         w.wcs.crpix = [y, x]
         w.wcs.cdelt = np.array([-0.05, 0.05])
-        w.wcs.crota = np.array([1, rot])
+        w.wcs.crota = np.array([0.05, rot])
         w.wcs.crval = [ra, dec]
         w.wcs.ctype = ["RA---TAN", "DEC--TAN"]
         pixcrd = np.array([[0, 0], [24, 38], [45, 98]], dtype=np.float64)

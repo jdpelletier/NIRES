@@ -999,9 +999,12 @@ class MathWindow(Widgets.Box):
 
     def sdiff(self, event):
         if self.sdiff_done == False:
-            image_data = fits.getdata(self.currentfile)
-            image_header = fits.getheader(self.currentfile)
-            previous = fits.getdata(str(self.previous_image))
+            try:
+                image_data = fits.getdata(self.currentfile)
+                image_header = fits.getheader(self.currentfile)
+                previous = fits.getdata(str(self.previous_image))
+            except FileNotFoundError:
+                return
             subtracted = image_data - previous
             hdu = fits.PrimaryHDU(header=image_header, data=subtracted)
             filename = self.mathFileNames(str(self.currentfile), str(self.previous_image) , '-')

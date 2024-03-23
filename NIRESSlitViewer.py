@@ -1380,6 +1380,8 @@ class FitsViewer(QtGui.QMainWindow):
             self.file_info.setText(f"File: {filepath}")
         except io_fits.FITSError:
             self.file_info.setText(f"File: error loading, wait for next image")
+        except FileNotFoundError:
+            self.file_info.setText(f"File: error loading")
 
         # self.wsky.setEnabled(True)
         # self.wsdiff.setEnabled(True)

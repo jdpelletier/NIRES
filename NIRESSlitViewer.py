@@ -1415,7 +1415,7 @@ class FitsViewer(QtGui.QMainWindow):
             self.load_file(fileName)
 
     def math_popup(self):
-        self.m = MathWindow(self.logger, self.fitsimage, self.load_file)
+        self.m = MathWindow(self.logger, self.fitsimage, self.load_file, self.dispname2, self.slit_lastfile)
         self.m.show()
 
     def cuts_popup(self):

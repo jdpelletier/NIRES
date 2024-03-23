@@ -1004,7 +1004,7 @@ class MathWindow(Widgets.Box):
             previous = fits.getdata(str(self.previous_image))
             subtracted = image_data - previous
             hdu = fits.PrimaryHDU(header=image_header, data=subtracted)
-            filename = mathFileNames(str(self.currentfile), str(self.previous_image) , '-')
+            filename = self.mathFileNames(str(self.currentfile), str(self.previous_image) , '-')
             try:
                 hdu.writeto(filename)
             except OSError:

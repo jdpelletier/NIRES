@@ -1587,17 +1587,18 @@ class FitsViewer(QtGui.QMainWindow):
         w = wcs.WCS(naxis=2)
         fitsData = fits.getdata(filen, ext=0)
         header = fits.getheader(filen)
-        ht, wd = fitsData.shape[:2]
-        y = ht//2
-        x = wd//2
-        ra = float(header['RA'])
-        dec = float(header['DEC'])
-        rot = float(header['ROTPOSN'])
-        w.wcs.crpix = [y, x]
-        w.wcs.cdelt = np.array([-0.05, 0.05])
-        w.wcs.crota = np.array([-0.05, rot])
-        w.wcs.crval = [ra, dec]
-        w.wcs.ctype = ["RA---TAN", "DEC--TAN"]
+        w = wcs.WCS(header)
+        # ht, wd = fitsData.shape[:2]
+        # y = ht//2
+        # x = wd//2
+        # ra = float(header['RA'])
+        # dec = float(header['DEC'])
+        # rot = float(header['ROTPOSN'])
+        # w.wcs.crpix = [y, x]
+        # w.wcs.cdelt = np.array([-0.05, 0.05])
+        # w.wcs.crota = np.array([-0.05, rot])
+        # w.wcs.crval = [ra, dec]
+        # w.wcs.ctype = ["RA---TAN", "DEC--TAN"]
         pixcrd = np.array([[0, 0], [24, 38], [45, 98]], dtype=np.float64)
         world = w.wcs_pix2world(pixcrd, 0)
         # Convert the same coordinates back to pixel coordinates.

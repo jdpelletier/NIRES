@@ -969,6 +969,7 @@ class MathWindow(Widgets.Box):
                 hdu.writeto(filename)
             self.load_file(filename)
             os.remove(filename)
+            self.sdiff_done = False
         except FileNotFoundError:
             return
         return
@@ -988,6 +989,7 @@ class MathWindow(Widgets.Box):
                 hdu.writeto(filename)
             self.load_file(filename)
             os.remove(filename)
+            self.sdiff_done = False
         except FileNotFoundError:
             return
         return

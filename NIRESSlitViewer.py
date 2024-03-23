@@ -1608,6 +1608,7 @@ class FitsViewer(QtGui.QMainWindow):
         assert np.max(np.abs(pixcrd - pixcrd2)) < 1e-6
         # Now, write out the WCS object as a FITS header
         header = w.to_header()
+        print(w.wcs)
         return header, fitsData
 
 

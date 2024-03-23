@@ -967,13 +967,14 @@ class MathWindow(Widgets.Box):
             image_header = fits.getheader(self.filenameone.get_text())
             subtracted = imageone_data - imagetwo_data
             hdu = fits.PrimaryHDU(header=image_header, data=subtracted)
-            filename = 'subtractedImage.fits'
+            filename = self.mathFileNames(str(self.currentfile), str(self.previous_image) , '-')
             try:
                 hdu.writeto(filename)
             except OSError:
                 os.remove(filename)
                 hdu.writeto(filename)
-            self.load_file('subtractedImage.fits')
+            self.load_file(filename)
+            os.remove(filename)
         except FileNotFoundError:
             return
         return
@@ -985,13 +986,14 @@ class MathWindow(Widgets.Box):
             image_header = fits.getheader(self.filenameone.get_text())
             added = imageone_data + imagetwo_data
             hdu = fits.PrimaryHDU(header=image_header, data=added)
-            filename = 'addedImage.fits'
+            filename = self.mathFileNames(str(self.currentfile), str(self.previous_image) , '+')
             try:
                 hdu.writeto(filename)
             except OSError:
                 os.remove(filename)
                 hdu.writeto(filename)
-            self.load_file('addedImage.fits')
+            self.load_file(filename)
+            os.remove(filename)
         except FileNotFoundError:
             return
         return

@@ -905,6 +905,9 @@ class MathWindow(Widgets.Box):
         self.dispname2 = ktl.cache('nids', 'dispname2')
         self.dispname2.monitor()
 
+        self.lastfile = ktl.cache('nids', 'lastfile')
+        self.lastfile.monitor()
+
         self.pastName = ""
 
         # self.threadpool = QtCore.QThreadPool()
@@ -967,7 +970,7 @@ class MathWindow(Widgets.Box):
             image_header = fits.getheader(self.filenameone.get_text())
             subtracted = imageone_data - imagetwo_data
             hdu = fits.PrimaryHDU(header=image_header, data=subtracted)
-            filename = self.mathFileNames(str(self.currentfile), str(self.previous_image) , '-')
+            filename = self.mathFileNames(self.filenameone.get_text(), self.filenametwo.get_text(), '-')
             try:
                 hdu.writeto(filename)
             except OSError:
@@ -986,7 +989,7 @@ class MathWindow(Widgets.Box):
             image_header = fits.getheader(self.filenameone.get_text())
             added = imageone_data + imagetwo_data
             hdu = fits.PrimaryHDU(header=image_header, data=added)
-            filename = self.mathFileNames(str(self.currentfile), str(self.previous_image) , '+')
+            filename = self.mathFileNames(self.filenameone.get_text(), self.filenametwo.get_text(), '+')
             try:
                 hdu.writeto(filename)
             except OSError:
@@ -1001,14 +1004,14 @@ class MathWindow(Widgets.Box):
     def sdiff(self, event):
         if self.sdiff_done == False:
             try:
-                image_data = fits.getdata(self.currentfile)
-                image_header = fits.getheader(self.currentfile)
-                previous = fits.getdata(str(self.previous_image))
+                image_data = fits.getdata(self.dispname2.read())
+                image_header = fits.getheader(self.dispname2.read())
+                previous = fits.getdata(str(self.lastfile.read()))
             except FileNotFoundError:
                 return
             subtracted = image_data - previous
             hdu = fits.PrimaryHDU(header=image_header, data=subtracted)
-            filename = self.mathFileNames(str(self.currentfile), str(self.previous_image) , '-')
+            filename = self.mathFileNames(str(self.dispname2.read()), str(self.lastfile.read()), '-')
             try:
                 hdu.writeto(filename)
             except OSError:

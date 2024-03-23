@@ -987,15 +987,30 @@ class MathWindow(Widgets.Box):
             previous = fits.getdata(str(self.previous_image))
             subtracted = image_data - previous
             hdu = fits.PrimaryHDU(header=image_header, data=subtracted)
-            filename = 'diffImage.fits'
+            firstfile = str(self.currentfile)
+            if "//" in firstfile:
+                firstfile = firstfile.split("//")
+                firstfile = firstfile[-1]
+            else: 
+                firstfile = firstfile.split("/")
+                firstfile = firstfile[-1]
+            secondfile = str(self.previous_image)
+            if "//" in secondfile:
+                secondfile = secondfile.split("//")
+                firstfile = firstfile[-1]
+            else: 
+                firstfile = secondfile.split("/")
+                firstfile = secondfile[-1]
+            filename = f'{firstfile} - {secondfile}.fits'
             try:
                 hdu.writeto(filename)
             except OSError:
                 os.remove(filename)
                 hdu.writeto(filename)
-            self.load_file('diffImage.fits')
+            self.load_file(filename)
             # self.wsdiff.set_text("Undo SDiff")
             self.sdiff_done = True
+            os.remove(filename)
         else:
             self.load_file(str(self.dispname2.read()))
             # self.fitsimage.set_image(image)

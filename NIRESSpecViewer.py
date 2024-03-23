@@ -1325,7 +1325,7 @@ class FitsViewer(QtGui.QMainWindow):
         return filename
     
     def math_popup(self):
-        self.m = MathWindow(self.logger, self.fitsimage, self.load_file, self.dispname2, self.spec_lastfile)
+        self.m = MathWindow(self.logger, self.fitsimage, self.load_file, self.dispname, self.spec_lastfile)
         self.m.show()
 
     ##Find star stuff

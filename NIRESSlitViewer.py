@@ -1592,7 +1592,7 @@ class FitsViewer(QtGui.QMainWindow):
         x = wd//2
         ra = float(header['RA'])
         dec = float(header['DEC'])
-        rot = float(header['ROTPOSN'])
+        rot = float(header['ROTPOSN']) + 90.0
         w.wcs.crpix = [y, x]
         w.wcs.cdelt = np.array([-0.05, 0.05])
         w.wcs.crota = np.array([0.05, rot])

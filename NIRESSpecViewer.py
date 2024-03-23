@@ -756,14 +756,14 @@ class MathWindow(Widgets.Box):
     This "window" is a QWidget. If it has no parent, it
     will appear as a free-floating window as we want.
     """
-    def __init__(self, logger, fitsimage, previm, currentim, loadfile):
+    def __init__(self, logger, fitsimage, loadfile, dispname, lastfile):
         super(MathWindow, self).__init__(fitsimage)
 
         self.logger = logger
         self.fitsimage = fitsimage
-        self.previous_image = previm
-        self.currentfile = currentim
         self.load_file = loadfile
+        self.dispname = dispname
+        self.lastfile = lastfile
 
         vbox = Widgets.VBox()
         math_hbox = Widgets.HBox()
@@ -827,6 +827,21 @@ class MathWindow(Widgets.Box):
             nightly = dir.parent
         return nightly
     
+    def mathFileNames(self, firstfile, secondfile, operation):
+        if "//" in firstfile:
+            firstfile = firstfile.split("//")
+            firstfile = firstfile[-1]
+        else: 
+            firstfile = firstfile.split("/")
+            firstfile = firstfile[-1]
+        if "//" in secondfile:
+            secondfile = secondfile.split("//")
+            secondfile = secondfile[-1]
+        else: 
+            secondfile = secondfile.split("/")
+            secondfile = secondfile[-1]
+        return f'{firstfile} {operation} {secondfile}.fits'
+    
     def openfileone(self, event):
         res = QtGui.QFileDialog.getOpenFileName(caption="Open FITS file 1",
                                                 directory = str(self.nightpath()))
@@ -856,13 +871,15 @@ class MathWindow(Widgets.Box):
             image_header = fits.getheader(self.filenameone.get_text())
             subtracted = imageone_data - imagetwo_data
             hdu = fits.PrimaryHDU(header=image_header, data=subtracted)
-            filename = 'subtractedImage.fits'
+            filename = self.mathFileNames(self.filenameone.get_text(), self.filenametwo.get_text(), '-')
             try:
                 hdu.writeto(filename)
             except OSError:
                 os.remove(filename)
                 hdu.writeto(filename)
-            self.load_file('subtractedImage.fits')
+            self.load_file(filename)
+            os.remove(filename)
+            self.sdiff_done = False
         except FileNotFoundError:
             return
         return
@@ -874,35 +891,42 @@ class MathWindow(Widgets.Box):
             image_header = fits.getheader(self.filenameone.get_text())
             added = imageone_data + imagetwo_data
             hdu = fits.PrimaryHDU(header=image_header, data=added)
-            filename = 'addedImage.fits'
+            filename = self.mathFileNames(self.filenameone.get_text(), self.filenametwo.get_text(), '+')
             try:
                 hdu.writeto(filename)
             except OSError:
                 os.remove(filename)
                 hdu.writeto(filename)
-            self.load_file('addedImage.fits')
+            self.load_file(filename)
+            os.remove(filename)
+            self.sdiff_done = False
         except FileNotFoundError:
             return
         return
 
     def sdiff(self, event):
         if self.sdiff_done == False:
-            image_data = fits.getdata(self.currentfile)
-            image_header = fits.getheader(self.currentfile)
-            previous = fits.getdata(str(self.previous_image))
+            try:
+                image_data = fits.getdata(self.dispname.read())
+                image_header = fits.getheader(self.dispname.read())
+                previous = fits.getdata(str(self.lastfile.read()))
+            except FileNotFoundError:
+                return
             subtracted = image_data - previous
             hdu = fits.PrimaryHDU(header=image_header, data=subtracted)
-            filename = 'diffImage.fits'
+            filename = self.mathFileNames(str(self.dispname.read()), str(self.lastfile.read()), '-')
             try:
                 hdu.writeto(filename)
             except OSError:
                 os.remove(filename)
                 hdu.writeto(filename)
-            self.load_file('diffImage.fits')
+            self.load_file(filename)
             # self.wsdiff.set_text("Undo SDiff")
             self.sdiff_done = True
+            os.remove(filename)
         else:
             self.load_file(str(self.dispname.read()))
+            # self.fitsimage.set_image(image)
             # self.wsdiff.set_text("SDiff")
             self.sdiff_done = False
 
@@ -1172,7 +1196,6 @@ class FitsViewer(QtGui.QMainWindow):
         # self.wstopscan.setEnabled(False)
 
     def load_file(self, filepath):
-        self.currentfile = filepath
         print(filepath)
         recenter = False
         if self.fitsimage.get_image() == None:
@@ -1250,16 +1273,16 @@ class FitsViewer(QtGui.QMainWindow):
     ##Start of image find and processing code
 
     def scan(self, file_callback):
-        self.previous_image = self.spec_lastfile.read() #TODO this is to get first previous image, might remove.
+        # self.previous_image = self.spec_lastfile.read() #TODO this is to get first previous image, might remove.
         while self.scanning:
             # if (self.go == 1 or self.test == 1 or self.display == 1) and ("v" in self.slit_filename or "TEMP" in self.slit_filename):
             if self.display == 1:
-                previm = self.spec_lastfile.read()
+                # previm = self.spec_lastfile.read()
                 print("Taking image")
                 # self.waitForFileToBeUnlocked(0.5)
                 file_callback.emit(str(self.dispname.read()))
                 self.waitForZero(0.25)
-                self.previous_image = previm
+                # self.previous_image = previm
             time.sleep(0.25)
 
     def fileIsCurrentlyLocked(self):
@@ -1302,7 +1325,7 @@ class FitsViewer(QtGui.QMainWindow):
         return filename
     
     def math_popup(self):
-        self.m = MathWindow(self.logger, self.fitsimage, self.previous_image, self.currentfile, self.load_file)
+        self.m = MathWindow(self.logger, self.fitsimage, self.load_file, self.dispname2, self.spec_lastfile)
         self.m.show()
 
     ##Find star stuff

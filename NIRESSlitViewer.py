@@ -930,7 +930,6 @@ class MathWindow(Widgets.Box):
             firstfile = firstfile.split("/")
             firstfile = firstfile[-1]
         secondfile = str(self.previous_image)
-        print(secondfile)
         if "//" in secondfile:
             secondfile = secondfile.split("//")
             secondfile = secondfile[-1]
@@ -1364,7 +1363,6 @@ class FitsViewer(QtGui.QMainWindow):
 
     def load_file(self, filepath):
         self.currentfile = filepath
-        print(filepath)
         recenter = False
         header, fitsData = self.addWcs(filepath)
         if self.fitsimage.get_image() == None:

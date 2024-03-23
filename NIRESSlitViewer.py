@@ -1030,6 +1030,7 @@ class MathWindow(Widgets.Box):
 
     def reload(self, event):
         self.load_file(str(self.dispname2.read()))
+        self.sdiff_done = False
 
     def stop(self):
         self.gui_up = False

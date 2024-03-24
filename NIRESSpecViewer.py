@@ -1038,6 +1038,8 @@ class FitsViewer(QtGui.QMainWindow):
         hw = QtGui.QWidget()
         hw.setLayout(viewer_hbox)
         vbox.addWidget(hw)
+        slider = QtGui.Slider(orientation = 'vertical')
+        vbox.addWidget(slider)
         click_hbox = QtGui.QHBoxLayout()
         click_hbox.setObjectName("click_hbox")
         self.clickinfo = QtGui.QLabel("Left-drag to manually adjust levels.")

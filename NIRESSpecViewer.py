@@ -1047,6 +1047,10 @@ class FitsViewer(QtGui.QMainWindow):
         self.wzoomin.setObjectName("wzoomin")
         self.wzoomin.clicked.connect(self.zoomIn)
         click_hbox.addWidget(self.wzoomin)
+        self.wzoomreset = QtGui.QPushButton("Reset Zoom")
+        self.wzoomreset.setObjectName("wzoomreset")
+        self.wzoomreset.clicked.connect(self.zoomReset)
+        click_hbox.addWidget(self.wzoomreset)
         self.wzoomout = QtGui.QPushButton("Zoom Out")
         self.wzoomout.setObjectName("wzoomout")
         self.wzoomout.clicked.connect(self.zoomOut)
@@ -1431,6 +1435,9 @@ class FitsViewer(QtGui.QMainWindow):
     def zoomIn(self):
         current = self.fitsimage.get_zoom()
         return self.fitsimage.zoom_to(current + 1)
+    
+    def zoomReset(self):
+        return self.fitsimage.zoom_to(0)
     
     def zoomOut(self):
         current = self.fitsimage.get_zoom()

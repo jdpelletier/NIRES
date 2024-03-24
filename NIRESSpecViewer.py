@@ -949,7 +949,7 @@ class MathWindow(Widgets.Box):
         self.delete()
 
 class FitsViewer(QtGui.QMainWindow):
-    resized = QtCore.pyqtSignal()
+    resized = QtCore.qtpySignal()
 
     def __init__(self, logger):
         super(FitsViewer, self).__init__()

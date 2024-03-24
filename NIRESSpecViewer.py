@@ -1181,15 +1181,14 @@ class FitsViewer(QtGui.QMainWindow):
             self.readout.setText(text)
         
     def drag_cb(self, viewer, button, data_x, data_y):
-        if self.panning == False:
-            low, high = viewer.get_cut_levels()
-            dx = data_x - self.xclick
-            dy = data_y - self.yclick
-            low = low + dx
-            high = high + dy
-            viewer.cut_levels(low, high)
-            self.xclick = data_x
-            self.yclick = data_y
+        low, high = viewer.get_cut_levels()
+        dx = data_x - self.xclick
+        dy = data_y - self.yclick
+        low = low + dx
+        high = high + dy
+        viewer.cut_levels(low, high)
+        self.xclick = data_x
+        self.yclick = data_y
 
 
     def quit(self, *args):
@@ -1424,13 +1423,13 @@ class FitsViewer(QtGui.QMainWindow):
     def setPan(self):
         if self.panning == False:
             self.panning = True
-            self.fitsimage.disable_callback('cursor-move', self.drag_cb)
+            self.fitsimage.block_callback('cursor-move', self.drag_cb)
             self.fitsimage.switch_cursor('pan')
             self.clickinfo.setText("Click the image to pan.")
             self.wsetpan.setText("Cancle Pan")
         else:
             self.panning = False
-            self.fitsimage.enable_callback('cursor-move', self.drag_cb)
+            self.fitsimage.unblock_callback('cursor-move', self.drag_cb)
             self.fitsimage.switch_cursor('pick')
             self.clickinfo.setText("Left-drag to manually adjust levels.")
             self.wsetpan.setText("Pan")

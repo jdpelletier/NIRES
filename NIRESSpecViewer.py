@@ -1128,6 +1128,7 @@ class FitsViewer(QtGui.QMainWindow):
         vw = QtGui.QWidget()
         self.setCentralWidget(vw)
         vw.setLayout(vbox)
+        vw.resize(1200,1200)
 
         fi.set_callback('cursor-changed', self.motion_cb)
         fi.add_callback('cursor-down', self.btndown)

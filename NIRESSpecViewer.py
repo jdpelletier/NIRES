@@ -1075,7 +1075,7 @@ class FitsViewer(QtGui.QMainWindow):
         self.wsetpan.clicked.connect(self.setPan)
         self.wsetpan.setMaximumSize(QtCore.QSize(75, 40))
         click_hbox.addWidget(self.wsetpan)
-        self.wrecenter = QtGui.QPushButton("Recenter Image")
+        self.wrecenter = QtGui.QPushButton("Recenter")
         self.wrecenter.setObjectName("wrecenter")
         self.wrecenter.clicked.connect(self.recenter)
         self.wrecenter.setMaximumSize(QtCore.QSize(75, 40))

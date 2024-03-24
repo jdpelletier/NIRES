@@ -1058,6 +1058,7 @@ class FitsViewer(QtGui.QMainWindow):
         self.wzoomin = QtGui.QPushButton("Zoom In")
         self.wzoomin.setObjectName("wzoomin")
         self.wzoomin.clicked.connect(self.zoomIn)
+        self.wzoomin.setMaximumSize(QtCore.QSize(150, 40))
         click_hbox.addWidget(self.wzoomin)
         self.wzoomreset = QtGui.QPushButton("Reset Zoom")
         self.wzoomreset.setObjectName("wzoomreset")

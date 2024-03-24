@@ -1120,14 +1120,13 @@ class FitsViewer(QtGui.QMainWindow):
         splitter = QtGui.QSplitter(QtCore.Qt.Vertical)
         splitter.addWidget(viewerHB)
         splitter.addWidget(buttonsVB)
-        splitter.setStretchFactor(1, 1)
+        splitter.setStretchFactor(0, 1)
         splitter.setSizes([600, 40])
         vbox.addWidget(splitter)
 
         vw = QtGui.QWidget()
         self.setCentralWidget(vw)
         vw.setLayout(vbox)
-        vw.resize(1200, 1200)
 
         fi.set_callback('cursor-changed', self.motion_cb)
         fi.add_callback('cursor-down', self.btndown)

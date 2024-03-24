@@ -1424,11 +1424,13 @@ class FitsViewer(QtGui.QMainWindow):
     def setPan(self):
         if self.panning == False:
             self.panning = True
+            self.fitsimage.disable_callback('cursor-move', self.drag_cb)
             self.fitsimage.switch_cursor('pan')
             self.clickinfo.setText("Click the image to pan.")
             self.wsetpan.setText("Cancle Pan")
         else:
             self.panning = False
+            self.fitsimage.enable_callback('cursor-move', self.drag_cb)
             self.fitsimage.switch_cursor('pick')
             self.clickinfo.setText("Left-drag to manually adjust levels.")
             self.wsetpan.setText("Pan")

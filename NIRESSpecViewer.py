@@ -1428,11 +1428,18 @@ class FitsViewer(QtGui.QMainWindow):
         self.fitsimage.zoom_fit()
     
         
-    def btndown(self, canvas, event, data_x, data_y):
+    def btndownright(self, canvas, event, data_x, data_y):
         self.xclick = data_x
         self.yclick = data_y
         # self.fitsimage.set_pan(data_x, data_y)
         # self.pickstar(self.fitsimage)
+
+    def btndownleft(self, canvas, event, data_x, data_y):
+        self.xclick = data_x
+        self.yclick = data_y
+        self.fitsimage.set_pan(data_x, data_y)
+        # self.pickstar(self.fitsimage)
+
 
 def main():
 

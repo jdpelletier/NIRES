@@ -1040,13 +1040,17 @@ class FitsViewer(QtGui.QMainWindow):
         vbox.addWidget(hw)
         click_hbox = QtGui.QHBoxLayout()
         click_hbox.setObjectName("click_hbox")
-        self.clickinfo = QtGui.QLabel("Click the image to pan.")
+        self.clickinfo = QtGui.QLabel("Left-drag to manually adjust levels.")
         self.clickinfo.setObjectName("clickinfo")
         click_hbox.addWidget(self.clickinfo)
         self.wrecenter = QtGui.QPushButton("Re-center Image")
         self.wrecenter.setObjectName("wrecenter")
         self.wrecenter.clicked.connect(self.recenter)
         click_hbox.addWidget(self.wrecenter)
+        self.wsetpan = QtGui.QPushButton("Pan")
+        self.wsetpan.setObjectName("wsetpan")
+        self.wsetpan.clicked.connect(self.setPan)
+        click_hbox.addWidget(self.wsetpan)
         click_hbox.setContentsMargins(QtCore.QMargins(4,1,4,1))
         hw = QtGui.QWidget()
         hw.setLayout(click_hbox)
@@ -1104,6 +1108,7 @@ class FitsViewer(QtGui.QMainWindow):
         # self.sdiff_done = False
         self.c = None
         self.m = None
+        self.panning = False
 
         self.wavelength_data = np.flip((fits.getdata("Wavelengths.fits")), 0)
 
@@ -1174,15 +1179,15 @@ class FitsViewer(QtGui.QMainWindow):
             self.readout.setText(text)
         
     def drag_cb(self, viewer, button, data_x, data_y):
-        print(button)
-        low, high = viewer.get_cut_levels()
-        dx = data_x - self.xclick
-        dy = data_y - self.yclick
-        low = low + dx
-        high = high + dy
-        viewer.cut_levels(low, high)
-        self.xclick = data_x
-        self.yclick = data_y
+        if self.panning == False:
+            low, high = viewer.get_cut_levels()
+            dx = data_x - self.xclick
+            dy = data_y - self.yclick
+            low = low + dx
+            high = high + dy
+            viewer.cut_levels(low, high)
+            self.xclick = data_x
+            self.yclick = data_y
 
 
     def quit(self, *args):
@@ -1414,6 +1419,15 @@ class FitsViewer(QtGui.QMainWindow):
             text = "Amplitude: N/A FWHM: N/A"
             self.box_readout.setText(text)
     
+    def setPan(self):
+        if self.panning == False:
+            self.panning = True
+            self.clickinfo.set_text("Click the image to pan.")
+        else:
+            self.panning = False
+            self.clickinfo.set_text("Left-drag to manually adjust levels.")
+
+
     def recenter(self):
         self.fitsimage.zoom_fit()
     
@@ -1421,9 +1435,8 @@ class FitsViewer(QtGui.QMainWindow):
     def btndown(self, canvas, event, data_x, data_y):
         self.xclick = data_x
         self.yclick = data_y
-        print(event.button())
-        # if event.button() == QtCore.Qt.LeftButton:
-        # self.fitsimage.set_pan(data_x, data_y)
+        if self.panning == True:
+            self.fitsimage.set_pan(data_x, data_y)
         # self.pickstar(self.fitsimage)
 
 

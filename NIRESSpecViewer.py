@@ -954,6 +954,16 @@ class FitsViewer(QtGui.QMainWindow):
         super(FitsViewer, self).__init__()
         self.logger = logger
 
+        self.actions = dict(
+            dmod_spec=['__s', None, 'spec'],
+
+            drag_cb=['spec+right'],
+            btndownleft=['spec+left'],
+            btndownright=['spec', 'right'],)
+
+        def __str__(self):
+            return 'spec'
+
         self.cachedFiles = None
         #KTL stuff
         #Cache KTL keywords
@@ -1093,8 +1103,8 @@ class FitsViewer(QtGui.QMainWindow):
         vw.setLayout(vbox)
 
         fi.set_callback('cursor-changed', self.motion_cb)
-        fi.add_callback('cursor-down', self.btndown)
-        fi.add_callback('cursor-move', self.drag_cb)
+        # fi.add_callback('cursor-down', self.btndown)
+        # fi.add_callback('cursor-move', self.drag_cb)
 
         self.recdc = self.add_canvas()
         self.picktag = "pick-box"
@@ -1417,7 +1427,13 @@ class FitsViewer(QtGui.QMainWindow):
         self.fitsimage.zoom_fit()
     
         
-    def btndown(self, canvas, event, data_x, data_y):
+    def btndownright(self, canvas, event, data_x, data_y):
+        self.xclick = data_x
+        self.yclick = data_y
+        self.fitsimage.set_pan(data_x, data_y)
+        # self.pickstar(self.fitsimage)
+
+    def btndownright(self, canvas, event, data_x, data_y):
         self.xclick = data_x
         self.yclick = data_y
         # self.fitsimage.set_pan(data_x, data_y)

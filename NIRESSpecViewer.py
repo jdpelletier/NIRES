@@ -1082,7 +1082,7 @@ class FitsViewer(QtGui.QMainWindow):
         readout_hbox.setObjectName("readout_hbox")
         self.readout = QtGui.QLabel("X:                 Y:                    Value:                   Wavelength:")
         self.readout.setObjectName("readout")
-        # self.readout.setMinimumSize(QtCore.QSize(550, 0))
+        self.readout.setMinimumSize(QtCore.QSize(550, 0))
         readout_hbox.addWidget(self.readout)
         self.wcmap = QtGui.QComboBox()
         for name in cmap.get_names():

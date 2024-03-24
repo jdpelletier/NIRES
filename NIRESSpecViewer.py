@@ -1428,6 +1428,7 @@ class FitsViewer(QtGui.QMainWindow):
             self.clickinfo.setText("Click the image to pan.")
         else:
             self.panning = False
+            self.fitsimage.switch_cursor('pick')
             self.clickinfo.setText("Left-drag to manually adjust levels.")
 
 

@@ -1437,6 +1437,7 @@ class FitsViewer(QtGui.QMainWindow):
         self.yclick = data_y
         if self.panning == True:
             self.fitsimage.set_pan(data_x, data_y)
+            self.setPan()
         # self.pickstar(self.fitsimage)
 
 

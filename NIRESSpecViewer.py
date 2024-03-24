@@ -1146,7 +1146,7 @@ class FitsViewer(QtGui.QMainWindow):
 
     def cut_change(self):
         self.fitsimage.set_autocut_params(self.wcut.currentText())
-        self.fitsimage.get_cut_levels()
+        print(self.fitsimage.get_cut_levels())
 
     def color_change(self):
         self.fitsimage.set_color_algorithm(self.wcolor.currentText())

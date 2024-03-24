@@ -1040,7 +1040,7 @@ class FitsViewer(QtGui.QMainWindow):
         viewer_hbox = QtGui.QHBoxLayout()
         viewer_hbox.setObjectName("viewer_hbox")
         w = fi.get_widget()
-        w.setMinimumSize(QtCore.QSize(1200, 600))
+        # w.setMinimumSize(QtCore.QSize(1200, 600))
         viewer_hbox.addWidget(w)
         viewer_hbox.setContentsMargins(QtCore.QMargins(4,1,4,1))
         viewerHB = QtGui.QWidget()
@@ -1083,7 +1083,7 @@ class FitsViewer(QtGui.QMainWindow):
         readout_hbox.setObjectName("readout_hbox")
         self.readout = QtGui.QLabel("X:                 Y:                    Value:                   Wavelength:")
         self.readout.setObjectName("readout")
-        self.readout.setMinimumSize(QtCore.QSize(550, 0))
+        # self.readout.setMinimumSize(QtCore.QSize(550, 0))
         readout_hbox.addWidget(self.readout)
         self.wcmap = QtGui.QComboBox()
         for name in cmap.get_names():
@@ -1128,7 +1128,6 @@ class FitsViewer(QtGui.QMainWindow):
         vw = QtGui.QWidget()
         self.setCentralWidget(vw)
         vw.setLayout(vbox)
-        # vw.resize(4000,4000)
 
         fi.set_callback('cursor-changed', self.motion_cb)
         fi.add_callback('cursor-down', self.btndown)
@@ -1505,7 +1504,7 @@ def main():
     logger = log.get_logger("NIRESSlitViewer", log_stderr=True, level=40)
 
     w = FitsViewer(logger)
-    w.resize(4000,4000)
+    w.resize(1200,600)
     w.show()
     app.setActiveWindow(w)
     w.raise_()

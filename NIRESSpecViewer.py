@@ -1174,12 +1174,12 @@ class FitsViewer(QtGui.QMainWindow):
             self.readout.setText(text)
         
     def drag_cb(self, viewer, button, data_x, data_y):
-        initlow, inithigh = viewer.get_cut_levels()
+        low, high = viewer.get_cut_levels()
         dx = data_x - self.xclick
         dy = data_y - self.yclick
-        dlow = initlow + dx
-        dhigh = inithigh + dy
-        viewer.cut_levels(dlow, dhigh)
+        low = low + dx
+        high = high + dy
+        viewer.cut_levels(low, high)
 
 
     def quit(self, *args):

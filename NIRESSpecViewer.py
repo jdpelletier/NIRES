@@ -1043,14 +1043,14 @@ class FitsViewer(QtGui.QMainWindow):
         self.clickinfo = QtGui.QLabel("Left-drag to manually adjust levels.")
         self.clickinfo.setObjectName("clickinfo")
         click_hbox.addWidget(self.clickinfo)
-        self.wrecenter = QtGui.QPushButton("Re-center Image")
-        self.wrecenter.setObjectName("wrecenter")
-        self.wrecenter.clicked.connect(self.recenter)
-        click_hbox.addWidget(self.wrecenter)
         self.wsetpan = QtGui.QPushButton("Pan")
         self.wsetpan.setObjectName("wsetpan")
         self.wsetpan.clicked.connect(self.setPan)
         click_hbox.addWidget(self.wsetpan)
+        self.wrecenter = QtGui.QPushButton("Re-center Image")
+        self.wrecenter.setObjectName("wrecenter")
+        self.wrecenter.clicked.connect(self.recenter)
+        click_hbox.addWidget(self.wrecenter)
         click_hbox.setContentsMargins(QtCore.QMargins(4,1,4,1))
         hw = QtGui.QWidget()
         hw.setLayout(click_hbox)
@@ -1422,10 +1422,10 @@ class FitsViewer(QtGui.QMainWindow):
     def setPan(self):
         if self.panning == False:
             self.panning = True
-            self.clickinfo.set_text("Click the image to pan.")
+            self.clickinfo.setText("Click the image to pan.")
         else:
             self.panning = False
-            self.clickinfo.set_text("Left-drag to manually adjust levels.")
+            self.clickinfo.setText("Left-drag to manually adjust levels.")
 
 
     def recenter(self):

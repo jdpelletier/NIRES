@@ -1128,7 +1128,7 @@ class FitsViewer(QtGui.QMainWindow):
         vw = QtGui.QWidget()
         self.setCentralWidget(vw)
         vw.setLayout(vbox)
-        vw.resize(4000,4000)
+        # vw.resize(4000,4000)
 
         fi.set_callback('cursor-changed', self.motion_cb)
         fi.add_callback('cursor-down', self.btndown)
@@ -1505,6 +1505,7 @@ def main():
     logger = log.get_logger("NIRESSlitViewer", log_stderr=True, level=40)
 
     w = FitsViewer(logger)
+    w.resize(4000,4000)
     w.show()
     app.setActiveWindow(w)
     w.raise_()

@@ -1038,7 +1038,7 @@ class FitsViewer(QtGui.QMainWindow):
         hw = QtGui.QWidget()
         hw.setLayout(viewer_hbox)
         vbox.addWidget(hw)
-        splitter = QtGui.QSplitter(orientation = 'vertical')
+        splitter = QtGui.QSplitter(QtCore.Qt.Vertical)
         vbox.addWidget(splitter)
         click_hbox = QtGui.QHBoxLayout()
         click_hbox.setObjectName("click_hbox")

@@ -1094,6 +1094,7 @@ class FitsViewer(QtGui.QMainWindow):
 
         fi.set_callback('cursor-changed', self.motion_cb)
         fi.add_callback('cursor-down', self.btndown)
+        fi.add_callback('cursor-move', self.drag_cb)
 
         self.recdc = self.add_canvas()
         self.picktag = "pick-box"
@@ -1146,7 +1147,6 @@ class FitsViewer(QtGui.QMainWindow):
 
     def cut_change(self):
         self.fitsimage.set_autocut_params(self.wcut.currentText())
-        print(self.fitsimage.get_cut_levels())
 
     def color_change(self):
         self.fitsimage.set_color_algorithm(self.wcolor.currentText())
@@ -1172,6 +1172,15 @@ class FitsViewer(QtGui.QMainWindow):
         else:
             text = f"X: {int(fits_x)} Y: {int(fits_y)}  Value: {value}  Wavelength: {wavelength}"
             self.readout.setText(text)
+        
+    def drag_cb(self, viewer, button, data_x, data_y):
+        initlow, inithigh = self.fitsimage.get_cut_levels()
+        dx = self.xclick - data_x
+        dy = self.yclick - data_y
+        dlow = initlow - dx
+        dhigh = inithigh - dy
+        self.fitsimage.set_cut_levels(dlow, dhigh)
+
 
     def quit(self, *args):
         self.logger.info("Attempting to shut down the application...")

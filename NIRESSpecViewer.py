@@ -1425,7 +1425,7 @@ class FitsViewer(QtGui.QMainWindow):
         if self.panning == False:
             self.panning = True
             hand = self.fitsimage.get_cursor('pan')
-            self.fitsimage.define_cursor('pick', hand)
+            self.fitsimage.switch_cursor(self, hand)
             self.clickinfo.setText("Click the image to pan.")
         else:
             self.panning = False

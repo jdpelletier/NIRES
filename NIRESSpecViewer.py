@@ -1174,12 +1174,12 @@ class FitsViewer(QtGui.QMainWindow):
             self.readout.setText(text)
         
     def drag_cb(self, viewer, button, data_x, data_y):
-        initlow, inithigh = self.fitsimage.get_cut_levels()
-        dx = self.xclick - data_x
-        dy = self.yclick - data_y
-        dlow = initlow - dx
-        dhigh = inithigh - dy
-        self.fitsimage.cut_levels(dlow, dhigh)
+        initlow, inithigh = viewer.get_cut_levels()
+        dx = data_x - self.xclick
+        dy = data_y - self.yclick
+        dlow = initlow + dx
+        dhigh = inithigh + dy
+        self.viewer.cut_levels(dlow, dhigh)
 
 
     def quit(self, *args):
@@ -1418,7 +1418,7 @@ class FitsViewer(QtGui.QMainWindow):
     def btndown(self, canvas, event, data_x, data_y):
         self.xclick = data_x
         self.yclick = data_y
-        self.fitsimage.set_pan(data_x, data_y)
+        # self.fitsimage.set_pan(data_x, data_y)
         # self.pickstar(self.fitsimage)
 
 def main():

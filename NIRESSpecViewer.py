@@ -1491,6 +1491,7 @@ class FitsViewer(QtGui.QMainWindow):
 
     def recenter(self):
         self.fitsimage.zoom_fit()
+        self.base_zoom = self.fitsimage.get_zoom()
     
         
     def btndown(self, canvas, event, data_x, data_y):

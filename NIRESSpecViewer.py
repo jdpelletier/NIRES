@@ -949,9 +949,17 @@ class MathWindow(Widgets.Box):
         self.delete()
 
 class FitsViewer(QtGui.QMainWindow):
+    resized = QtCore.pyqtSignal()
 
     def __init__(self, logger):
         super(FitsViewer, self).__init__()
+
+        self.resized.connect(self.recenter)
+
+        def resizeEvent(self, event):
+            self.resized.emit()
+            return super(FitsViewer, self).resizeEvent(event)
+        
         self.logger = logger
 
         self.cachedFiles = None

@@ -1041,7 +1041,6 @@ class FitsViewer(QtGui.QMainWindow):
         viewer_hbox.setObjectName("viewer_hbox")
         w = fi.get_widget()
         # w.setMinimumSize(QtCore.QSize(1200, 600))
-        # w.resize(1200, 600)
         viewer_hbox.addWidget(w)
         viewer_hbox.setContentsMargins(QtCore.QMargins(4,1,4,1))
         viewerHB = QtGui.QWidget()
@@ -1128,6 +1127,7 @@ class FitsViewer(QtGui.QMainWindow):
         vw = QtGui.QWidget()
         self.setCentralWidget(vw)
         vw.setLayout(vbox)
+        vw.resize(1200, 600)
 
         fi.set_callback('cursor-changed', self.motion_cb)
         fi.add_callback('cursor-down', self.btndown)

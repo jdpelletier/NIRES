@@ -1430,11 +1430,11 @@ class FitsViewer(QtGui.QMainWindow):
 
     def zoomIn(self):
         current = self.fitsimage.get_zoom()
-        return self.fitsimage.zoom_toom(current + 1)
+        return self.fitsimage.zoom_to(current + 1)
     
     def zoomOut(self):
         current = self.fitsimage.get_zoom()
-        return self.fitsimage.zoom_toom(current - 1)
+        return self.fitsimage.zoom_to(current - 1)
     
     def setPan(self):
         if self.panning == False:

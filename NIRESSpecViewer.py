@@ -1179,7 +1179,7 @@ class FitsViewer(QtGui.QMainWindow):
         dy = self.yclick - data_y
         dlow = initlow - dx
         dhigh = inithigh - dy
-        self.fitsimage.set_cut_levels(dlow, dhigh)
+        self.fitsimage.cut_levels(dlow, dhigh)
 
 
     def quit(self, *args):

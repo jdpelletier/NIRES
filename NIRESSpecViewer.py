@@ -1093,8 +1093,7 @@ class FitsViewer(QtGui.QMainWindow):
         vw.setLayout(vbox)
 
         fi.set_callback('cursor-changed', self.motion_cb)
-        fi.add_callback('cursor-right-down', self.btndownright)
-        fi.add_callback('cursor-down', self.btndownleft)
+        fi.add_callback('cursor-down', self.btndown)
         fi.add_callback('cursor-move', self.drag_cb)
 
         self.recdc = self.add_canvas()
@@ -1175,6 +1174,7 @@ class FitsViewer(QtGui.QMainWindow):
             self.readout.setText(text)
         
     def drag_cb(self, viewer, button, data_x, data_y):
+        print(button)
         low, high = viewer.get_cut_levels()
         dx = data_x - self.xclick
         dy = data_y - self.yclick
@@ -1418,16 +1418,12 @@ class FitsViewer(QtGui.QMainWindow):
         self.fitsimage.zoom_fit()
     
         
-    def btndownright(self, canvas, event, data_x, data_y):
+    def btndown(self, canvas, event, data_x, data_y):
         self.xclick = data_x
         self.yclick = data_y
+        print(event.button())
+        # if event.button() == QtCore.Qt.LeftButton:
         # self.fitsimage.set_pan(data_x, data_y)
-        # self.pickstar(self.fitsimage)
-
-    def btndownleft(self, canvas, event, data_x, data_y):
-        self.xclick = data_x
-        self.yclick = data_y
-        self.fitsimage.set_pan(data_x, data_y)
         # self.pickstar(self.fitsimage)
 
 

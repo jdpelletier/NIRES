@@ -1121,6 +1121,7 @@ class FitsViewer(QtGui.QMainWindow):
         self.c = None
         self.m = None
         self.panning = False
+        self.base_zoom = 0
 
         self.wavelength_data = np.flip((fits.getdata("Wavelengths.fits")), 0)
 
@@ -1250,6 +1251,7 @@ class FitsViewer(QtGui.QMainWindow):
                 self.recenter()
             print(f"Loaded {filepath}")
             self.file_info.setText(f"File: {filepath}")
+            self.base_zoom = self.fitsimage.get_zoom()
         except io_fits.FITSError:
             self.file_info.setText(f"File: error loading, wait for next image")
 

@@ -954,15 +954,15 @@ class FitsViewer(QtGui.QMainWindow):
         super(FitsViewer, self).__init__()
         self.logger = logger
 
-        # self.actions = dict(
-        #     dmod_spec=['__s', None, 'spec'],
+        self.actions = dict(
+            dmod_spec=['__s', None, 'spec'],
 
-        #     drag_cb=['spec+right'],
-        #     btndownleft=['spec+left'],
-        #     btndownright=['spec', 'right'],)
+            drag_cb=['spec+right'],
+            btndownleft=['spec+left'],
+            btndownright=['spec', 'right'],)
 
-        # def __str__(self):
-            # return 'spec'
+        def __str__(self):
+            return 'spec'
 
         self.cachedFiles = None
         #KTL stuff
@@ -1103,7 +1103,8 @@ class FitsViewer(QtGui.QMainWindow):
         vw.setLayout(vbox)
 
         fi.set_callback('cursor-changed', self.motion_cb)
-        fi.add_callback('cursor-down', self.btndown)
+        fi.add_callback('cursor-down', self.btndownright)
+        fi.add_callback('cursor-down', self.btndownleft)
         fi.add_callback('cursor-move', self.drag_cb)
 
         self.recdc = self.add_canvas()

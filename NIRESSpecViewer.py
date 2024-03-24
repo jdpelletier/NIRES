@@ -1426,10 +1426,12 @@ class FitsViewer(QtGui.QMainWindow):
             self.panning = True
             self.fitsimage.switch_cursor('pan')
             self.clickinfo.setText("Click the image to pan.")
+            self.wsetpan.setText("Cancle Pan")
         else:
             self.panning = False
             self.fitsimage.switch_cursor('pick')
             self.clickinfo.setText("Left-drag to manually adjust levels.")
+            self.wsetpan.setText("Pan")
 
 
     def recenter(self):

@@ -1252,7 +1252,6 @@ class FitsViewer(QtGui.QMainWindow):
             print(f"Loaded {filepath}")
             self.file_info.setText(f"File: {filepath}")
             self.base_zoom = self.fitsimage.get_zoom()
-            print(self.base_zoom)
         except io_fits.FITSError:
             self.file_info.setText(f"File: error loading, wait for next image")
 
@@ -1440,7 +1439,7 @@ class FitsViewer(QtGui.QMainWindow):
         return self.fitsimage.zoom_to(current + 1)
     
     def zoomReset(self):
-        return self.fitsimage.zoom_to(0)
+        return self.fitsimage.zoom_to(self.base_zoom)
     
     def zoomOut(self):
         current = self.fitsimage.get_zoom()

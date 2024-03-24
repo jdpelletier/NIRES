@@ -1053,6 +1053,7 @@ class FitsViewer(QtGui.QMainWindow):
         click_hbox.setObjectName("click_hbox")
         self.clickinfo = QtGui.QLabel("Left-drag to manually adjust levels.")
         self.clickinfo.setObjectName("clickinfo")
+        self.clickinfo.setMinimumSize(QtCore.QSize(300, 0))
         click_hbox.addWidget(self.clickinfo)
         self.wzoomin = QtGui.QPushButton("Zoom In")
         self.wzoomin.setObjectName("wzoomin")

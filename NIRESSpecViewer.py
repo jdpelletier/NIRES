@@ -1043,6 +1043,14 @@ class FitsViewer(QtGui.QMainWindow):
         self.clickinfo = QtGui.QLabel("Left-drag to manually adjust levels.")
         self.clickinfo.setObjectName("clickinfo")
         click_hbox.addWidget(self.clickinfo)
+        self.wzoomin = QtGui.QPushButton("Zoom In")
+        self.wzoomin.setObjectName("wzoomin")
+        self.wzoomin.clicked.connect(self.zoomIn)
+        click_hbox.addWidget(self.wzoomin)
+        self.wzoomout = QtGui.QPushButton("Zoom Out")
+        self.wzoomout.setObjectName("wzoomout")
+        self.wzoomout.clicked.connect(self.zoomOut)
+        click_hbox.addWidget(self.wzoomout)
         self.wsetpan = QtGui.QPushButton("Pan")
         self.wsetpan.setObjectName("wsetpan")
         self.wsetpan.clicked.connect(self.setPan)
@@ -1419,6 +1427,14 @@ class FitsViewer(QtGui.QMainWindow):
         except IndexError:
             text = "Amplitude: N/A FWHM: N/A"
             self.box_readout.setText(text)
+
+    def zoomIn(self):
+        current = self.fitsimage.get_zoom()
+        return self.fitsimage.zoom_toom(current + 1)
+    
+    def zoomOut(self):
+        current = self.fitsimage.get_zoom()
+        return self.fitsimage.zoom_toom(current - 1)
     
     def setPan(self):
         if self.panning == False:

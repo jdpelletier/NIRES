@@ -1107,7 +1107,7 @@ class FitsViewer(QtGui.QMainWindow):
         hw.setLayout(file_hbox)
         buttons_vbox.addWidget(hw)
         buttonsVB = QtGui.QWidget()
-        buttonsVB.setLayout(viewer_hbox)
+        buttonsVB.setLayout(buttons_vbox)
 
         splitter = QtGui.QSplitter(QtCore.Qt.Vertical)
         splitter.addWidget(viewerHB)

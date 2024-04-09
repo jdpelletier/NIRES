@@ -569,8 +569,8 @@ class Cuts(Widgets.Box):
     def motion_cb(self, canvas, event, data_x, data_y, viewer):
 
 
-        if self.cutstag == self._new_cut:
-            return True
+        # if self.cutstag == self._new_cut:
+            # return True
         obj = self.canvas.get_object_by_tag(self.cutstag)
         # Assume first element of this compound object is the reference obj
         obj = obj.objects[0]

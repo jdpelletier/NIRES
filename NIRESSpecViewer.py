@@ -236,8 +236,8 @@ class Cuts(Widgets.Box):
 
     def delete_cut_cb(self, w):
         tag = self.cutstag
-        # if tag == self._new_cut:
-        #     return
+        if tag == self._new_cut:
+            return
         index = self.tags.index(tag)  # noqa
         self.canvas.delete_object_by_tag(tag)
         self.w.cuts.delete_alpha(tag)
@@ -261,6 +261,16 @@ class Cuts(Widgets.Box):
         self.cuts_plot.clear()
         # plot cleared in replot_all() if no more cuts
         self.replot_all()
+    
+    def delete_all(self):
+        self.canvas.delete_all_objects()
+        # self.w.cuts.clear()
+        self.tags = [self._new_cut]
+        self.cutstag = self._new_cut
+        # self.w.cuts.append_text(self._new_cut)
+        # self.select_cut(self._new_cut)
+        # self.save_cuts.set_enabled(False)
+        self.cuts_plot.clear()
 
     def add_cuts_tag(self, tag):
         if tag not in self.tags:
@@ -443,7 +453,8 @@ class Cuts(Widgets.Box):
         return True
 
     def replot_all(self):
-        self.cuts_plot.clear()
+        self.delete_all()
+        # self.cuts_plot.clear()
         # self.w.delete_all.set_enabled(False)
         # self.save_cuts.set_enabled(False)
 
@@ -569,29 +580,21 @@ class Cuts(Widgets.Box):
     def motion_cb(self, canvas, event, data_x, data_y, viewer):
 
 
-        # if self.cutstag == self._new_cut:
-        #     return True
+        if self.cutstag == self._new_cut:
+            return True
         obj = self.canvas.get_object_by_tag(self.cutstag)
         # Assume first element of this compound object is the reference obj
         obj = obj.objects[0]
         obj.move_to_pt((data_x, data_y))
         canvas.redraw(whence=3)
 
-        # if self.drag_update:
-        self.replot_all()
+        if self.drag_update:
+            self.replot_all()
         return True
 
     def buttonup_cb(self, canvas, event, data_x, data_y, viewer):
-        self.canvas.delete_all_objects()
-        self.w.cuts.clear()
-        self.tags = [self._new_cut]
-        self.cutstag = self._new_cut
-        # self.w.cuts.append_text(self._new_cut)
-        # self.select_cut(self._new_cut)
-        # self.save_cuts.set_enabled(False)
-        self.cuts_plot.clear()
-        # if self.cutstag == self._new_cut:
-        #     return True
+        if self.cutstag == self._new_cut:
+            return True
         obj = self.canvas.get_object_by_tag(self.cutstag)
         # Assume first element of this compound object is the reference obj
         obj = obj.objects[0]

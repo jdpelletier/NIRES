@@ -577,8 +577,8 @@ class Cuts(Widgets.Box):
         obj.move_to_pt((data_x, data_y))
         canvas.redraw(whence=3)
 
-        if self.drag_update:
-            self.replot_all()
+        # if self.drag_update:
+        self.replot_all()
         return True
 
     def buttonup_cb(self, canvas, event, data_x, data_y, viewer):

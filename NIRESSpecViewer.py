@@ -488,7 +488,6 @@ class Cuts(Widgets.Box):
         return True
 
     def _create_cut(self, x, y, count, x1, y1, x2, y2, color='cyan'):
-        self.delete_all()
         text = "cuts%d" % (count)
         if not self.settings.get('label_cuts', False):
             text = ''
@@ -533,6 +532,7 @@ class Cuts(Widgets.Box):
             obj.objects.append(aline)
 
     def _create_cut_obj(self, count, cuts_obj, color='cyan'):
+        self.delete_all()
         text = "cuts%d" % (count)
         # if not self.settings.get('label_cuts', False):
         #     text = ''

@@ -652,7 +652,6 @@ class Cuts(Widgets.Box):
         """Perform a cut at the last mouse position in the image.
         `cuttype` determines the type of cut made.
         """
-        self.delete_all()
         data_x, data_y = self.fitsimage.get_last_data_xy()
         image = self.fitsimage.get_image()
         wd, ht = image.get_size()
@@ -693,6 +692,7 @@ class Cuts(Widgets.Box):
         return self.replot_all()
 
     def draw_cb(self, canvas, tag):
+        self.delete_all()
         obj = canvas.get_object_by_tag(tag)
         canvas.delete_object_by_tag(tag)
 

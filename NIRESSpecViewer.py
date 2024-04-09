@@ -624,18 +624,18 @@ class Cuts(Widgets.Box):
         return count
 
     def _get_cut_index(self):
-        # if self.cutstag != self._new_cut:
-        # Replacing a cut
-        self.logger.debug("replacing cut position")
-        try:
-            cutobj = self.canvas.get_object_by_tag(self.cutstag)
-            self.canvas.delete_object_by_tag(self.cutstag)
-            count = cutobj.get_data('count')
-        except KeyError:
+        if self.cutstag != self._new_cut:
+            # Replacing a cut
+            self.logger.debug("replacing cut position")
+            try:
+                cutobj = self.canvas.get_object_by_tag(self.cutstag)
+                self.canvas.delete_object_by_tag(self.cutstag)
+                count = cutobj.get_data('count')
+            except KeyError:
+                count = self._get_new_count()
+        else:
+            self.logger.debug("adding cut position")
             count = self._get_new_count()
-        # else:
-        #     self.logger.debug("adding cut position")
-        #     count = self._get_new_count()
         return count
 
     def cut_at(self, cuttype):

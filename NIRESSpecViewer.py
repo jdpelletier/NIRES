@@ -236,8 +236,8 @@ class Cuts(Widgets.Box):
 
     def delete_cut_cb(self, w):
         tag = self.cutstag
-        if tag == self._new_cut:
-            return
+        # if tag == self._new_cut:
+        #     return
         index = self.tags.index(tag)  # noqa
         self.canvas.delete_object_by_tag(tag)
         self.w.cuts.delete_alpha(tag)
@@ -569,8 +569,8 @@ class Cuts(Widgets.Box):
     def motion_cb(self, canvas, event, data_x, data_y, viewer):
 
 
-        # if self.cutstag == self._new_cut:
-            # return True
+        if self.cutstag == self._new_cut:
+            return True
         obj = self.canvas.get_object_by_tag(self.cutstag)
         # Assume first element of this compound object is the reference obj
         obj = obj.objects[0]

@@ -453,8 +453,7 @@ class Cuts(Widgets.Box):
         return True
 
     def replot_all(self):
-        self.delete_all()
-        # self.cuts_plot.clear()
+        self.cuts_plot.clear()
         # self.w.delete_all.set_enabled(False)
         # self.save_cuts.set_enabled(False)
 
@@ -575,6 +574,7 @@ class Cuts(Widgets.Box):
             return []
 
     def buttondown_cb(self, canvas, event, data_x, data_y, viewer):
+        self.delete_all()
         return self.motion_cb(canvas, event, data_x, data_y, viewer)
 
     def motion_cb(self, canvas, event, data_x, data_y, viewer):

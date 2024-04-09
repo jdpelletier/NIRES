@@ -583,7 +583,7 @@ class Cuts(Widgets.Box):
 
     def buttonup_cb(self, canvas, event, data_x, data_y, viewer):
         self.canvas.delete_all_objects()
-        # self.w.cuts.clear()
+        self.w.cuts.clear()
         self.tags = [self._new_cut]
         self.cutstag = self._new_cut
         # self.w.cuts.append_text(self._new_cut)

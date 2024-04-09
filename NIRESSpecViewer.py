@@ -443,8 +443,8 @@ class Cuts(Widgets.Box):
         return True
 
     def replot_all(self):
-        # self.cuts_plot.clear()
-        self.delete_all_cb()
+        self.cuts_plot.clear()
+        # self.w.delete_all.set_enabled(False)
         # self.save_cuts.set_enabled(False)
 
         # idx = 0
@@ -582,6 +582,14 @@ class Cuts(Widgets.Box):
         return True
 
     def buttonup_cb(self, canvas, event, data_x, data_y, viewer):
+        self.canvas.delete_all_objects()
+        # self.w.cuts.clear()
+        self.tags = [self._new_cut]
+        self.cutstag = self._new_cut
+        # self.w.cuts.append_text(self._new_cut)
+        # self.select_cut(self._new_cut)
+        # self.save_cuts.set_enabled(False)
+        self.cuts_plot.clear()
         # if self.cutstag == self._new_cut:
         #     return True
         obj = self.canvas.get_object_by_tag(self.cutstag)

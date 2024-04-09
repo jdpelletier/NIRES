@@ -574,7 +574,6 @@ class Cuts(Widgets.Box):
             return []
 
     def buttondown_cb(self, canvas, event, data_x, data_y, viewer):
-        self.delete_all()
         return self.motion_cb(canvas, event, data_x, data_y, viewer)
 
     def motion_cb(self, canvas, event, data_x, data_y, viewer):
@@ -593,7 +592,6 @@ class Cuts(Widgets.Box):
         return True
 
     def buttonup_cb(self, canvas, event, data_x, data_y, viewer):
-        self.delete_all()
         if self.cutstag == self._new_cut:
             return True
         obj = self.canvas.get_object_by_tag(self.cutstag)
@@ -654,6 +652,7 @@ class Cuts(Widgets.Box):
         """Perform a cut at the last mouse position in the image.
         `cuttype` determines the type of cut made.
         """
+        self.delete_all()
         data_x, data_y = self.fitsimage.get_last_data_xy()
         image = self.fitsimage.get_image()
         wd, ht = image.get_size()

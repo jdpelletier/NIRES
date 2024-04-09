@@ -265,12 +265,12 @@ class Cuts(Widgets.Box):
     def delete_all(self):
         self.canvas.delete_all_objects()
         # self.w.cuts.clear()
-        self.tags = [self._new_cut]
-        self.cutstag = self._new_cut
-        # self.w.cuts.append_text(self._new_cut)
-        # self.select_cut(self._new_cut)
-        # self.save_cuts.set_enabled(False)
-        self.cuts_plot.clear()
+        # self.tags = [self._new_cut]
+        # self.cutstag = self._new_cut
+        # # self.w.cuts.append_text(self._new_cut)
+        # # self.select_cut(self._new_cut)
+        # # self.save_cuts.set_enabled(False)
+        # self.cuts_plot.clear()
 
     def add_cuts_tag(self, tag):
         if tag not in self.tags:
@@ -692,8 +692,7 @@ class Cuts(Widgets.Box):
         return self.replot_all()
 
     def draw_cb(self, canvas, tag):
-        # self.delete_all()
-        self.cuts_plot.clear()
+        self.delete_all()
         obj = canvas.get_object_by_tag(tag)
         canvas.delete_object_by_tag(tag)
 

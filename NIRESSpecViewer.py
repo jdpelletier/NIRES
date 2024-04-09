@@ -692,7 +692,8 @@ class Cuts(Widgets.Box):
         return self.replot_all()
 
     def draw_cb(self, canvas, tag):
-        self.delete_all()
+        # self.delete_all()
+        self.cuts_plot.clear()
         obj = canvas.get_object_by_tag(tag)
         canvas.delete_object_by_tag(tag)
 

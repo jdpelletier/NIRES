@@ -173,10 +173,10 @@ class Cuts(Widgets.Box):
     def free_draw_cb(self, event):
         self.cut_mode = "free"
     
-    def horizontal_cb(self, event):
+    def horizontal_draw_cb(self, event):
         self.cut_mode = "horizontal"
     
-    def vertical_cb(self, event):
+    def vertical_draw_cb(self, event):
         self.cut_mode = "vertical"
 
     def build_axes(self):

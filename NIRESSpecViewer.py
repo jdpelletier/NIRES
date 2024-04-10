@@ -700,7 +700,7 @@ class Cuts(Widgets.Box):
             return True
 
         count = self._get_cut_index()
-        tag = "cut" % (count)
+        tag = "cut"
 
         cut = self._create_cut_obj(count, obj, color='cyan')
         cut.set_data(count=count)

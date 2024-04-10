@@ -696,7 +696,7 @@ class Cuts(Widgets.Box):
             coords.append((data_x, 0, data_x, ht - 1))
 
         count = self._get_cut_index()
-        tag = "cuts%d" % (count)
+        tag = "cuts"
         cuts = []
         for (x1, y1, x2, y2) in coords:
             # calculate center of line

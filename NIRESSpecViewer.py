@@ -166,18 +166,28 @@ class Cuts(Widgets.Box):
         self.add_widget(vbox)
 
         self.cut_mode = "Free"
+        self.freedraw.setEnabled(False)
 
         self.start()
         self.gui_up = True
 
     def free_draw_cb(self, event):
         self.cut_mode = "Free"
+        self.freedraw.setEnabled(False)
+        self.horizontaldraw.setEnabled(True)
+        self.verticaldraw.setEnabled(True)
     
     def horizontal_draw_cb(self, event):
         self.cut_mode = "Horizontal"
+        self.freedraw.setEnabled(True)
+        self.horizontaldraw.setEnabled(False)
+        self.verticaldraw.setEnabled(True)
     
     def vertical_draw_cb(self, event):
         self.cut_mode = "Vertical"
+        self.freedraw.setEnabled(True)
+        self.horizontaldraw.setEnabled(True)
+        self.verticaldraw.setEnabled(False)
 
     def build_axes(self):
         self.selected_axis = None

@@ -596,11 +596,6 @@ class Cuts(Widgets.Box):
             return []
 
     def buttondown_cb(self, canvas, event, data_x, data_y, viewer):
-        print(self.cut_mode)
-        if self.cut_mode == "horizontal":
-            return self.cut_at('horizontal')
-        elif self.cut_mode == "vertical":
-            return self.cut_at('vertical')
         return self.motion_cb(canvas, event, data_x, data_y, viewer)
 
     def motion_cb(self, canvas, event, data_x, data_y, viewer):
@@ -719,6 +714,11 @@ class Cuts(Widgets.Box):
         return self.replot_all()
 
     def draw_cb(self, canvas, tag):
+        print(self.cut_mode)
+        if self.cut_mode == "horizontal":
+            return self.cut_at('horizontal')
+        elif self.cut_mode == "vertical":
+            return self.cut_at('vertical')
         obj = canvas.get_object_by_tag(tag)
         canvas.delete_object_by_tag(tag)
 

@@ -147,16 +147,37 @@ class Cuts(Widgets.Box):
         ax = self.cuts_plot.add_axis()
         ax.grid(True)
         vbox.add_widget(self.plot)
+        control_hbox = Widgets.HBox()
+        self.freedraw = Widgets.Button("Free Draw")
+        self.freedraw.add_callback('activated', self.free_draw_cb)
+        control_hbox.add_widget(self.freedraw)
+        self.horizontaldraw = Widgets.Button("Horizontal")
+        self.horizontaldraw.add_callback('activated', self.horizontal_draw_cb)
+        control_hbox.add_widget(self.horizontaldraw)
+        self.verticaldraw = Widgets.Button("Vertical")
+        self.verticaldraw.add_callback('activated', self.vertical_draw_cb)
+        control_hbox.add_widget(self.verticaldraw)
         # self.deleteall = Widgets.Button("Delete All")
         # self.deleteall.add_callback('activated', self.delete_all_cb)
-        # vbox.add_widget(self.deleteall)
+        vbox.add_widget(control_hbox)
         self.closebtn = Widgets.Button("Close")
         self.closebtn.add_callback('activated', self.dismiss)
         vbox.add_widget(self.closebtn)
         self.add_widget(vbox)
 
+        self.cut_mode = "free"
+
         self.start()
         self.gui_up = True
+
+    def free_draw_cb(self, event):
+        self.cut_mode = "free"
+    
+    def horizontal_cb(self, event):
+        self.cut_mode = "horizontal"
+    
+    def vertical_cb(self, event):
+        self.cut_mode = "vertical"
 
     def build_axes(self):
         self.selected_axis = None
@@ -575,6 +596,10 @@ class Cuts(Widgets.Box):
             return []
 
     def buttondown_cb(self, canvas, event, data_x, data_y, viewer):
+        if self.cut_mode == "horizontal":
+            return self.cut_at('horizontal')
+        elif self.cut_mode == "vertical":
+            return self.cut_at('vertical')
         return self.motion_cb(canvas, event, data_x, data_y, viewer)
 
     def motion_cb(self, canvas, event, data_x, data_y, viewer):

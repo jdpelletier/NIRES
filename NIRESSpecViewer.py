@@ -426,7 +426,6 @@ class Cuts(Widgets.Box):
             points = image.get_pixels_on_curve(obj)
 
         points = np.array(points)
-        print(points)
 
         self.cuts_plot.cuts(points, title = f"{self.cut_mode} Cut", xtitle="Line Index", ytitle="Pixel Value",
                             color=color)

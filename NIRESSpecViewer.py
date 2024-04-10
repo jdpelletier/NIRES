@@ -596,6 +596,7 @@ class Cuts(Widgets.Box):
             return []
 
     def buttondown_cb(self, canvas, event, data_x, data_y, viewer):
+        print(self.cut_mode)
         if self.cut_mode == "horizontal":
             return self.cut_at('horizontal')
         elif self.cut_mode == "vertical":

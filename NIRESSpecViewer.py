@@ -510,8 +510,8 @@ class Cuts(Widgets.Box):
 
     def _create_cut(self, x, y, count, x1, y1, x2, y2, color='cyan'):
         text = "cuts%d" % (count)
-        if not self.settings.get('label_cuts', False):
-            text = ''
+        # if not self.settings.get('label_cuts', False):
+        #     text = ''
         line_obj = self.dc.Line(x1, y1, x2, y2, color=color,
                                 showcap=False)
         text_obj = self.dc.Text(0, 0, text, color=color, coord='offset',

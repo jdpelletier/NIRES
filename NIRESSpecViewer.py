@@ -149,7 +149,7 @@ class Cuts(Widgets.Box):
         vbox.add_widget(self.plot)
         # self.deleteall = Widgets.Button("Delete All")
         # self.deleteall.add_callback('activated', self.delete_all_cb)
-        vbox.add_widget(self.deleteall)
+        # vbox.add_widget(self.deleteall)
         self.closebtn = Widgets.Button("Close")
         self.closebtn.add_callback('activated', self.dismiss)
         vbox.add_widget(self.closebtn)

@@ -173,21 +173,21 @@ class Cuts(Widgets.Box):
 
     def free_draw_cb(self, event):
         self.cut_mode = "Free"
-        self.freedraw.setEnabled(False)
-        self.horizontaldraw.setEnabled(True)
-        self.verticaldraw.setEnabled(True)
+        self.freedraw.set_enabled(False)
+        self.horizontaldraw.set_enabled(True)
+        self.verticaldraw.set_enabled(True)
     
     def horizontal_draw_cb(self, event):
         self.cut_mode = "Horizontal"
-        self.freedraw.setEnabled(True)
-        self.horizontaldraw.setEnabled(False)
-        self.verticaldraw.setEnabled(True)
+        self.freedraw.set_enabled(True)
+        self.horizontaldraw.set_enabled(False)
+        self.verticaldraw.set_enabled(True)
     
     def vertical_draw_cb(self, event):
         self.cut_mode = "Vertical"
-        self.freedraw.setEnabled(True)
-        self.horizontaldraw.setEnabled(True)
-        self.verticaldraw.setEnabled(False)
+        self.freedraw.set_enabled(True)
+        self.horizontaldraw.set_enabled(True)
+        self.verticaldraw.set_enabled(False)
 
     def build_axes(self):
         self.selected_axis = None

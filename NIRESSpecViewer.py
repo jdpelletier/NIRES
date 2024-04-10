@@ -431,7 +431,7 @@ class Cuts(Widgets.Box):
                             color=color)
 
         # if self.settings.get('show_cuts_legend', False):
-        self.add_legend()
+        # self.add_legend()
 
     def add_legend(self):
         """Add or update Cuts plot legend."""
@@ -696,7 +696,7 @@ class Cuts(Widgets.Box):
             coords.append((data_x, 0, data_x, ht - 1))
 
         count = self._get_cut_index()
-        tag = "cuts"
+        tag = "cut"
         cuts = []
         for (x1, y1, x2, y2) in coords:
             # calculate center of line

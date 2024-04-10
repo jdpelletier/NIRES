@@ -166,7 +166,7 @@ class Cuts(Widgets.Box):
         self.add_widget(vbox)
 
         self.cut_mode = "Free"
-        self.freedraw.setEnabled(False)
+        self.freedraw.set_enabled(False)
 
         self.start()
         self.gui_up = True

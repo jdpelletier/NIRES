@@ -165,19 +165,19 @@ class Cuts(Widgets.Box):
         vbox.add_widget(self.closebtn)
         self.add_widget(vbox)
 
-        self.cut_mode = "free"
+        self.cut_mode = "Free"
 
         self.start()
         self.gui_up = True
 
     def free_draw_cb(self, event):
-        self.cut_mode = "free"
+        self.cut_mode = "Free"
     
     def horizontal_draw_cb(self, event):
-        self.cut_mode = "horizontal"
+        self.cut_mode = "Horizontal"
     
     def vertical_draw_cb(self, event):
-        self.cut_mode = "vertical"
+        self.cut_mode = "Vertical"
 
     def build_axes(self):
         self.selected_axis = None
@@ -417,7 +417,7 @@ class Cuts(Widgets.Box):
 
         points = np.array(points)
 
-        self.cuts_plot.cuts(points, xtitle="Line Index", ytitle="Pixel Value",
+        self.cuts_plot.cuts(points, title = f"{self.cut_mode} Cut", xtitle="Line Index", ytitle="Pixel Value",
                             color=color)
 
         # if self.settings.get('show_cuts_legend', False):
@@ -715,9 +715,9 @@ class Cuts(Widgets.Box):
         return self.replot_all()
 
     def draw_cb(self, canvas, tag):
-        if self.cut_mode == "horizontal":
+        if self.cut_mode == "Horizontal":
             return self.cut_at('horizontal')
-        elif self.cut_mode == "vertical":
+        elif self.cut_mode == "Vertical":
             return self.cut_at('vertical')
         obj = canvas.get_object_by_tag(tag)
         canvas.delete_object_by_tag(tag)

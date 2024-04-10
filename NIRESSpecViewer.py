@@ -141,14 +141,14 @@ class Cuts(Widgets.Box):
         vbox = Widgets.VBox()
 
         self.cuts_plot = plots.CutsPlot(logger=self.logger,
-                                        width=400, height=400)
+                                        width=700, height=400)
         self.plot = Plot.PlotWidget(self.cuts_plot)
         self.plot.resize(400, 400)
         ax = self.cuts_plot.add_axis()
         ax.grid(True)
         vbox.add_widget(self.plot)
-        self.deleteall = Widgets.Button("Delete All")
-        self.deleteall.add_callback('activated', self.delete_all_cb)
+        # self.deleteall = Widgets.Button("Delete All")
+        # self.deleteall.add_callback('activated', self.delete_all_cb)
         vbox.add_widget(self.deleteall)
         self.closebtn = Widgets.Button("Close")
         self.closebtn.add_callback('activated', self.dismiss)
@@ -533,7 +533,7 @@ class Cuts(Widgets.Box):
 
     def _create_cut_obj(self, count, cuts_obj, color='cyan'):
         self.delete_all()
-        text = "cuts%d" % (count)
+        text = "cut"
         # if not self.settings.get('label_cuts', False):
         #     text = ''
         cuts_obj.showcap = False
@@ -700,7 +700,7 @@ class Cuts(Widgets.Box):
             return True
 
         count = self._get_cut_index()
-        tag = "cuts%d" % (count)
+        tag = "cut" % (count)
 
         cut = self._create_cut_obj(count, obj, color='cyan')
         cut.set_data(count=count)

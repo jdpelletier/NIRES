@@ -715,7 +715,6 @@ class Cuts(Widgets.Box):
         return self.replot_all()
 
     def draw_cb(self, canvas, tag):
-        print(self.cut_mode)
         if self.cut_mode == "horizontal":
             return self.cut_at('horizontal')
         elif self.cut_mode == "vertical":

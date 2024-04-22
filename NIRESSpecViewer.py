@@ -1094,9 +1094,9 @@ class FitsViewer(QtGui.QMainWindow):
         cutmenu.addAction(item)
 
         colormenu = menubar.addMenu("Colors")
-        for name in fi.get_color_algorithms():
+        for name in cmap.get_names():
             item = QtGui.QAction(name, menubar)
-            item.triggered.connect(self.color_change)
+            item.triggered.connect(self.cmap_change)
             colormenu.addAction(item)
 
 
@@ -1163,13 +1163,6 @@ class FitsViewer(QtGui.QMainWindow):
         self.readout.setObjectName("readout")
         # self.readout.setMinimumSize(QtCore.QSize(550, 0))
         readout_hbox.addWidget(self.readout)
-        self.wcmap = QtGui.QComboBox()
-        for name in cmap.get_names():
-            self.wcmap.addItem(name)
-        self.wcmap.currentIndexChanged.connect(self.cmap_change)
-        self.wcmap.setCurrentText('gray')
-        self.wcmap.setMaximumSize(QtCore.QSize(100, 30))
-        readout_hbox.addWidget(self.wcmap)
         self.wcut = QtGui.QComboBox()
         for name in fi.get_autocut_methods():
             self.wcut.addItem(name)
@@ -1177,6 +1170,12 @@ class FitsViewer(QtGui.QMainWindow):
         self.wcut.setCurrentText('zscale')
         self.wcut.setMaximumSize(QtCore.QSize(100, 30))
         readout_hbox.addWidget(self.wcut)
+        self.wcolor = QtGui.QComboBox()
+        for name in fi.get_color_algorithms():
+            self.wcolor.addItem(name)
+        self.wcolor.currentIndexChanged.connect(self.color_change)
+        self.wcolor.setMaximumSize(QtCore.QSize(100, 30))
+        readout_hbox.addWidget(self.wcolor)
         readout_hbox.setContentsMargins(QtCore.QMargins(4,1,4,1))
         hw = QtGui.QWidget()
         hw.setLayout(readout_hbox)
@@ -1263,8 +1262,8 @@ class FitsViewer(QtGui.QMainWindow):
     def cut_change(self):
         self.fitsimage.set_autocut_params(self.wcut.currentText())
 
-    def color_change(self, name):
-        self.fitsimage.set_color_algorithm(name)
+    def color_change(self):
+        self.fitsimage.set_color_algorithm(self.wcolor.currentText())
 
     def motion_cb(self, viewer, button, data_x, data_y):
 

@@ -988,7 +988,7 @@ class MathWindow(Widgets.Box):
     
     def previous_file(self, fn):
         prev_dir = int(str(fn).split("_")[0])
-        prev_file = f"{int(str(fn).split("_")[-1].split(".")[0])-1}.fits"
+        prev_file = f"{int(str(fn).split('_')[-1].split('.')[0])-1}.fits"
         while len(prev_file)<9:
             prev_file = "0" + prev_file
         return prev_dir + prev_file

@@ -995,6 +995,66 @@ class MathWindow(Widgets.Box):
         # self.delete_all_cb(event)
         self.delete()
 
+class Window(Widgets.Box):
+
+    def __init__(self, logger, fitsimage):
+        super(Window, self).__init__(fitsimage)
+
+        self.logger = logger
+
+        vbox = Widgets.VBox()   
+        viewer_hbox = Widgets.HBox()
+        w = fitsimage.get_widget()
+        # w.setMinimumSize(QtCore.QSize(1200, 600))
+        viewer_hbox.add_widget(w)
+        viewer_hbox.setContentsMargins(QtCore.QMargins(4,1,4,1))
+        vbox.add_widget(viewer_hbox)
+        button_hbox = Widgets.HBox()
+        self.closebtn = Widgets.Button("Close")
+        self.closebtn.add_callback('activated', self.dismiss)
+        button_hbox.add_widget(self.closebtn)
+        vw = QtGui.QWidget()
+        self.setCentralWidget(vw)
+        vw.setLayout(vbox)
+
+        fitsimage.set_callback('cursor-changed', self.motion_cb)
+
+    def motion_cb(self, viewer, button, data_x, data_y):
+
+        viewer.set_pan(data_x, data_y)
+
+        # # Get the value under the data coordinates
+        # try:
+        #     # We report the value across the pixel, even though the coords
+        #     # change halfway across the pixel
+        #     value = viewer.get_data(int(data_x + 0.5), int(data_y + 0.5))
+
+        # except Exception:
+        #     value = None
+
+        # fits_x, fits_y = data_x, data_y
+        # try:
+        #     wavelength = int(self.wavelength_data[int(fits_x), int(fits_y)])
+        # except Exception:
+        #     wavelength = None
+
+        # if (fits_x > 2048 or fits_x <0) or (fits_y > 2048 or fits_y <0):
+        #     text = "X: Y: Value: Wavelength: "
+        #     self.readout.setText(text)
+        # else:
+        #     text = f"X: {int(fits_x)} Y: {int(fits_y)}  Value: {value}  Wavelength: {wavelength}"
+        #     self.readout.setText(text)
+
+    
+    def stop(self):
+        self.gui_up = False
+
+    def dismiss(self, event):
+        self.stop()
+        # self.canvas.enable_draw(False)
+        # self.delete_all_cb(event)
+        self.delete()
+
 class FitsViewer(QtGui.QMainWindow):
     # resized = QtCore.Signal()
 
@@ -1127,6 +1187,11 @@ class FitsViewer(QtGui.QMainWindow):
         self.wrecenter.clicked.connect(self.recenter)
         self.wrecenter.setMaximumSize(QtCore.QSize(75, 40))
         click_hbox.addWidget(self.wrecenter)
+        self.wwindow = QtGui.QPushButton("Window")
+        self.wwindow.setObjectName("wwindow")
+        self.wwindow.clicked.connect(self.window)
+        self.wwindow.setMaximumSize(QtCore.QSize(75, 40))
+        click_hbox.addWidget(self.wwindow)
         click_hbox.setContentsMargins(QtCore.QMargins(4,1,4,1))
         hw = QtGui.QWidget()
         hw.setLayout(click_hbox)

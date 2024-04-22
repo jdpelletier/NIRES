@@ -1089,9 +1089,14 @@ class FitsViewer(QtGui.QMainWindow):
 
         cutmenu = menubar.addMenu("Cuts")
 
-        item = QtGui.QAction("Cut Gui", menubar)
+        item = QtGui.QAction("Cut GUI", menubar)
         item.triggered.connect(self.cuts_popup)
         cutmenu.addAction(item)
+
+        self.colormenu = menubar.addMenu("Colors")
+        for name in fi.get_color_algorithms():
+            self.colormenu.addItem(name)
+        self.colormenu.currentIndexChanged.connect(self.color_change)
 
 
         self.bd = fi.get_bindings()
@@ -1171,12 +1176,6 @@ class FitsViewer(QtGui.QMainWindow):
         self.wcut.setCurrentText('zscale')
         self.wcut.setMaximumSize(QtCore.QSize(100, 30))
         readout_hbox.addWidget(self.wcut)
-        self.wcolor = QtGui.QComboBox()
-        for name in fi.get_color_algorithms():
-            self.wcolor.addItem(name)
-        self.wcolor.currentIndexChanged.connect(self.color_change)
-        self.wcolor.setMaximumSize(QtCore.QSize(100, 30))
-        readout_hbox.addWidget(self.wcolor)
         readout_hbox.setContentsMargins(QtCore.QMargins(4,1,4,1))
         hw = QtGui.QWidget()
         hw.setLayout(readout_hbox)

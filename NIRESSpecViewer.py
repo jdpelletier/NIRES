@@ -1013,9 +1013,9 @@ class Window(Widgets.Box):
         self.closebtn = Widgets.Button("Close")
         self.closebtn.add_callback('activated', self.dismiss)
         button_hbox.add_widget(self.closebtn)
-        vw = QtGui.QWidget()
-        self.setCentralWidget(vw)
-        vw.setLayout(vbox)
+        vbox.add_widget(button_hbox)
+        self.add_widget(vbox)
+        self.resize(500, 0)
 
         fitsimage.set_callback('cursor-changed', self.motion_cb)
 

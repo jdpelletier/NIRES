@@ -1508,6 +1508,10 @@ class FitsViewer(QtGui.QMainWindow):
         self.m = MathWindow(self.logger, self.fitsimage, self.load_file, self.dispname, self.spec_lastfile)
         self.m.show()
 
+    def window(self):
+        self.w = Window(self.logger, self.fitsimage)
+        self.w.show()
+
     ##Find star stuff
     def cutdetail(self, image, shape_obj):
         view, mask = image.get_shape_view(shape_obj)

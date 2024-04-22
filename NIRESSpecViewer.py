@@ -53,7 +53,7 @@ class Scanner(QtCore.QRunnable):
         self.fn(*self.args, **self.kwargs)
 
 class NewFileSignals(QtCore.QObject):
-    load = QtCore.Signal(object)
+    load = QtCore.Signal()
 
 class NewFile(QtCore.QRunnable):
     '''

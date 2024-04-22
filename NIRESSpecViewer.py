@@ -1007,7 +1007,7 @@ class Window(Widgets.Box):
         # w = fitsimage.get_widget()
         # w.setMinimumSize(QtCore.QSize(1200, 600))
         viewer_hbox.add_widget(fitsimage)
-        viewer_hbox.setContentsMargins(QtCore.QMargins(4,1,4,1))
+        # viewer_hbox.setContentsMargins(QtCore.QMargins(4,1,4,1))
         vbox.add_widget(viewer_hbox)
         button_hbox = Widgets.HBox()
         self.closebtn = Widgets.Button("Close")

@@ -1356,7 +1356,7 @@ class FitsViewer(QtGui.QMainWindow):
             text = "X: Y: Value: Wavelength: "
             self.readout.setText(text)
         else:
-            fx = "{:<6}".format(str(int(fits_x)))
+            fx = str(int(fits_x)).ljust(5)
             fy = str(int(fits_y)).ljust(5)
             value = str(value).ljust(5)
             wavelength = str(wavelength).ljust(10)

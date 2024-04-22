@@ -964,8 +964,7 @@ class MathWindow(Widgets.Box):
                 image_data = fits.getdata(ds)
                 image_header = fits.getheader(ds)
                 # previous = fits.getdata(str(self.lastfile.read()))
-                previous = self.previous_file(ds)
-                print(previous)
+                previous = fits.getdata(self.previous_file(ds))
             except FileNotFoundError:
                 return
             subtracted = image_data - previous

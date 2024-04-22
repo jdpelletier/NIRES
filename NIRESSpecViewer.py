@@ -1212,7 +1212,7 @@ class FitsViewer(QtGui.QMainWindow):
         splitter.addWidget(viewerHB)
         splitter.addWidget(buttonsVB)
         splitter.setStretchFactor(0, 1)
-        splitter.setSizes([550, 30])
+        splitter.setSizes([700, 30])
         vbox.addWidget(splitter)
 
         vw = QtGui.QWidget()

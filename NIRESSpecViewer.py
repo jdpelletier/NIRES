@@ -1093,10 +1093,11 @@ class FitsViewer(QtGui.QMainWindow):
         item.triggered.connect(self.cuts_popup)
         cutmenu.addAction(item)
 
-        self.colormenu = menubar.addMenu("Colors")
+        colormenu = menubar.addMenu("Colors")
         for name in fi.get_color_algorithms():
-            self.colormenu.addItem(name)
-        self.colormenu.currentIndexChanged.connect(self.color_change)
+            item = QtGui.QAction(name, menubar)
+            item.triggered.connect(self.color_change(name))
+            colormenu.addAction(item)
 
 
         self.bd = fi.get_bindings()
@@ -1262,8 +1263,8 @@ class FitsViewer(QtGui.QMainWindow):
     def cut_change(self):
         self.fitsimage.set_autocut_params(self.wcut.currentText())
 
-    def color_change(self):
-        self.fitsimage.set_color_algorithm(self.wcolor.currentText())
+    def color_change(self, name):
+        self.fitsimage.set_color_algorithm(name)
 
     def motion_cb(self, viewer, button, data_x, data_y):
 

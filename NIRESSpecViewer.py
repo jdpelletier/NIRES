@@ -1155,7 +1155,7 @@ class FitsViewer(QtGui.QMainWindow):
             item.triggered.connect(partial(self.cmap_change, cm_name))
             colormenu.addAction(item)
 
-        cutmenu = menubar.addMenu("Cut")
+        cutmenu = menubar.addMenu("Display Parameters")
         for cut_name in fi.get_autocut_methods():
             item = QtGui.QAction(cut_name, menubar)
             

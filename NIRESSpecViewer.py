@@ -1244,7 +1244,7 @@ class FitsViewer(QtGui.QMainWindow):
         readout_hbox.setObjectName("readout_hbox")
         self.xreadout = QtGui.QLabel("X:     ")
         self.xreadout.setObjectName("xreadout")
-        # self.xreadout.setMaximumSize(QtCore.QSize(10, 0))
+        self.xreadout.setMaximumSize(QtCore.QSize(10, 0))
         readout_hbox.addWidget(self.xreadout)
         self.yreadout = QtGui.QLabel("Y:     ")
         self.yreadout.setObjectName("yreadout")
@@ -1254,7 +1254,7 @@ class FitsViewer(QtGui.QMainWindow):
         self.vreadout.setObjectName("xreadout")
         # self.vreadout.setMaximumSize(QtCore.QSize(10, 0))
         readout_hbox.addWidget(self.vreadout)
-        self.wreadout = QtGui.QLabel("Value:     ")
+        self.wreadout = QtGui.QLabel("Wavelength:     ")
         self.wreadout.setObjectName("wreadout")
         readout_hbox.addWidget(self.wreadout)
         # self.readout = QtGui.QLabel("X:                 Y:                    Value:                   Wavelength:")
@@ -1371,13 +1371,13 @@ class FitsViewer(QtGui.QMainWindow):
             text = "X: Y: Value: Wavelength: "
             self.xreadout.setText(f"X: ")
             self.yreadout.setText(f"Y: ")
-            self.vreadout.setText(f"Y: ")
-            self.wreadout.setText(f"Y: ")
+            self.vreadout.setText(f"Value: ")
+            self.wreadout.setText(f"Wavelength: ")
         else:
             self.xreadout.setText(f"X: {int(fits_x)}")
             self.yreadout.setText(f"Y: {int(fits_y)}")
-            self.vreadout.setText(f"Y: {value}")
-            self.wreadout.setText(f"Y: {wavelength}")
+            self.vreadout.setText(f"Value: {value}")
+            self.wreadout.setText(f"Wavelength: {wavelength}")
             # text = f"X: {fx} Y: {fy}  Value: {value}  Wavelength: {wavelength}"
             # self.readout.setText(text)
         

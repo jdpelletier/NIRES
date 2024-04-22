@@ -1650,7 +1650,7 @@ def main():
     logger = log.get_logger("NIRESSlitViewer", log_stderr=True, level=40)
 
     w = FitsViewer(logger)
-    w.resize(1200,712)
+    w.resize(1200,711)
     w.show()
     app.setActiveWindow(w)
     w.raise_()

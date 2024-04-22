@@ -1096,7 +1096,7 @@ class FitsViewer(QtGui.QMainWindow):
         colormenu = menubar.addMenu("Colors")
         for name in cmap.get_names():
             item = QtGui.QAction(name, menubar)
-            item.triggered.connect(self.cmap_change(name))
+            item.triggered.connect(lambda: self.cmap_change(name))
             colormenu.addAction(item)
 
 

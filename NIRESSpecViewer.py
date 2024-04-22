@@ -991,7 +991,7 @@ class MathWindow(Widgets.Box):
         prev_file = f"{int(str(fn).split('_')[-1].split('.')[0])-1}.fits"
         while len(prev_file)<9:
             prev_file = "0" + prev_file
-        return prev_dir + prev_file
+        return prev_dir + "_" + prev_file
 
 
     def reload(self, event):

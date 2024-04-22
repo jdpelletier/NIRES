@@ -199,6 +199,7 @@ class Cuts(Widgets.Box):
 
         self.start()
         self.gui_up = True
+        self.threadpool = QtCore.QThreadPool()
         self.start_filecheck()
 
     def free_draw_cb(self, event):

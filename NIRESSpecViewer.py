@@ -52,6 +52,32 @@ class Scanner(QtCore.QRunnable):
 
         self.fn(*self.args, **self.kwargs)
 
+class NewFileSignals(QtCore.QObject):
+    load = QtCore.Signal(object)
+
+class NewFile(QtCore.QRunnable):
+    '''
+    NewFile thread
+    '''
+    def __init__(self, fn, *args, **kwargs):
+        super(Scanner, self).__init__()
+
+        # Store constructor arguments (re-used for processing)
+        self.fn = fn
+        self.args = args
+        self.kwargs = kwargs
+        self.signals = NewFileSignals()
+        self.kwargs['file_callback'] = self.signals.load
+
+        # Add the callback to our kwargs
+    @QtCore.Slot()
+    def run(self):
+        '''
+        Initialise the runner function with passed args, kwargs.
+        '''
+
+        self.fn(*self.args, **self.kwargs)
+
 class UpdateControlWindowSignals(QtCore.QObject):
     load = QtCore.Signal()
 
@@ -81,8 +107,10 @@ class UpdateControlWindow(QtCore.QRunnable):
 ##Cuts
 class Cuts(Widgets.Box):
 
-    def __init__(self, logger, fitsimage):
+    def __init__(self, logger, fitsimage, dispname):
         super(Cuts, self).__init__(fitsimage)
+
+        self.dispname = dispname
 
         self.logger = logger
 
@@ -171,6 +199,7 @@ class Cuts(Widgets.Box):
 
         self.start()
         self.gui_up = True
+        self.start_filecheck()
 
     def free_draw_cb(self, event):
         self.cut_mode = "Free"
@@ -791,6 +820,27 @@ class Cuts(Widgets.Box):
                 continue
             self._update_tines(obj)
         self.canvas.redraw(whence=3)
+    
+    
+    def start_filecheck(self):
+        self.currentfile = str(self.dispname.read())
+        self.filechecking = True
+        filechecker = NewFile(self.new_file)
+        filechecker.signals.load.connect(self.file_compare)
+        self.threadpool.start(filechecker)
+    
+    def new_file(self, file_callback):
+        while self.filechecking:
+            file_callback.emit()
+            time.sleep(0.5)
+
+    def stop_filecheck(self):
+        self.updating = False
+    
+    def file_compare(self):
+        if self.currentfile != str(self.dispname.read()):
+            self.replot_all()
+            self.currentfile = str(self.dispname.read())
 
     def dismiss(self, event):
         self.stop()
@@ -1407,7 +1457,7 @@ class FitsViewer(QtGui.QMainWindow):
                 self.c.dismiss(None)
             except AttributeError:
                 pass
-        self.c = Cuts(self.logger, self.fitsimage)
+        self.c = Cuts(self.logger, self.fitsimage, self.dispname)
         self.c.show()
 
     def sdiff(self):

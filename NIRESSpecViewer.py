@@ -964,12 +964,13 @@ class MathWindow(Widgets.Box):
                 image_data = fits.getdata(ds)
                 image_header = fits.getheader(ds)
                 # previous = fits.getdata(str(self.lastfile.read()))
-                previous = fits.getdata(self.previous_file(ds))
+                previous = self.previous_file(ds)
+                previous_data = fits.getdata(previous)
             except FileNotFoundError:
                 return
-            subtracted = image_data - previous
+            subtracted = image_data - previous_data
             hdu = fits.PrimaryHDU(header=image_header, data=subtracted)
-            filename = self.mathFileNames(str(self.dispname.read()), str(self.lastfile.read()), '-')
+            filename = self.mathFileNames(ds, previous, '-')
             try:
                 hdu.writeto(filename)
             except OSError:

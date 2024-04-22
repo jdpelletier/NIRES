@@ -1096,7 +1096,7 @@ class FitsViewer(QtGui.QMainWindow):
         colormenu = menubar.addMenu("Colors")
         for name in fi.get_color_algorithms():
             item = QtGui.QAction(name, menubar)
-            item.triggered.connect(self.color_change(name))
+            item.triggered.connect(self.color_change(str(name)))
             colormenu.addAction(item)
 
 

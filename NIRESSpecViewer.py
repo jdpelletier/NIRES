@@ -5,6 +5,7 @@ from pathlib import Path
 # import datetime
 # import csv
 # import copy
+from functools import partial
 
 import numpy as np
 from astropy.io import fits
@@ -1096,7 +1097,8 @@ class FitsViewer(QtGui.QMainWindow):
         colormenu = menubar.addMenu("Colors")
         for cm_name in cmap.get_names():
             item = QtGui.QAction(cm_name, menubar)
-            item.triggered.connect(lambda cm_name: self.cmap_change(str(cm_name)))
+            
+            item.triggered.connect(partial(self.cmap_change, cm_name))
             colormenu.addAction(item)
 
 

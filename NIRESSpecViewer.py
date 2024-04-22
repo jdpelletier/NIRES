@@ -1257,6 +1257,7 @@ class FitsViewer(QtGui.QMainWindow):
         return RecCanvas
 
     def cmap_change(self, name):
+        print(name)
         self.fitsimage.set_color_map(name)
 
     def cut_change(self):

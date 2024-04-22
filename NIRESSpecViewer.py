@@ -60,7 +60,7 @@ class NewFile(QtCore.QRunnable):
     NewFile thread
     '''
     def __init__(self, fn, *args, **kwargs):
-        super(Scanner, self).__init__()
+        super(NewFile, self).__init__()
 
         # Store constructor arguments (re-used for processing)
         self.fn = fn

@@ -823,7 +823,7 @@ class Cuts(Widgets.Box):
     
     
     def start_filecheck(self):
-        self.currentfile = str(self.dispname.read())
+        self.currentfile = self.fitsimage.get_image().get_header()['DISPNAME']
         self.filechecking = True
         filechecker = NewFile(self.new_file)
         filechecker.signals.load.connect(self.file_compare)
@@ -835,14 +835,17 @@ class Cuts(Widgets.Box):
             time.sleep(0.5)
 
     def stop_filecheck(self):
-        self.updating = False
+        self.filechecking = False
     
     def file_compare(self):
-        if self.currentfile != str(self.dispname.read()):
+        image = self.fitsimage.get_image()
+        name = image.get_header()['DISPNAME']
+        if self.currentfile != name:
             self.replot_all()
-            self.currentfile = str(self.dispname.read())
+            self.currentfile = name
 
     def dismiss(self, event):
+        self.stop_filecheck()
         self.stop()
         # self.canvas.enable_draw(False)
         # self.delete_all_cb(event)
@@ -1450,8 +1453,6 @@ class FitsViewer(QtGui.QMainWindow):
             fileName = str(res)
         if len(fileName) != 0:
             self.load_file(fileName)
-            image = self.fitsimage.get_image()
-            print(image.get_header()['DISPNAME'])
 
     def cuts_popup(self):
         if self.c != None:

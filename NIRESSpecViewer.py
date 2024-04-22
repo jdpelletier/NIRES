@@ -1244,7 +1244,7 @@ class FitsViewer(QtGui.QMainWindow):
         readout_hbox.setObjectName("readout_hbox")
         self.xreadout = QtGui.QLabel("X:     ")
         self.xreadout.setObjectName("xreadout")
-        self.xreadout.setMaximumSize(QtCore.QSize(10, 0))
+        self.xreadout.setMaximumSize(QtCore.QSize(20, 0))
         readout_hbox.addWidget(self.xreadout)
         self.yreadout = QtGui.QLabel("Y:     ")
         self.yreadout.setObjectName("yreadout")

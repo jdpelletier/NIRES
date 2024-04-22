@@ -964,7 +964,7 @@ class MathWindow(Widgets.Box):
                 image_data = fits.getdata(ds)
                 image_header = fits.getheader(ds)
                 # previous = fits.getdata(str(self.lastfile.read()))
-                previous = int(str(ds).split("_")[-1].split(".")[0])-1
+                previous = self.previous_file(ds)
                 print(previous)
             except FileNotFoundError:
                 return
@@ -987,7 +987,7 @@ class MathWindow(Widgets.Box):
             self.sdiff_done = False
     
     def previous_file(self, fn):
-        prev_dir = int(str(fn).split("_")[0]
+        prev_dir = int(str(fn).split("_")[0])
         prev_file = f"{int(str(fn).split("_")[-1].split(".")[0])-1}.fits"
         while len(prev_file)<9:
             prev_file = "0" + prev_file

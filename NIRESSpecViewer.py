@@ -1212,7 +1212,7 @@ class FitsViewer(QtGui.QMainWindow):
         splitter.addWidget(viewerHB)
         splitter.addWidget(buttonsVB)
         splitter.setStretchFactor(0, 1)
-        splitter.setSizes([700, 30])
+        splitter.setSizes([600, 40])
         vbox.addWidget(splitter)
 
         vw = QtGui.QWidget()
@@ -1650,7 +1650,7 @@ def main():
     logger = log.get_logger("NIRESSlitViewer", log_stderr=True, level=40)
 
     w = FitsViewer(logger)
-    w.resize(1200,719)
+    w.resize(1200,710)
     w.show()
     app.setActiveWindow(w)
     w.raise_()

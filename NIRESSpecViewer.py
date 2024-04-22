@@ -1430,6 +1430,21 @@ class FitsViewer(QtGui.QMainWindow):
         while len(prev_file)<9:
             prev_file = "0" + prev_file
         return prev_dir + "_" + prev_file
+    
+    def mathFileNames(self, firstfile, secondfile, operation):
+        if "//" in firstfile:
+            firstfile = firstfile.split("//")
+            firstfile = firstfile[-1]
+        else: 
+            firstfile = firstfile.split("/")
+            firstfile = firstfile[-1]
+        if "//" in secondfile:
+            secondfile = secondfile.split("//")
+            secondfile = secondfile[-1]
+        else: 
+            secondfile = secondfile.split("/")
+            secondfile = secondfile[-1]
+        return f'{firstfile} {operation} {secondfile}.fits'
 
     # def subtract_sky(self, file):
     #     image = self.fitsimage.get_image()

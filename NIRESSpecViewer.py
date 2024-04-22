@@ -1004,9 +1004,9 @@ class Window(Widgets.Box):
 
         vbox = Widgets.VBox()   
         viewer_hbox = Widgets.HBox()
-        w = fitsimage.get_widget()
+        # w = fitsimage.get_widget()
         # w.setMinimumSize(QtCore.QSize(1200, 600))
-        viewer_hbox.add_widget(w)
+        viewer_hbox.add_widget(fitsimage)
         viewer_hbox.setContentsMargins(QtCore.QMargins(4,1,4,1))
         vbox.add_widget(viewer_hbox)
         button_hbox = Widgets.HBox()

@@ -1213,12 +1213,12 @@ class FitsViewer(QtGui.QMainWindow):
 
         # self.sky = ""
         self.curentfile = ""
-        # self.sdiff_done = False
+        self.sdiff_done = False
         self.c = None
         self.m = None
         self.panning = False
         self.base_zoom = 0
-        self.sdiff = False
+        # self.sdiff = False
 
         self.wavelength_data = np.flip((fits.getdata("Wavelengths.fits")), 0)
 

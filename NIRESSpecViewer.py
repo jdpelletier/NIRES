@@ -1101,6 +1101,33 @@ class FitsViewer(QtGui.QMainWindow):
             item.triggered.connect(partial(self.cmap_change, cm_name))
             colormenu.addAction(item)
 
+        cutmenu = menubar.addMenu("Cut")
+        for cut_name in fi.get_autocut_methods():
+            item = QtGui.QAction(cut_name, menubar)
+            
+            item.triggered.connect(partial(self.cut_change, cut_name))
+            cutmenu.addAction(item)
+
+        cutmenu = menubar.addMenu("Stretch")
+        for stretch_name in fi.get_color_algorithms():
+            item = QtGui.QAction(stretch_name, menubar)
+            
+            item.triggered.connect(partial(self.color_change, stretch_name))
+            cutmenu.addAction(item)
+
+        # self.wcut = QtGui.QComboBox()
+        # for name in fi.get_autocut_methods():
+        #     self.wcut.addItem(name)
+        # self.wcut.currentIndexChanged.connect(self.cut_change)
+        # self.wcut.setCurrentText('zscale')
+        # self.wcut.setMaximumSize(QtCore.QSize(100, 30))
+        # readout_hbox.addWidget(self.wcut)
+        # self.wcolor = QtGui.QComboBox()
+        # for name in fi.get_color_algorithms():
+        #     self.wcolor.addItem(name)
+        # self.wcolor.currentIndexChanged.connect(self.color_change)
+        # self.wcolor.setMaximumSize(QtCore.QSize(100, 30))
+        # readout_hbox.addWidget(self.wcolor)
 
         self.bd = fi.get_bindings()
         self.bd.enable_all(True)
@@ -1165,19 +1192,6 @@ class FitsViewer(QtGui.QMainWindow):
         self.readout.setObjectName("readout")
         # self.readout.setMinimumSize(QtCore.QSize(550, 0))
         readout_hbox.addWidget(self.readout)
-        self.wcut = QtGui.QComboBox()
-        for name in fi.get_autocut_methods():
-            self.wcut.addItem(name)
-        self.wcut.currentIndexChanged.connect(self.cut_change)
-        self.wcut.setCurrentText('zscale')
-        self.wcut.setMaximumSize(QtCore.QSize(100, 30))
-        readout_hbox.addWidget(self.wcut)
-        self.wcolor = QtGui.QComboBox()
-        for name in fi.get_color_algorithms():
-            self.wcolor.addItem(name)
-        self.wcolor.currentIndexChanged.connect(self.color_change)
-        self.wcolor.setMaximumSize(QtCore.QSize(100, 30))
-        readout_hbox.addWidget(self.wcolor)
         readout_hbox.setContentsMargins(QtCore.QMargins(4,1,4,1))
         hw = QtGui.QWidget()
         hw.setLayout(readout_hbox)
@@ -1261,11 +1275,11 @@ class FitsViewer(QtGui.QMainWindow):
     def cmap_change(self, cm_name):
         self.fitsimage.set_color_map(cm_name)
 
-    def cut_change(self):
-        self.fitsimage.set_autocut_params(self.wcut.currentText())
+    def cut_change(self, cut_name):
+        self.fitsimage.set_autocut_params(cut_name)
 
-    def color_change(self):
-        self.fitsimage.set_color_algorithm(self.wcolor.currentText())
+    def color_change(self, stretch_name):
+        self.fitsimage.set_color_algorithm(stretch_name)
 
     def motion_cb(self, viewer, button, data_x, data_y):
 

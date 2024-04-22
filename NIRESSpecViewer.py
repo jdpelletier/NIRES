@@ -1269,6 +1269,7 @@ class FitsViewer(QtGui.QMainWindow):
         hw.setLayout(display_hbox)
         readout_hbox.addWidget(hw)
         spacer_hbox = QtGui.QHBoxLayout()
+        spacer_hbox.setContentsMargins(QtCore.QMargins(100,1,4,1))
         hw = QtGui.QWidget()
         hw.setLayout(spacer_hbox)
         readout_hbox.addWidget(hw)

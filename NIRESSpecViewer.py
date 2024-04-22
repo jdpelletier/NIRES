@@ -1450,6 +1450,8 @@ class FitsViewer(QtGui.QMainWindow):
             fileName = str(res)
         if len(fileName) != 0:
             self.load_file(fileName)
+            image = self.fitsimage.get_image()
+            print(image)
 
     def cuts_popup(self):
         if self.c != None:

@@ -1094,9 +1094,9 @@ class FitsViewer(QtGui.QMainWindow):
         cutmenu.addAction(item)
 
         colormenu = menubar.addMenu("Colors")
-        for name in cmap.get_names():
-            item = QtGui.QAction(name, menubar)
-            item.triggered.connect(lambda: self.cmap_change(str(name)))
+        for cm_name in cmap.get_names():
+            item = QtGui.QAction(cm_name, menubar)
+            item.triggered.connect(lambda: self.cmap_change(str(cm_name)))
             colormenu.addAction(item)
 
 
@@ -1256,9 +1256,9 @@ class FitsViewer(QtGui.QMainWindow):
         # return RecCanvas, CompCanvas
         return RecCanvas
 
-    def cmap_change(self, name):
-        print(name)
-        self.fitsimage.set_color_map(name)
+    def cmap_change(self, cm_name):
+        print(cm_name)
+        self.fitsimage.set_color_map(cm_name)
 
     def cut_change(self):
         self.fitsimage.set_autocut_params(self.wcut.currentText())

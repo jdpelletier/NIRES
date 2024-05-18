@@ -852,6 +852,9 @@ class MathWindow(Widgets.Box):
     def __init__(self, logger, fitsimage, loadfile, dispname2, lastfile):
         super(MathWindow, self).__init__(fitsimage)
 
+        math_path = "/home/jpelletier/NIRES/"
+        
+
         self.logger = logger
         self.fitsimage = fitsimage
         self.load_file = loadfile
@@ -982,13 +985,14 @@ class MathWindow(Widgets.Box):
             added = imageone_data + imagetwo_data
             hdu = fits.PrimaryHDU(header=image_header, data=added)
             filename = self.mathFileNames(self.filenameone.get_text(), self.filenametwo.get_text(), '+')
+            full_path = Path(math_path + filename)
             try:
-                hdu.writeto(filename)
+                hdu.writeto(full_path)
             except OSError:
-                os.remove(filename)
-                hdu.writeto(filename)
-            self.load_file(filename)
-            os.remove(filename)
+                os.remove(full_path)
+                hdu.writeto(full_path)
+            self.load_file(full_path)
+            os.remove(full_path)
             self.sdiff_done = False
         except FileNotFoundError:
             return

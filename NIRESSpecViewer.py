@@ -1,4 +1,4 @@
-import os, time, sys, subprocess
+import os, time, sys
 # from os import listdir
 # from os.path import abspath, isfile, join
 from pathlib import Path
@@ -15,10 +15,10 @@ import astropy.units as u
 from astropy.modeling import models, fitting
 # import PIL.Image as PILimage
 
-from ginga import Bindings, cmap
-from ginga.misc import log, Settings
+from ginga import cmap
+from ginga.misc import log
 from ginga.qtw.QtHelp import QtGui, QtCore
-from ginga.qtw.ImageViewQt import CanvasView, ScrolledView
+from ginga.qtw.ImageViewQt import CanvasView
 from ginga.util import iqcalc, io_fits, plots
 from ginga.util.loader import load_data
 from ginga.AstroImage import AstroImage
@@ -867,6 +867,8 @@ class MathWindow(Widgets.Box):
         self.dispname = dispname
         self.sdiff = sdiff
 
+        self.math_path = "/home/jpelletier/NIRES/"
+
         vbox = Widgets.VBox()
         math_hbox = Widgets.HBox()
         filebutton_vbox = Widgets.VBox()
@@ -980,13 +982,14 @@ class MathWindow(Widgets.Box):
         subtracted = imageone_data - imagetwo_data
         hdu = fits.PrimaryHDU(header=image_header, data=subtracted)
         filename = self.mathFileNames(self.filenameone.get_text(), self.filenametwo.get_text(), '-')
+        full_path = Path(self.math_path + filename)
         try:
-            hdu.writeto(filename)
+            hdu.writeto(full_path)
         except OSError:
-            os.remove(filename)
-            hdu.writeto(filename)
-        self.load_file(filename)
-        os.remove(filename)
+            os.remove(full_path)
+            hdu.writeto(full_path)
+        self.load_file(full_path)
+        os.remove(full_path)
         self.sdiff_done = False
         return
     
@@ -998,13 +1001,14 @@ class MathWindow(Widgets.Box):
             added = imageone_data + imagetwo_data
             hdu = fits.PrimaryHDU(header=image_header, data=added)
             filename = self.mathFileNames(self.filenameone.get_text(), self.filenametwo.get_text(), '+')
+            full_path = Path(self.math_path + filename)
             try:
-                hdu.writeto(filename)
+                hdu.writeto(full_path)
             except OSError:
-                os.remove(filename)
-                hdu.writeto(filename)
-            self.load_file(filename)
-            os.remove(filename)
+                os.remove(full_path)
+                hdu.writeto(full_path)
+            self.load_file(full_path)
+            os.remove(full_path)
             self.sdiff_done = False
         except FileNotFoundError:
             return
@@ -1289,7 +1293,7 @@ class FitsViewer(QtGui.QMainWindow):
         self.base_zoom = 0
         # self.sdiff = False
 
-        self.wavelength_data = np.flip((fits.getdata("Wavelengths.fits")), 0)
+        self.wavelength_data = np.flip((fits.getdata("/home/jpelletier/NIRES/Wavelengths.fits")), 0)
 
         self.start_updating()
 
@@ -1469,6 +1473,7 @@ class FitsViewer(QtGui.QMainWindow):
         self.c.show()
 
     def sdiff(self):
+        working_path = "/home/jpelletier/NIRES/"
         if self.sdiff_done == False:
             try:
                 ds = self.dispname.read()
@@ -1482,15 +1487,16 @@ class FitsViewer(QtGui.QMainWindow):
             subtracted = image_data - previous_data
             hdu = fits.PrimaryHDU(header=image_header, data=subtracted)
             filename = self.mathFileNames(ds, previous, '-')
+            full_path = Path(working_path + filename)
             try:
-                hdu.writeto(filename)
+                hdu.writeto(full_path)
             except OSError:
-                os.remove(filename)
-                hdu.writeto(filename)
-            self.load_file(filename)
+                os.remove(full_path)
+                hdu.writeto(full_path)
+            self.load_file(full_path)
             # self.wsdiff.set_text("Undo SDiff")
             self.sdiff_done = True
-            os.remove(filename)
+            os.remove(full_path)
         else:
             self.load_file(str(self.dispname.read()))
             # self.fitsimage.set_image(image)
@@ -1574,14 +1580,16 @@ class FitsViewer(QtGui.QMainWindow):
         return nightly
 
     def writeFits(self, headerinfo, image_data):
+        working_path = '/home/jpelletier/NIRES/'
         hdu = fits.PrimaryHDU(header=headerinfo, data=image_data)
         filename = 'procImage.fits'
+        full_path = Path(working_path + filename)
         try:
-            hdu.writeto(filename)
+            hdu.writeto(full_path)
         except OSError:
-            os.remove(filename)
-            hdu.writeto(filename)
-        return filename
+            os.remove(full_path)
+            hdu.writeto(full_path)
+        return full_path
     
     def math_popup(self):
         self.m = MathWindow(self.logger, self.fitsimage, self.load_file, self.dispname, self.spec_lastfile)

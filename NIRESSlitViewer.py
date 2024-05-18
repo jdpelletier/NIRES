@@ -851,6 +851,8 @@ class MathWindow(Widgets.Box):
     """
     def __init__(self, logger, fitsimage, loadfile, dispname2, lastfile):
         super(MathWindow, self).__init__(fitsimage)
+
+        self.math_path = "/home/jpelletier/NIRES/"
         
 
         self.logger = logger
@@ -956,7 +958,6 @@ class MathWindow(Widgets.Box):
         return
 
     def imageSubtract(self, event):
-        math_path = "/home/jpelletier/NIRES/"
         try:
             imageone_data = fits.getdata(self.filenameone.get_text())
             imagetwo_data = fits.getdata(self.filenametwo.get_text())
@@ -977,7 +978,6 @@ class MathWindow(Widgets.Box):
         return
     
     def imageAdd(self, event):
-        math_path = "/home/jpelletier/NIRES/"
         try:
             imageone_data = fits.getdata(self.filenameone.get_text())
             imagetwo_data = fits.getdata(self.filenametwo.get_text())
@@ -985,7 +985,7 @@ class MathWindow(Widgets.Box):
             added = imageone_data + imagetwo_data
             hdu = fits.PrimaryHDU(header=image_header, data=added)
             filename = self.mathFileNames(self.filenameone.get_text(), self.filenametwo.get_text(), '+')
-            full_path = Path(math_path + filename)
+            full_path = Path(self.math_path + filename)
             try:
                 hdu.writeto(full_path)
             except OSError:
@@ -999,7 +999,6 @@ class MathWindow(Widgets.Box):
         return
 
     def sdiff(self, event):
-        math_path = "/home/jpelletier/NIRES/"
         if self.sdiff_done == False:
             try:
                 image_data = fits.getdata(self.dispname2.read())

@@ -9,16 +9,16 @@ from pathlib import Path
 import numpy as np
 from astropy.io import fits
 from astropy import wcs
-import astropy.units as u
+# import astropy.units as u
 # from astropy.stats import gaussian_sigma_to_fwhm
 from astropy.modeling import models, fitting
 # import PIL.Image as PILimage
-from PyQt5.QtWidgets import QDesktopWidget
+# from PyQt5.QtWidgets import QDesktopWidget
 
-from ginga import Bindings, cmap
-from ginga.misc import log, Settings
+from ginga import cmap
+from ginga.misc import log
 from ginga.qtw.QtHelp import QtGui, QtCore
-from ginga.qtw.ImageViewQt import CanvasView, ScrolledView
+from ginga.qtw.ImageViewQt import CanvasView
 from ginga.util import iqcalc, io_fits, plots
 from ginga.util.loader import load_data
 from ginga.AstroImage import AstroImage

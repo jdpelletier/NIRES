@@ -983,7 +983,6 @@ class MathWindow(Widgets.Box):
         hdu = fits.PrimaryHDU(header=image_header, data=subtracted)
         filename = self.mathFileNames(self.filenameone.get_text(), self.filenametwo.get_text(), '-')
         full_path = Path(self.math_path + filename)
-        print(full_path)
         try:
             hdu.writeto(full_path)
         except OSError:
@@ -1408,7 +1407,6 @@ class FitsViewer(QtGui.QMainWindow):
         # self.wstopscan.setEnabled(False)
 
     def load_file(self, filepath):
-        print(filepath)
         recenter = False
         if self.fitsimage.get_image() == None:
             recenter = True

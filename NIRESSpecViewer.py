@@ -1492,7 +1492,7 @@ class FitsViewer(QtGui.QMainWindow):
             except OSError:
                 os.remove(full_path)
                 hdu.writeto(full_path)
-            self.load_file(full_path)
+            self.load_file(str(full_path))
             # self.wsdiff.set_text("Undo SDiff")
             self.sdiff_done = True
             os.remove(full_path)

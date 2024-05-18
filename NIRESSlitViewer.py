@@ -965,13 +965,14 @@ class MathWindow(Widgets.Box):
             subtracted = imageone_data - imagetwo_data
             hdu = fits.PrimaryHDU(header=image_header, data=subtracted)
             filename = self.mathFileNames(self.filenameone.get_text(), self.filenametwo.get_text(), '-')
+            full_path = Path(self.math_path + filename)
             try:
-                hdu.writeto(filename)
+                hdu.writeto(full_path)
             except OSError:
-                os.remove(filename)
-                hdu.writeto(filename)
-            self.load_file(filename)
-            os.remove(filename)
+                os.remove(full_path)
+                hdu.writeto(full_path)
+            self.load_file(full_path)
+            os.remove(full_path)
             self.sdiff_done = False
         except FileNotFoundError:
             return
@@ -1009,15 +1010,16 @@ class MathWindow(Widgets.Box):
             subtracted = image_data - previous
             hdu = fits.PrimaryHDU(header=image_header, data=subtracted)
             filename = self.mathFileNames(str(self.dispname2.read()), str(self.lastfile.read()), '-')
+            full_path = Path(self.math_path + filename)
             try:
-                hdu.writeto(filename)
+                hdu.writeto(full_path)
             except OSError:
-                os.remove(filename)
-                hdu.writeto(filename)
-            self.load_file(filename)
+                os.remove(full_path)
+                hdu.writeto(full_path)
+            self.load_file(full_path)
             # self.wsdiff.set_text("Undo SDiff")
             self.sdiff_done = True
-            os.remove(filename)
+            os.remove(full_path)
         else:
             self.load_file(str(self.dispname2.read()))
             # self.fitsimage.set_image(image)

@@ -983,6 +983,7 @@ class MathWindow(Widgets.Box):
         hdu = fits.PrimaryHDU(header=image_header, data=subtracted)
         filename = self.mathFileNames(self.filenameone.get_text(), self.filenametwo.get_text(), '-')
         full_path = Path(self.math_path + filename)
+        print(full_path)
         try:
             hdu.writeto(full_path)
         except OSError:

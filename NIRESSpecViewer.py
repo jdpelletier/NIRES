@@ -989,7 +989,7 @@ class MathWindow(Widgets.Box):
         except OSError:
             os.remove(full_path)
             hdu.writeto(full_path)
-        self.load_file(full_path)
+        self.load_file(str(full_path))
         os.remove(full_path)
         self.sdiff_done = False
         return
@@ -1008,7 +1008,7 @@ class MathWindow(Widgets.Box):
             except OSError:
                 os.remove(full_path)
                 hdu.writeto(full_path)
-            self.load_file(full_path)
+            self.load_file(str(full_path))
             os.remove(full_path)
             self.sdiff_done = False
         except FileNotFoundError:

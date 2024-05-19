@@ -6,6 +6,7 @@ from pathlib import Path
 # import csv
 # import copy
 from functools import partial
+import configparser
 
 import numpy as np
 from astropy.io import fits
@@ -1294,8 +1295,13 @@ class FitsViewer(QtGui.QMainWindow):
         self.panning = False
         self.base_zoom = 0
         # self.sdiff = False
+        current_directory = os.path.dirname(os.path.abspath(__file__))
+        config_file = Path(current_directory) / 'config.ini'
 
-        self.wavelength_data = np.flip((fits.getdata("Wavelengths.fits")), 0)
+        config = configparser.ConfigParser()
+        config.read(config_file)
+        file_path = config.get('DEFAULT', 'FILE_PATH')
+        self.wavelength_data = np.flip((fits.getdata(file_path)), 0)
 
         self.start_updating()
 

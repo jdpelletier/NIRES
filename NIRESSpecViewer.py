@@ -982,7 +982,8 @@ class MathWindow(Widgets.Box):
         subtracted = imageone_data - imagetwo_data
         hdu = fits.PrimaryHDU(header=image_header, data=subtracted)
         filename = self.mathFileNames(self.filenameone.get_text(), self.filenametwo.get_text(), '-')
-        full_path = Path(self.math_path + filename)
+        # full_path = Path(self.math_path + filename)
+        full_path = filename
         try:
             hdu.writeto(full_path)
         except OSError:
@@ -1001,7 +1002,8 @@ class MathWindow(Widgets.Box):
             added = imageone_data + imagetwo_data
             hdu = fits.PrimaryHDU(header=image_header, data=added)
             filename = self.mathFileNames(self.filenameone.get_text(), self.filenametwo.get_text(), '+')
-            full_path = Path(self.math_path + filename)
+            # full_path = Path(self.math_path + filename)
+            full_path = filename
             try:
                 hdu.writeto(full_path)
             except OSError:
@@ -1486,7 +1488,8 @@ class FitsViewer(QtGui.QMainWindow):
             subtracted = image_data - previous_data
             hdu = fits.PrimaryHDU(header=image_header, data=subtracted)
             filename = self.mathFileNames(ds, previous, '-')
-            full_path = Path(working_path + filename)
+            # full_path = Path(working_path + filename)
+            full_path = filename
             try:
                 hdu.writeto(full_path)
             except OSError:
@@ -1582,7 +1585,8 @@ class FitsViewer(QtGui.QMainWindow):
         working_path = '/home/jpelletier/NIRES/'
         hdu = fits.PrimaryHDU(header=headerinfo, data=image_data)
         filename = 'procImage.fits'
-        full_path = Path(working_path + filename)
+        # full_path = Path(working_path + filename)
+        full_path = filename
         try:
             hdu.writeto(full_path)
         except OSError:

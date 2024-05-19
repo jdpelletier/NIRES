@@ -867,7 +867,7 @@ class MathWindow(Widgets.Box):
         self.dispname = dispname
         self.sdiff = sdiff
 
-        self.math_path = "/home/jpelletier/NIRES/"
+        # self.math_path = "/home/jpelletier/NIRES/"
 
         vbox = Widgets.VBox()
         math_hbox = Widgets.HBox()
@@ -1295,7 +1295,7 @@ class FitsViewer(QtGui.QMainWindow):
         self.base_zoom = 0
         # self.sdiff = False
 
-        self.wavelength_data = np.flip((fits.getdata("/home/jpelletier/NIRES/Wavelengths.fits")), 0)
+        self.wavelength_data = np.flip((fits.getdata("Wavelengths.fits")), 0)
 
         self.start_updating()
 
@@ -1474,7 +1474,7 @@ class FitsViewer(QtGui.QMainWindow):
         self.c.show()
 
     def sdiff(self):
-        working_path = "/home/jpelletier/NIRES/"
+        # working_path = "/home/jpelletier/NIRES/"
         if self.sdiff_done == False:
             try:
                 ds = self.dispname.read()
@@ -1582,7 +1582,7 @@ class FitsViewer(QtGui.QMainWindow):
         return nightly
 
     def writeFits(self, headerinfo, image_data):
-        working_path = '/home/jpelletier/NIRES/'
+        # working_path = '/home/jpelletier/NIRES/'
         hdu = fits.PrimaryHDU(header=headerinfo, data=image_data)
         filename = 'procImage.fits'
         # full_path = Path(working_path + filename)

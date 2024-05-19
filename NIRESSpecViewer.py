@@ -1295,7 +1295,7 @@ class FitsViewer(QtGui.QMainWindow):
         self.base_zoom = 0
         # self.sdiff = False
 
-        self.wavelength_data = np.flip((fits.getdata("./Wavelengths.fits")), 0)
+        self.wavelength_data = np.flip((fits.getdata("Wavelengths.fits")), 0)
 
         self.start_updating()
 

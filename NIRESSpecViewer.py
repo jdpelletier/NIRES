@@ -1491,7 +1491,7 @@ class FitsViewer(QtGui.QMainWindow):
                 print(previous)
                 previous_data = fits.getdata(previous)
             except FileNotFoundError:
-                print("file not found")
+                print("No previous file.")
                 return
             subtracted = image_data - previous_data
             hdu = fits.PrimaryHDU(header=image_header, data=subtracted)

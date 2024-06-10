@@ -798,7 +798,7 @@ class Cuts(Widgets.Box):
     
     
     def start_filecheck(self):
-        self.currentfile = self.fitsimage.get_image().get_header()['DISPNAME']
+        self.currentfile = self.fitsimage.get_image().get_header()['DISPNAME2']
         self.filechecking = True
         filechecker = NewFile(self.new_file)
         filechecker.signals.load.connect(self.file_compare)

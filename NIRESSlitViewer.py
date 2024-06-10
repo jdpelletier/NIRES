@@ -798,6 +798,7 @@ class Cuts(Widgets.Box):
     
     
     def start_filecheck(self):
+        print(self.fitsimage.get_image().get_header())
         self.currentfile = self.fitsimage.get_image().get_header()['OFNAME']
         self.filechecking = True
         filechecker = NewFile(self.new_file)

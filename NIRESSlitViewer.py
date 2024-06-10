@@ -798,7 +798,7 @@ class Cuts(Widgets.Box):
     
     
     def start_filecheck(self):
-        self.currentfile = self.fitsimage.get_image().get_header()['HIERARCH DISPNAME2']
+        self.currentfile = self.fitsimage.get_image().get_header()['OFNAME']
         self.filechecking = True
         filechecker = NewFile(self.new_file)
         filechecker.signals.load.connect(self.file_compare)
@@ -814,7 +814,7 @@ class Cuts(Widgets.Box):
     
     def file_compare(self):
         image = self.fitsimage.get_image()
-        name = image.get_header()['HIERARCH DISPNAME2']
+        name = image.get_header()['OFNAME']
         if self.currentfile != name:
             self.replot_all()
             self.currentfile = name

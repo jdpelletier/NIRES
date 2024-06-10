@@ -1395,7 +1395,7 @@ class FitsViewer(QtGui.QMainWindow):
                 self.c.dismiss(None)
             except AttributeError:
                 pass
-        self.c = Cuts(self.logger, self.fitsimage)
+        self.c = Cuts(self.logger, self.fitsimage, self.dispname2)
         self.c.show()
 
     def sdiff(self):

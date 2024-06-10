@@ -1076,12 +1076,6 @@ class FitsViewer(QtGui.QMainWindow):
         item.triggered.connect(self.open_file)
         filemenu.addAction(item)
 
-        cutmenu = menubar.addMenu("Cuts")
-
-        item = QtGui.QAction("Cut GUI", menubar)
-        item.triggered.connect(self.cuts_popup)
-        cutmenu.addAction(item)
-
         sep = QtGui.QAction(menubar)
         sep.setSeparator(True)
         filemenu.addAction(sep)
@@ -1089,6 +1083,12 @@ class FitsViewer(QtGui.QMainWindow):
         item = QtGui.QAction("Quit", menubar)
         item.triggered.connect(self.quit)
         filemenu.addAction(item)
+
+        cutmenu = menubar.addMenu("Cuts")
+
+        item = QtGui.QAction("Cut GUI", menubar)
+        item.triggered.connect(self.cuts_popup)
+        cutmenu.addAction(item)
 
         mathmenu = menubar.addMenu("Math")
 
@@ -1103,6 +1103,30 @@ class FitsViewer(QtGui.QMainWindow):
         item = QtGui.QAction("Math", menubar)
         item.triggered.connect(self.math_popup)
         mathmenu.addAction(item)
+
+        colormenu = menubar.addMenu("Colors")
+        for cm_name in cmap.get_names():
+            item = QtGui.QAction(cm_name, menubar)
+            
+            item.triggered.connect(partial(self.cmap_change, cm_name))
+            colormenu.addAction(item)
+
+        cutmenu = menubar.addMenu("Display Parameters")
+        for cut_name in fi.get_autocut_methods():
+            item = QtGui.QAction(cut_name, menubar)
+            
+            item.triggered.connect(partial(self.cut_change, cut_name))
+            cutmenu.addAction(item)
+
+        cutmenu = menubar.addMenu("Stretch")
+        for stretch_name in fi.get_color_algorithms():
+            item = QtGui.QAction(stretch_name, menubar)
+            
+            item.triggered.connect(partial(self.color_change, stretch_name))
+            cutmenu.addAction(item)
+        
+
+        
         
         self.bd = fi.get_bindings()
         self.bd.enable_all(True)

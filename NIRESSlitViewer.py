@@ -81,8 +81,10 @@ class UpdateControlWindow(QtCore.QRunnable):
 ##Cuts
 class Cuts(Widgets.Box):
 
-    def __init__(self, logger, fitsimage):
+    def __init__(self, logger, fitsimage, dispname):
         super(Cuts, self).__init__(fitsimage)
+
+        self.dispname = dispname
 
         self.logger = logger
 
@@ -142,116 +144,55 @@ class Cuts(Widgets.Box):
         vbox = Widgets.VBox()
 
         self.cuts_plot = plots.CutsPlot(logger=self.logger,
-                                        width=400, height=400)
+                                        width=700, height=400)
         self.plot = Plot.PlotWidget(self.cuts_plot)
         self.plot.resize(400, 400)
         ax = self.cuts_plot.add_axis()
         ax.grid(True)
         vbox.add_widget(self.plot)
-        self.deleteall = Widgets.Button("Delete All")
-        self.deleteall.add_callback('activated', self.delete_all_cb)
-        vbox.add_widget(self.deleteall)
+        control_hbox = Widgets.HBox()
+        self.freedraw = Widgets.Button("Free Draw")
+        self.freedraw.add_callback('activated', self.free_draw_cb)
+        control_hbox.add_widget(self.freedraw)
+        self.horizontaldraw = Widgets.Button("Horizontal")
+        self.horizontaldraw.add_callback('activated', self.horizontal_draw_cb)
+        control_hbox.add_widget(self.horizontaldraw)
+        self.verticaldraw = Widgets.Button("Vertical")
+        self.verticaldraw.add_callback('activated', self.vertical_draw_cb)
+        control_hbox.add_widget(self.verticaldraw)
+        # self.deleteall = Widgets.Button("Delete All")
+        # self.deleteall.add_callback('activated', self.delete_all_cb)
+        vbox.add_widget(control_hbox)
         self.closebtn = Widgets.Button("Close")
         self.closebtn.add_callback('activated', self.dismiss)
         vbox.add_widget(self.closebtn)
         self.add_widget(vbox)
+
+        self.cut_mode = "Free"
+        self.freedraw.set_enabled(False)
+
         self.start()
-
-        # btn = b.delete_all
-        # btn.add_callback('activated', self.delete_all_cb)
-        # btn.set_tooltip("Clear all cuts")
-
-        # fr = Widgets.Frame("Cuts")
-        # fr.set_widget(w)
-
-        # box.add_widget(fr, stretch=0)
-
-        # exp = Widgets.Expander("Cut Width")
-
-        # captions = (('Width Type:', 'label', 'Width Type', 'combobox',
-        #              'Width radius:', 'label', 'Width radius', 'spinbutton'),
-        #             )
-        # w, b = Widgets.build_info(captions, orientation=orientation)
-        # self.w.update(b)
-
-        # # control for selecting width cut type
-        # combobox = b.width_type
-        # for atype in self.widthtypes:
-        #     combobox.append_text(atype)
-        # index = self.widthtypes.index(self.widthtype)
-        # combobox.set_index(index)
-        # combobox.add_callback('activated', self.set_width_type_cb)
-        # combobox.set_tooltip("Direction of summation orthogonal to cut")
-
-        # sb = b.width_radius
-        # sb.add_callback('value-changed', self.width_radius_changed_cb)
-        # sb.set_tooltip("Radius of cut width")
-        # sb.set_limits(1, 100)
-        # sb.set_value(self.width_radius)
-
-        # fr = Widgets.Frame()
-        # fr.set_widget(w)
-        # exp.set_widget(fr)
-
-        # box.add_widget(exp, stretch=0)
-        # box.add_widget(Widgets.Label(''), stretch=1)
-        # paned.add_widget(sw)
-        # paned.set_sizes(self._split_sizes)
-
-        # top.add_widget(paned, stretch=5)
-
-        # mode = self.canvas.get_draw_mode()
-        # hbox = Widgets.HBox()
-        # btn1 = Widgets.RadioButton("Move")
-        # btn1.set_state(mode == 'move')
-        # btn1.add_callback('activated',
-        #                   lambda w, val: self.set_mode_cb('move', val))
-        # btn1.set_tooltip("Choose this to position cuts")
-        # self.w.btn_move = btn1
-        # hbox.add_widget(btn1)
-
-        # btn2 = Widgets.RadioButton("Draw", group=btn1)
-        # btn2.set_state(mode == 'draw')
-        # btn2.add_callback('activated',
-        #                   lambda w, val: self.set_mode_cb('draw', val))
-        # btn2.set_tooltip("Choose this to draw a new or replacement cut")
-        # self.w.btn_draw = btn2
-        # hbox.add_widget(btn2)
-
-        # btn3 = Widgets.RadioButton("Edit", group=btn1)
-        # btn3.set_state(mode == 'edit')
-        # btn3.add_callback('activated',
-        #                   lambda w, val: self.set_mode_cb('edit', val))
-        # btn3.set_tooltip("Choose this to edit a cut")
-        # self.w.btn_edit = btn3
-        # hbox.add_widget(btn3)
-
-        # hbox.add_widget(Widgets.Label(''), stretch=1)
-        # top.add_widget(hbox, stretch=0)
-
-        # # Add Cuts plot to its tab
-        # vbox_cuts = Widgets.VBox()
-        # vbox_cuts.add_widget(self.plot, stretch=1)
-        # nb.add_widget(vbox_cuts, title="Cuts")
-
-        # btns = Widgets.HBox()
-        # btns.set_border_width(4)
-        # btns.set_spacing(3)
-
-        # btn = Widgets.Button("Close")
-        # btn.add_callback('activated', lambda w: self.close())
-        # btns.add_widget(btn, stretch=0)
-        # btn = Widgets.Button("Help")
-        # btn.add_callback('activated', lambda w: self.help())
-        # btns.add_widget(btn, stretch=0)
-        # btns.add_widget(Widgets.Label(''), stretch=1)
-
-        # top.add_widget(btns, stretch=0)
-
-        # container.add_widget(top, stretch=1)
-
-        # self.select_cut(self.cutstag)
         self.gui_up = True
+        self.threadpool = QtCore.QThreadPool()
+        self.start_filecheck()
+
+    def free_draw_cb(self, event):
+        self.cut_mode = "Free"
+        self.freedraw.set_enabled(False)
+        self.horizontaldraw.set_enabled(True)
+        self.verticaldraw.set_enabled(True)
+    
+    def horizontal_draw_cb(self, event):
+        self.cut_mode = "Horizontal"
+        self.freedraw.set_enabled(True)
+        self.horizontaldraw.set_enabled(False)
+        self.verticaldraw.set_enabled(True)
+    
+    def vertical_draw_cb(self, event):
+        self.cut_mode = "Vertical"
+        self.freedraw.set_enabled(True)
+        self.horizontaldraw.set_enabled(True)
+        self.verticaldraw.set_enabled(False)
 
     def build_axes(self):
         self.selected_axis = None
@@ -356,6 +297,16 @@ class Cuts(Widgets.Box):
         self.cuts_plot.clear()
         # plot cleared in replot_all() if no more cuts
         self.replot_all()
+    
+    def delete_all(self):
+        self.canvas.delete_all_objects()
+        # self.w.cuts.clear()
+        self.tags = [self._new_cut]
+        self.cutstag = self._new_cut
+        # self.w.cuts.append_text(self._new_cut)
+        # self.select_cut(self._new_cut)
+        # self.save_cuts.set_enabled(False)
+        self.cuts_plot.clear()
 
     def add_cuts_tag(self, tag):
         if tag not in self.tags:
@@ -481,11 +432,11 @@ class Cuts(Widgets.Box):
 
         points = np.array(points)
 
-        self.cuts_plot.cuts(points, xtitle="Line Index", ytitle="Pixel Value",
+        self.cuts_plot.cuts(points, title = f"{self.cut_mode} Cut", xtitle="Line Index", ytitle="Pixel Value",
                             color=color)
 
         # if self.settings.get('show_cuts_legend', False):
-        self.add_legend()
+        # self.add_legend()
 
     def add_legend(self):
         """Add or update Cuts plot legend."""
@@ -573,9 +524,10 @@ class Cuts(Widgets.Box):
         return True
 
     def _create_cut(self, x, y, count, x1, y1, x2, y2, color='cyan'):
-        text = "cuts%d" % (count)
-        if not self.settings.get('label_cuts', False):
-            text = ''
+        self.delete_all()
+        text = "cut"
+        # if not self.settings.get('label_cuts', False):
+        #     text = ''
         line_obj = self.dc.Line(x1, y1, x2, y2, color=color,
                                 showcap=False)
         text_obj = self.dc.Text(0, 0, text, color=color, coord='offset',
@@ -617,7 +569,8 @@ class Cuts(Widgets.Box):
             obj.objects.append(aline)
 
     def _create_cut_obj(self, count, cuts_obj, color='cyan'):
-        text = "cuts%d" % (count)
+        self.delete_all()
+        text = "cut"
         # if not self.settings.get('label_cuts', False):
         #     text = ''
         cuts_obj.showcap = False
@@ -662,6 +615,8 @@ class Cuts(Widgets.Box):
         return self.motion_cb(canvas, event, data_x, data_y, viewer)
 
     def motion_cb(self, canvas, event, data_x, data_y, viewer):
+
+
         if self.cutstag == self._new_cut:
             return True
         obj = self.canvas.get_object_by_tag(self.cutstag)
@@ -746,7 +701,7 @@ class Cuts(Widgets.Box):
             coords.append((data_x, 0, data_x, ht - 1))
 
         count = self._get_cut_index()
-        tag = "cuts%d" % (count)
+        tag = "cut"
         cuts = []
         for (x1, y1, x2, y2) in coords:
             # calculate center of line
@@ -775,6 +730,10 @@ class Cuts(Widgets.Box):
         return self.replot_all()
 
     def draw_cb(self, canvas, tag):
+        if self.cut_mode == "Horizontal":
+            return self.cut_at('horizontal')
+        elif self.cut_mode == "Vertical":
+            return self.cut_at('vertical')
         obj = canvas.get_object_by_tag(tag)
         canvas.delete_object_by_tag(tag)
 
@@ -782,7 +741,7 @@ class Cuts(Widgets.Box):
             return True
 
         count = self._get_cut_index()
-        tag = "cuts%d" % (count)
+        tag = "cut"
 
         cut = self._create_cut_obj(count, obj, color='cyan')
         cut.set_data(count=count)
@@ -836,8 +795,32 @@ class Cuts(Widgets.Box):
                 continue
             self._update_tines(obj)
         self.canvas.redraw(whence=3)
+    
+    
+    def start_filecheck(self):
+        self.currentfile = self.fitsimage.get_image().get_header()['DISPNAME']
+        self.filechecking = True
+        filechecker = NewFile(self.new_file)
+        filechecker.signals.load.connect(self.file_compare)
+        self.threadpool.start(filechecker)
+    
+    def new_file(self, file_callback):
+        while self.filechecking:
+            file_callback.emit()
+            time.sleep(0.5)
+
+    def stop_filecheck(self):
+        self.filechecking = False
+    
+    def file_compare(self):
+        image = self.fitsimage.get_image()
+        name = image.get_header()['DISPNAME']
+        if self.currentfile != name:
+            self.replot_all()
+            self.currentfile = name
 
     def dismiss(self, event):
+        self.stop_filecheck()
         self.stop()
         # self.canvas.enable_draw(False)
         # self.delete_all_cb(event)
@@ -1067,13 +1050,11 @@ class FitsViewer(QtGui.QMainWindow):
         item.triggered.connect(self.open_file)
         filemenu.addAction(item)
 
-        sep = QtGui.QAction(menubar)
-        sep.setSeparator(True)
-        filemenu.addAction(sep)
+        cutmenu = menubar.addMenu("Cuts")
 
-        item = QtGui.QAction("Cuts", menubar)
+        item = QtGui.QAction("Cut GUI", menubar)
         item.triggered.connect(self.cuts_popup)
-        filemenu.addAction(item)
+        cutmenu.addAction(item)
 
         sep = QtGui.QAction(menubar)
         sep.setSeparator(True)

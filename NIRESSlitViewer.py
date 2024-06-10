@@ -5,6 +5,7 @@ from pathlib import Path
 # import datetime
 # import csv
 # import copy
+from functools import partial
 
 import numpy as np
 from astropy.io import fits

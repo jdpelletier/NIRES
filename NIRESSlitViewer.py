@@ -52,6 +52,32 @@ class Scanner(QtCore.QRunnable):
 
         self.fn(*self.args, **self.kwargs)
 
+class NewFileSignals(QtCore.QObject):
+    load = QtCore.Signal()
+
+class NewFile(QtCore.QRunnable):
+    '''
+    NewFile thread
+    '''
+    def __init__(self, fn, *args, **kwargs):
+        super(NewFile, self).__init__()
+
+        # Store constructor arguments (re-used for processing)
+        self.fn = fn
+        self.args = args
+        self.kwargs = kwargs
+        self.signals = NewFileSignals()
+        self.kwargs['file_callback'] = self.signals.load
+
+        # Add the callback to our kwargs
+    @QtCore.Slot()
+    def run(self):
+        '''
+        Initialise the runner function with passed args, kwargs.
+        '''
+
+        self.fn(*self.args, **self.kwargs)
+
 class UpdateControlWindowSignals(QtCore.QObject):
     load = QtCore.Signal()
 

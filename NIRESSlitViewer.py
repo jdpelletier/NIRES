@@ -911,7 +911,7 @@ class MathWindow(Widgets.Box):
         # x = screen.width()/2
         # y = screen.height()/2
         # self.move(x, y)
-        self.resize(500, 500)
+        self.resize(500, 0)
 
         self.sdiff_done = False
 
@@ -1739,6 +1739,7 @@ def main():
     logger = log.get_logger("NIRESSlitViewer", log_stderr=True, level=40)
 
     w = FitsViewer(logger)
+    w.resize(500,800)
     w.show()
     app.setActiveWindow(w)
     w.raise_()

@@ -1230,6 +1230,7 @@ class FitsViewer(QtGui.QMainWindow):
 
         # self.sky = ""
         self.curentfile = ""
+        self.sdiff_done = False
         
         self.c = None
 

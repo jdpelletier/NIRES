@@ -889,9 +889,9 @@ class MathWindow(Widgets.Box):
         self.wreload = Widgets.Button("Reload Latest Image")
         self.wreload.add_callback('activated', self.reload)
         vbox.add_widget(self.wreload)
-        self.wsdiff = Widgets.Button("SDiff/Undo")
-        self.wsdiff.add_callback('activated', self.sdiff)
-        vbox.add_widget(self.wsdiff)
+        # self.wsdiff = Widgets.Button("SDiff/Undo")
+        # self.wsdiff.add_callback('activated', self.sdiff)
+        # vbox.add_widget(self.wsdiff)
         self.closebtn = Widgets.Button("Close")
         self.closebtn.add_callback('activated', self.dismiss)
         vbox.add_widget(self.closebtn)
@@ -999,33 +999,6 @@ class MathWindow(Widgets.Box):
             return
         return
 
-    def sdiff(self, event):
-        if self.sdiff_done == False:
-            try:
-                image_data = fits.getdata(self.dispname2.read())
-                image_header = fits.getheader(self.dispname2.read())
-                previous = fits.getdata(str(self.lastfile.read()))
-            except FileNotFoundError:
-                return
-            subtracted = image_data - previous
-            hdu = fits.PrimaryHDU(header=image_header, data=subtracted)
-            filename = self.mathFileNames(str(self.dispname2.read()), str(self.lastfile.read()), '-')
-            full_path = Path(self.math_path + filename)
-            try:
-                hdu.writeto(full_path)
-            except OSError:
-                os.remove(full_path)
-                hdu.writeto(full_path)
-            self.load_file(str(full_path))
-            # self.wsdiff.set_text("Undo SDiff")
-            self.sdiff_done = True
-            os.remove(full_path)
-        else:
-            self.load_file(str(self.dispname2.read()))
-            # self.fitsimage.set_image(image)
-            # self.wsdiff.set_text("SDiff")
-            self.sdiff_done = False
-
 
     def reload(self, event):
         self.load_file(str(self.dispname2.read()))
@@ -1106,18 +1079,24 @@ class FitsViewer(QtGui.QMainWindow):
         sep.setSeparator(True)
         filemenu.addAction(sep)
 
-        item = QtGui.QAction("Math", menubar)
-        item.triggered.connect(self.math_popup)
-        filemenu.addAction(item)
-
-        sep = QtGui.QAction(menubar)
-        sep.setSeparator(True)
-        filemenu.addAction(sep)
-
         item = QtGui.QAction("Quit", menubar)
         item.triggered.connect(self.quit)
         filemenu.addAction(item)
 
+        mathmenu = menubar.addMenu("Math")
+
+        item = QtGui.QAction("SDiff/Undo", menubar)
+        item.triggered.connect(self.sdiff)
+        mathmenu.addAction(item)
+
+        sep = QtGui.QAction(menubar)
+        sep.setSeparator(True)
+        mathmenu.addAction(sep)
+
+        item = QtGui.QAction("Math", menubar)
+        item.triggered.connect(self.math_popup)
+        mathmenu.addAction(item)
+        
         self.bd = fi.get_bindings()
         self.bd.enable_all(True)
         vbox = QtGui.QVBoxLayout()
@@ -1436,6 +1415,33 @@ class FitsViewer(QtGui.QMainWindow):
                 pass
         self.c = Cuts(self.logger, self.fitsimage)
         self.c.show()
+
+    def sdiff(self):
+        if self.sdiff_done == False:
+            try:
+                image_data = fits.getdata(self.dispname2.read())
+                image_header = fits.getheader(self.dispname2.read())
+                previous = fits.getdata(str(self.lastfile.read()))
+            except FileNotFoundError:
+                return
+            subtracted = image_data - previous
+            hdu = fits.PrimaryHDU(header=image_header, data=subtracted)
+            filename = self.mathFileNames(str(self.dispname2.read()), str(self.lastfile.read()), '-')
+            full_path = Path(self.math_path + filename)
+            try:
+                hdu.writeto(full_path)
+            except OSError:
+                os.remove(full_path)
+                hdu.writeto(full_path)
+            self.load_file(str(full_path))
+            # self.wsdiff.set_text("Undo SDiff")
+            self.sdiff_done = True
+            os.remove(full_path)
+        else:
+            self.load_file(str(self.dispname2.read()))
+            # self.fitsimage.set_image(image)
+            # self.wsdiff.set_text("SDiff")
+            self.sdiff_done = False
 
     # def subtract_sky(self, file):
     #     image = self.fitsimage.get_image()

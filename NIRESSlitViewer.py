@@ -1492,20 +1492,21 @@ class FitsViewer(QtGui.QMainWindow):
                 previous = self.previous_file(ds)
                 previous_data = fits.getdata(previous)
             except FileNotFoundError:
+                print("No previous file.")
                 return
-            subtracted = image_data - previous
+            subtracted = image_data - previous_data
             hdu = fits.PrimaryHDU(header=image_header, data=subtracted)
-            filename = self.mathFileNames(str(self.dispname2.read()), str(self.slit_lastfile.read()), '-')
-            full_path = Path("/home/jpelletier/NIRES/" + filename)
+            filename = self.mathFileNames(ds, previous, '-')
+            # full_path = Path("/home/jpelletier/NIRES/" + filename)
             try:
-                hdu.writeto(full_path)
+                hdu.writeto(filename)
             except OSError:
-                os.remove(full_path)
-                hdu.writeto(full_path)
-            self.load_file(str(full_path))
+                os.remove(filename)
+                hdu.writeto(filename)
+            self.load_file(str(filename))
             # self.wsdiff.set_text("Undo SDiff")
             self.sdiff_done = True
-            os.remove(full_path)
+            os.remove(filename)
         else:
             self.load_file(str(self.dispname2.read()))
             # self.fitsimage.set_image(image)

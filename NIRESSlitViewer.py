@@ -1487,7 +1487,7 @@ class FitsViewer(QtGui.QMainWindow):
             subtracted = image_data - previous
             hdu = fits.PrimaryHDU(header=image_header, data=subtracted)
             filename = self.mathFileNames(str(self.dispname2.read()), str(self.slit_lastfile.read()), '-')
-            full_path = Path(self.math_path + filename)
+            full_path = Path("/home/jpelletier/NIRES/" + filename)
             try:
                 hdu.writeto(full_path)
             except OSError:

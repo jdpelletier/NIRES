@@ -859,7 +859,7 @@ class MathWindow(Widgets.Box):
     This "window" is a QWidget. If it has no parent, it
     will appear as a free-floating window as we want.
     """
-    def __init__(self, logger, fitsimage, loadfile, dispname2, lastfile):
+    def __init__(self, logger, fitsimage, loadfile, dispname2):
         super(MathWindow, self).__init__(fitsimage)
 
         self.math_path = "/home/jpelletier/NIRES/"
@@ -869,7 +869,6 @@ class MathWindow(Widgets.Box):
         self.fitsimage = fitsimage
         self.load_file = loadfile
         self.dispname2 = dispname2
-        self.lastfile = lastfile
 
         vbox = Widgets.VBox()
         math_hbox = Widgets.HBox()
@@ -1450,7 +1449,7 @@ class FitsViewer(QtGui.QMainWindow):
             self.load_file(fileName)
 
     def math_popup(self):
-        self.m = MathWindow(self.logger, self.fitsimage, self.load_file, self.dispname2, self.slit_lastfile)
+        self.m = MathWindow(self.logger, self.fitsimage, self.load_file, self.dispname2)
         self.m.show()
 
     def cuts_popup(self):
@@ -1467,12 +1466,12 @@ class FitsViewer(QtGui.QMainWindow):
             try:
                 image_data = fits.getdata(self.dispname2.read())
                 image_header = fits.getheader(self.dispname2.read())
-                previous = fits.getdata(str(self.lastfile.read()))
+                previous = fits.getdata(str(self.slit_lastfile.read()))
             except FileNotFoundError:
                 return
             subtracted = image_data - previous
             hdu = fits.PrimaryHDU(header=image_header, data=subtracted)
-            filename = self.mathFileNames(str(self.dispname2.read()), str(self.lastfile.read()), '-')
+            filename = self.mathFileNames(str(self.dispname2.read()), str(self.slit_lastfile.read()), '-')
             full_path = Path(self.math_path + filename)
             try:
                 hdu.writeto(full_path)

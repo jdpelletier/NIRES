@@ -1461,6 +1461,21 @@ class FitsViewer(QtGui.QMainWindow):
         self.c = Cuts(self.logger, self.fitsimage, self.dispname2)
         self.c.show()
 
+    def mathFileNames(self, firstfile, secondfile, operation):
+        if "//" in firstfile:
+            firstfile = firstfile.split("//")
+            firstfile = firstfile[-1]
+        else: 
+            firstfile = firstfile.split("/")
+            firstfile = firstfile[-1]
+        if "//" in secondfile:
+            secondfile = secondfile.split("//")
+            secondfile = secondfile[-1]
+        else: 
+            secondfile = secondfile.split("/")
+            secondfile = secondfile[-1]
+        return f'{firstfile} {operation} {secondfile}.fits'
+
     def sdiff(self):
         if self.sdiff_done == False:
             try:

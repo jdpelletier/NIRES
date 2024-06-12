@@ -1475,13 +1475,22 @@ class FitsViewer(QtGui.QMainWindow):
             secondfile = secondfile.split("/")
             secondfile = secondfile[-1]
         return f'{firstfile} {operation} {secondfile}.fits'
+    
+    def previous_file(self, fn):
+        prev_dir = str(fn).split("_")[0]
+        prev_file = f"{int(str(fn).split('_')[-1].split('.')[0])-1}.fits"
+        while len(prev_file)<9:
+            prev_file = "0" + prev_file
+        return prev_dir + "_" + prev_file
 
     def sdiff(self):
         if self.sdiff_done == False:
             try:
-                image_data = fits.getdata(self.dispname2.read())
-                image_header = fits.getheader(self.dispname2.read())
-                previous = fits.getdata(str(self.slit_lastfile.read()))
+                ds = self.dispname2.read()
+                image_data = fits.getdata(ds)
+                image_header = fits.getheader(ds)
+                previous = self.previous_file(ds)
+                previous_data = fits.getdata(previous)
             except FileNotFoundError:
                 return
             subtracted = image_data - previous

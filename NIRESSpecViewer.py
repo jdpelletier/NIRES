@@ -1377,11 +1377,10 @@ class FitsViewer(QtGui.QMainWindow):
         
     def drag_cb(self, viewer, button, data_x, data_y):
         low, high = viewer.get_cut_levels()
-        print(f"{low}, {high}")
         dx = data_x - self.xclick
         dy = data_y - self.yclick
-        low = low + dx/10
-        high = high + dy/10
+        low = low + dx/5
+        high = high + dy/5
         viewer.cut_levels(low, high)
         self.xclick = data_x
         self.yclick = data_y

@@ -1151,6 +1151,21 @@ class FitsViewer(QtGui.QMainWindow):
         # self.clickinfo.setMinimumSize(QtCore.QSize(200, 0))
         self.clickinfo.setObjectName("clickinfo")
         click_hbox.addWidget(self.clickinfo)
+        self.wzoomin = QtGui.QPushButton("Zoom In")
+        self.wzoomin.setObjectName("wzoomin")
+        self.wzoomin.clicked.connect(self.zoomIn)
+        self.wzoomin.setMaximumSize(QtCore.QSize(75, 40))
+        click_hbox.addWidget(self.wzoomin)
+        self.wzoomreset = QtGui.QPushButton("Reset Zoom")
+        self.wzoomreset.setObjectName("wzoomreset")
+        self.wzoomreset.clicked.connect(self.zoomReset)
+        self.wzoomreset.setMaximumSize(QtCore.QSize(80, 40))
+        click_hbox.addWidget(self.wzoomreset)
+        self.wzoomout = QtGui.QPushButton("Zoom Out")
+        self.wzoomout.setObjectName("wzoomout")
+        self.wzoomout.clicked.connect(self.zoomOut)
+        self.wzoomout.setMaximumSize(QtCore.QSize(75, 40))
+        click_hbox.addWidget(self.wzoomout)
         self.wrecenter = QtGui.QPushButton("Re-center Image")
         self.wrecenter.setObjectName("wrecenter")
         self.wrecenter.clicked.connect(self.recenter)
@@ -1280,6 +1295,8 @@ class FitsViewer(QtGui.QMainWindow):
 
         self.m = None
 
+        self.base_zoom = 0
+
         self.start_updating()
 
     def start_updating(self):
@@ -1408,6 +1425,7 @@ class FitsViewer(QtGui.QMainWindow):
                 self.recenter()
             print(f"Loaded {filepath}")
             self.file_info.setText(f"File: {filepath}")
+            self.base_zoom = self.fitsimage.get_zoom()
         except io_fits.FITSError:
             self.file_info.setText(f"File: error loading, wait for next image")
         except FileNotFoundError:
@@ -1643,9 +1661,21 @@ class FitsViewer(QtGui.QMainWindow):
         except IndexError:
             text = "Amplitude: N/A FWHM: N/A"
             self.box_readout.setText(text)
+
+    def zoomIn(self):
+        current = self.fitsimage.get_zoom()
+        return self.fitsimage.zoom_to(current + 1)
+    
+    def zoomReset(self):
+        return self.fitsimage.zoom_to(self.base_zoom)
+    
+    def zoomOut(self):
+        current = self.fitsimage.get_zoom()
+        return self.fitsimage.zoom_to(current - 1)
     
     def recenter(self):
         self.fitsimage.zoom_fit()
+        self.base_zoom = self.fitsimage.get_zoom()
     
     def toggleslit(self):
         try:

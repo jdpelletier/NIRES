@@ -1379,8 +1379,8 @@ class FitsViewer(QtGui.QMainWindow):
         low, high = viewer.get_cut_levels()
         dx = data_x - self.xclick
         dy = data_y - self.yclick
-        low = low + dx/5
-        high = high + dy/5
+        low = low + dx/10
+        high = high + dy/10
         viewer.cut_levels(low, high)
         self.xclick = data_x
         self.yclick = data_y

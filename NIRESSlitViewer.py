@@ -1429,6 +1429,8 @@ class FitsViewer(QtGui.QMainWindow):
         # self.wstopscan.setEnabled(False)
 
     def load_file(self, filepath):
+        if '/s/' not in filepath:
+            filepath = '/s' + filepath
         recenter = False
         try:
             header, fitsData = self.addWcs(filepath)

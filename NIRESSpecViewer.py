@@ -1486,6 +1486,8 @@ class FitsViewer(QtGui.QMainWindow):
         if self.sdiff_done == False:
             try:
                 ds = self.dispname.read()
+                if '/s/' not in ds:
+                    ds = '/s' + ds
                 image_data = fits.getdata(ds)
                 image_header = fits.getheader(ds)
                 # previous = fits.getdata(str(self.lastfile.read()))
@@ -1582,6 +1584,8 @@ class FitsViewer(QtGui.QMainWindow):
 
     def nightpath(self):
         dir = str(self.dispname)
+        if '/s/' not in dir:
+            dir = '/s' + dir
         if "//" in str(dir):
             dir = str(dir).split("//")
             dir = dir[0] + "/"

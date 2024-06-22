@@ -1429,7 +1429,7 @@ class FitsViewer(QtGui.QMainWindow):
         # self.wstopscan.setEnabled(False)
 
     def load_file(self, filepath):
-        if '/s/' not in filepath:
+        if '/s/' not in filepath and 'sdata' in filepath:
             filepath = '/s' + filepath
         recenter = False
         try:
@@ -1532,6 +1532,8 @@ class FitsViewer(QtGui.QMainWindow):
         if self.sdiff_done == False:
             try:
                 ds = self.dispname2.read()
+                if '/s/' not in ds:
+                    ds = '/s' + ds
                 image_data = fits.getdata(ds)
                 image_header = fits.getheader(ds)
                 previous = self.previous_file(ds)
@@ -1603,6 +1605,8 @@ class FitsViewer(QtGui.QMainWindow):
 
     def nightpath(self):
         dir = str(self.dispname2)
+        if '/s/' not in dir:
+            dir = '/s' + dir
         if "//" in str(dir):
             dir = str(dir).split("//")
             dir = dir[0] + "/"

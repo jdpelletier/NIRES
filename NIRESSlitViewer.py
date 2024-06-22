@@ -1433,7 +1433,8 @@ class FitsViewer(QtGui.QMainWindow):
         try:
             header, fitsData = self.addWcs(filepath)
         except FileNotFoundError:
-            pass
+            print(f"File {filepath}not found.")
+            return
         if self.fitsimage.get_image() == None:
             recenter = True
         try:

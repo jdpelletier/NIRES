@@ -1415,6 +1415,8 @@ class FitsViewer(QtGui.QMainWindow):
         # self.wstopscan.setEnabled(False)
 
     def load_file(self, filepath):
+        if '/s/' not in filepath:
+            filepath = '/s' + filepath
         recenter = False
         if self.fitsimage.get_image() == None:
             recenter = True

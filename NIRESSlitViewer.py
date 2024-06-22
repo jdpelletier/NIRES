@@ -108,7 +108,7 @@ class UpdateControlWindow(QtCore.QRunnable):
 ##Cuts
 class Cuts(Widgets.Box):
 
-    def __init__(self, logger, fitsimage, dispname, coadds):
+    def __init__(self, logger, fitsimage, dispname):
         super(Cuts, self).__init__(fitsimage)
 
         self.dispname = dispname
@@ -137,7 +137,6 @@ class Cuts(Widgets.Box):
 
         # get Cuts preferences
         self.fitsimage = fitsimage
-        self.coadds = coadds
         # my_canvas = self.fitsimage.get_canvas()
         # self.crossdc = my_canvas.get_draw_class('crosshair')
         # self.fitsimage.get_canvas().add(self.crossdc(500, 500, color='blue', text=""))
@@ -458,9 +457,9 @@ class Cuts(Widgets.Box):
         elif obj.kind == 'beziercurve':
             points = image.get_pixels_on_curve(obj)
 
-        points = np.divide(np.array(points), float(self.coadds))
+        points = np.array(points)
 
-        self.cuts_plot.cuts(points, title = f"{self.cut_mode} Cut", xtitle="Line Index", ytitle="ADUs/COADD",
+        self.cuts_plot.cuts(points, title = f"{self.cut_mode} Cut", xtitle="Line Index", ytitle="ADUs",
                             color=color)
 
         # if self.settings.get('show_cuts_legend', False):
@@ -1065,8 +1064,6 @@ class FitsViewer(QtGui.QMainWindow):
         self.display2.monitor()
         self.dispname2 = ktl.cache('nids', 'dispname2')
         self.dispname2.monitor()
-        self.coadds = ktl.cache('nids', 'coadds')
-        self.coadds.monitor()
         # self.tempsky2 = ktl.cache('nids', 'TEMPSKY2')
         # self.tempsky2.monitor()
         # self.dcs = ktl.Service('dcs2')
@@ -1506,7 +1503,7 @@ class FitsViewer(QtGui.QMainWindow):
                 self.c.dismiss(None)
             except AttributeError:
                 pass
-        self.c = Cuts(self.logger, self.fitsimage, self.dispname2, self.coadds)
+        self.c = Cuts(self.logger, self.fitsimage, self.dispname2)
         self.c.show()
 
     def mathFileNames(self, firstfile, secondfile, operation):

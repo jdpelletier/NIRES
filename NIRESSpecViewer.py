@@ -108,7 +108,7 @@ class UpdateControlWindow(QtCore.QRunnable):
 ##Cuts
 class Cuts(Widgets.Box):
 
-    def __init__(self, logger, fitsimage, dispname):
+    def __init__(self, logger, fitsimage, dispname, coadds):
         super(Cuts, self).__init__(fitsimage)
 
         self.dispname = dispname
@@ -137,6 +137,7 @@ class Cuts(Widgets.Box):
 
         # get Cuts preferences
         self.fitsimage = fitsimage
+        self.coadds = coadds
         # my_canvas = self.fitsimage.get_canvas()
         # self.crossdc = my_canvas.get_draw_class('crosshair')
         # self.fitsimage.get_canvas().add(self.crossdc(500, 500, color='blue', text=""))
@@ -457,9 +458,9 @@ class Cuts(Widgets.Box):
         elif obj.kind == 'beziercurve':
             points = image.get_pixels_on_curve(obj)
 
-        points = np.array(points)
+        points = np.divide(np.array(points), float(self.coadds))
 
-        self.cuts_plot.cuts(points, title = f"{self.cut_mode} Cut", xtitle="Line Index", ytitle="Pixel Value",
+        self.cuts_plot.cuts(points, title = f"{self.cut_mode} Cut", xtitle="Line Index", ytitle="ADUs/COADD",
                             color=color)
 
         # if self.settings.get('show_cuts_legend', False):
@@ -1096,6 +1097,8 @@ class FitsViewer(QtGui.QMainWindow):
         self.display.monitor()
         self.dispname = ktl.cache('nsds', 'dispname')
         self.dispname.monitor()
+        self.coadds = ktl.cache('nids', 'coadds')
+        self.coadds.monitor()
 
         self.rawfile = ''
         self.mode = ''
@@ -1479,7 +1482,7 @@ class FitsViewer(QtGui.QMainWindow):
                 self.c.dismiss(None)
             except AttributeError:
                 pass
-        self.c = Cuts(self.logger, self.fitsimage, self.dispname)
+        self.c = Cuts(self.logger, self.fitsimage, self.dispname, self.coadds)
         self.c.show()
 
     def sdiff(self):

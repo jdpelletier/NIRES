@@ -1430,7 +1430,10 @@ class FitsViewer(QtGui.QMainWindow):
 
     def load_file(self, filepath):
         recenter = False
-        header, fitsData = self.addWcs(filepath)
+        try:
+            header, fitsData = self.addWcs(filepath)
+        except FileNotFoundError:
+            pass
         if self.fitsimage.get_image() == None:
             recenter = True
         try:
@@ -1441,8 +1444,6 @@ class FitsViewer(QtGui.QMainWindow):
                 self.fitsimage.get_canvas().get_object_by_tag(self.picktag)
                 self.fitsimage.get_canvas().delete_object_by_tag(self.picktag)
             except KeyError:
-                pass
-            except FileNotFoundError:
                 pass
             if recenter == True:
                 self.recenter()
@@ -1719,7 +1720,6 @@ class FitsViewer(QtGui.QMainWindow):
             
     def addWcs(self, filen):
         w = wcs.WCS(naxis=2)
-        fitsData = fits.getdata(filen, ext=0)
         header = fits.getheader(filen)
         w = wcs.WCS(header)
         # ht, wd = fitsData.shape[:2]

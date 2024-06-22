@@ -1721,6 +1721,7 @@ class FitsViewer(QtGui.QMainWindow):
             
     def addWcs(self, filen):
         w = wcs.WCS(naxis=2)
+        fitsData = fits.getdata(filen, ext=0)
         header = fits.getheader(filen)
         w = wcs.WCS(header)
         # ht, wd = fitsData.shape[:2]

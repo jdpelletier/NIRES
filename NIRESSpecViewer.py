@@ -1415,7 +1415,7 @@ class FitsViewer(QtGui.QMainWindow):
         # self.wstopscan.setEnabled(False)
 
     def load_file(self, filepath):
-        if '/s/' not in filepath:
+        if '/s/' not in filepath and 'sdata' in filepath:
             filepath = '/s' + filepath
         print(f"Loading {filepath}")
         recenter = False

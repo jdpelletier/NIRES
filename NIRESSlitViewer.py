@@ -1442,6 +1442,8 @@ class FitsViewer(QtGui.QMainWindow):
                 self.fitsimage.get_canvas().delete_object_by_tag(self.picktag)
             except KeyError:
                 pass
+            except FileNotFoundError:
+                pass
             if recenter == True:
                 self.recenter()
             print(f"Loaded {filepath}")

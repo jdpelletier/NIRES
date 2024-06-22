@@ -2,6 +2,7 @@ import os, time, sys, subprocess
 # from os import listdir
 # from os.path import abspath, isfile, join
 from pathlib import Path
+import math
 # import datetime
 # import csv
 # import copy
@@ -1816,7 +1817,7 @@ class FitsViewer(QtGui.QMainWindow):
         subprocess.Popen(f"ssh {user}@{host} {cmd}", shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE).communicate()
         # self.dcs['instxoff'].write(dx)
         # self.dcs['instyoff'].write(dy)
-        return dx, dy 
+        return math.round(dx, 2) , math.round(dy, 2)
 
     def movManual(self, x1, y1, x2, y2):
         pscale = 0.123
@@ -1829,7 +1830,7 @@ class FitsViewer(QtGui.QMainWindow):
         subprocess.Popen(f"ssh {user}@{host} {cmd}", shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE).communicate()
         # self.dcs['instxoff'].write(dx)
         # self.dcs['instyoff'].write(dy)
-        return dx, dy  
+        return math.round(dx, 2) , math.round(dy, 2)
 
 def main():
 

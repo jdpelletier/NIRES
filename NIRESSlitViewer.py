@@ -1022,6 +1022,27 @@ class MathWindow(Widgets.Box):
         # self.delete_all_cb(event)
         self.delete()
 
+class OffsetPopup(Widgets.Box):
+    """
+    This "window" is a QWidget. If it has no parent, it
+    will appear as a free-floating window as we want.
+    """
+    def __init__(self, logger, dx, dy):
+        super(OffsetPopup, self).__init__()
+        self.logger = logger
+
+        vbox = Widgets.VBox()
+        self.info = QtGui.QLabel(f'Telescope offset {dx}", {dy}"')
+        vbox.add_widget(self.info)
+        self.closebtn = Widgets.Button("Close")
+        self.closebtn.add_callback('activated', self.dismiss)
+        vbox.add_widget(self.closebtn)
+
+        self.add_widget(vbox)
+
+    def dismiss(self, event):
+        self.stop()
+        self.delete()
 
 class FitsViewer(QtGui.QMainWindow):
 
@@ -1751,17 +1772,18 @@ class FitsViewer(QtGui.QMainWindow):
         self.yclick = data_y
         if self.movSlitCursor == True:
             if self.autoCenter == True:
-                self.movAuto(data_x, data_y)
+                dx, dy = self.movAuto(data_x, data_y)
                 self.movSlitCursor = False
                 self.autoCenter = False
-                self.clickinfo.setText("Click image to pan.")
+                self.clickinfo.setText(f'Telescope offset {dx}", {dy}"')
                 self.wmovSlitCent.setText("Center on Slit")
+                self.o = OffsetPopup(self.logger, dx, dy)
             elif self.second_click == True:
-                self.movManual(self.init_x, self.init_y, data_x, data_y)
+                dx, dy = self.movManual(self.init_x, self.init_y, data_x, data_y)
                 self.movSlitCursor = False
                 self.autoCenter = False
                 self.second_click = False
-                self.clickinfo.setText("Click image to pan.")
+                self.clickinfo.setText(f'Telescope offset {dx}", {dy}"')
                 self.wmovObj.setText("Move Object")
             else:
                 self.init_x = data_x
@@ -1783,6 +1805,7 @@ class FitsViewer(QtGui.QMainWindow):
         subprocess.Popen(f"ssh {user}@{host} {cmd}", shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE).communicate()
         # self.dcs['instxoff'].write(dx)
         # self.dcs['instyoff'].write(dy)
+        return dx, dy 
 
     def movManual(self, x1, y1, x2, y2):
         pscale = 0.123
@@ -1795,6 +1818,7 @@ class FitsViewer(QtGui.QMainWindow):
         subprocess.Popen(f"ssh {user}@{host} {cmd}", shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE).communicate()
         # self.dcs['instxoff'].write(dx)
         # self.dcs['instyoff'].write(dy)
+        return dx, dy  
 
 def main():
 

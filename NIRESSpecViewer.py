@@ -1417,6 +1417,7 @@ class FitsViewer(QtGui.QMainWindow):
     def load_file(self, filepath):
         if '/s/' not in filepath:
             filepath = '/s' + filepath
+        print(f"Loading {filepath}")
         recenter = False
         if self.fitsimage.get_image() == None:
             recenter = True

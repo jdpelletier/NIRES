@@ -1777,7 +1777,7 @@ class FitsViewer(QtGui.QMainWindow):
                 self.autoCenter = False
                 self.clickinfo.setText(f'Telescope offset {dx}", {dy}"')
                 self.wmovSlitCent.setText("Center on Slit")
-                self.o = OffsetPopup(self.logger, dx, dy)
+                # self.o = OffsetPopup(self.logger, dx, dy)
             elif self.second_click == True:
                 dx, dy = self.movManual(self.init_x, self.init_y, data_x, data_y)
                 self.movSlitCursor = False
@@ -1785,6 +1785,7 @@ class FitsViewer(QtGui.QMainWindow):
                 self.second_click = False
                 self.clickinfo.setText(f'Telescope offset {dx}", {dy}"')
                 self.wmovObj.setText("Move Object")
+                # self.o = OffsetPopup(self.logger, dx, dy)
             else:
                 self.init_x = data_x
                 self.init_y = data_y

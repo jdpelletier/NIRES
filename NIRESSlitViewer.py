@@ -1732,7 +1732,7 @@ class FitsViewer(QtGui.QMainWindow):
             self.fitsimage.get_canvas().delete_object_by_tag(self.customcomptag)
         except KeyError:
             # self.compass = self.dc.Compass(120, 880, 50, color='green')
-            self.fitsimage.get_canvas().add(self.compass, tag=self.comptag, redraw=True)
+            # self.fitsimage.get_canvas().add(self.compass, tag=self.comptag, redraw=True)
             ox = 120
             oy = 880
             px1 = 120

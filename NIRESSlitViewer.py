@@ -1746,7 +1746,7 @@ class FitsViewer(QtGui.QMainWindow):
             qy2 = oy + math.sin(angle) * (px2 - ox) + math.cos(angle) * (py2 - oy)
             line1 = self.dc.Line(ox, oy, qx1, qy1, color='blue', linewidth=3)
             line2 = self.dc.Line(ox, oy, qx2, qy2, color='blue', linewidth=3)
-            north = self.dc.Text(qx1+25, qy1-10, text = 'N', color = 'blue', fontsize=10)
+            north = self.dc.Text(qx1+15, qy1-10, text = 'N', color = 'blue', fontsize=10)
             east = self.dc.Text(qx2-10, qy2-25, text = 'E', color = 'blue', fontsize=10)
             self.customcompass = self.dc.CompoundObject(line1, line2, north, east)
             self.fitsimage.get_canvas().add(self.customcompass, tag=self.customcomptag, redraw=True)

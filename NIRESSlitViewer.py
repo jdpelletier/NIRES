@@ -1455,6 +1455,12 @@ class FitsViewer(QtGui.QMainWindow):
             print(f"Loaded {filepath}")
             self.file_info.setText(f"File: {filepath}")
             self.base_zoom = self.fitsimage.get_zoom()
+            try:
+                self.fitsimage.get_canvas().get_object_by_tag(self.customcomptag)
+                self.fitsimage.get_canvas().delete_object_by_tag(self.customcomptag)
+                self.togglecompass()
+            except KeyError:
+                pass
         except io_fits.FITSError:
             self.file_info.setText(f"File: error loading, wait for next image")
         except FileNotFoundError:

@@ -6,6 +6,7 @@ from pathlib import Path
 # import csv
 # import copy
 from functools import partial
+import math
 
 import numpy as np
 from astropy.io import fits
@@ -1307,6 +1308,7 @@ class FitsViewer(QtGui.QMainWindow):
         self.dc = self.fitsimage.get_canvas().get_draw_classes()
         self.slittag = "slit-line"
         self.comptag = "compass"
+        self.customcomptag = "custom-compass"
 
         # self.sky = ""
         self.curentfile = ""
@@ -1720,9 +1722,26 @@ class FitsViewer(QtGui.QMainWindow):
         try:
             self.fitsimage.get_canvas().get_object_by_tag(self.comptag)
             self.fitsimage.get_canvas().delete_object_by_tag(self.comptag)
+            self.fitsimage.get_canvas().get_object_by_tag(self.customcomptag)
+            self.fitsimage.get_canvas().delete_object_by_tag(self.customcomptag)
         except KeyError:
             self.compass = self.dc.Compass(120, 880, 50, color='green')
             self.fitsimage.get_canvas().add(self.compass, tag=self.comptag, redraw=True)
+            ox = 120
+            oy = 880
+            px1 = 120
+            py1 = 930
+            px2 = 70
+            py2 = 880
+            angle = math.radians(self.rot)
+            qx1 = ox + math.cos(angle) * (px1 - ox) - math.sin(angle) * (py1 - oy)
+            qy1 = oy + math.sin(angle) * (px1 - ox) + math.cos(angle) * (py1 - oy)
+            qx2 = ox + math.cos(angle) * (px2 - ox) - math.sin(angle) * (py2 - oy)
+            qy2 = oy + math.sin(angle) * (px2 - ox) + math.cos(angle) * (py2 - oy)
+            line1 = self.dc.Line(ox, oy, qx1, qy1, color='blue')
+            line2 = self.dc.Line(ox, oy, qx2, qy2, color='blue')
+            self.customcompass = self.dc.CompoundObject(line1, line2)
+            self.fitsimage.get_canvas().add(self.customcompass, tag=self.customcomptag, redraw=True)
 
             
     def addWcs(self, filen):
@@ -1735,7 +1754,7 @@ class FitsViewer(QtGui.QMainWindow):
         # x = wd//2
         # ra = float(header['RA'])
         # dec = float(header['DEC'])
-        # rot = float(header['ROTPOSN'])
+        self.rot = float(header['ROTPOSN'])
         # w.wcs.crpix = [y, x]
         # w.wcs.cdelt = np.array([-0.05, 0.05])
         # w.wcs.crota = np.array([-rot, rot])

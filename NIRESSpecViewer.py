@@ -1193,8 +1193,8 @@ class FitsViewer(QtGui.QMainWindow):
         # self.wcolor.setMaximumSize(QtCore.QSize(100, 30))
         # readout_hbox.addWidget(self.wcolor)
 
-        self.bd = fi.get_bindings()
-        self.bd.enable_all(True)
+        # self.bd = fi.get_bindings()
+        # self.bd.enable_all(True)
         vbox = QtGui.QVBoxLayout()
         vbox.setContentsMargins(0, 0, 0, 0)
         vbox.setObjectName("vbox")

@@ -109,9 +109,10 @@ class UpdateControlWindow(QtCore.QRunnable):
 ##Cuts
 class Cuts(Widgets.Box):
 
-    def __init__(self, logger, fitsimage, dispname):
+    def __init__(self, logger, fitsimage, dispname, bm):
         super(Cuts, self).__init__(fitsimage)
 
+        bm.reset_mode(fitsimage)
         self.dispname = dispname
 
         self.logger = logger
@@ -1151,7 +1152,9 @@ class FitsViewer(QtGui.QMainWindow):
         
         
         self.bd = fi.get_bindings()
-        self.bd.enable_all(True)
+        self.bd.enable_all(False)
+        self.bm = fi.get_bindmap()
+        self.bm.reset_mode(fi)
         vbox = QtGui.QVBoxLayout()
         vbox.setContentsMargins(0, 0, 0, 0)
         vbox.setObjectName("vbox")
@@ -1511,7 +1514,7 @@ class FitsViewer(QtGui.QMainWindow):
                 self.c.dismiss(None)
             except AttributeError:
                 pass
-        self.c = Cuts(self.logger, self.fitsimage, self.dispname2)
+        self.c = Cuts(self.logger, self.fitsimage, self.dispname2, self.bm)
         self.c.show()
 
     def mathFileNames(self, firstfile, secondfile, operation):

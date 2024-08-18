@@ -1195,8 +1195,8 @@ class FitsViewer(QtGui.QMainWindow):
 
         self.bd = fi.get_bindings()
         self.bd.enable_all(False)
-        self.set = fi.get_bindmap()
-        print(self.set)
+        self.bm = fi.get_bindmap()
+        self.bm.reset_mode(viewer)
         vbox = QtGui.QVBoxLayout()
         vbox.setContentsMargins(0, 0, 0, 0)
         vbox.setObjectName("vbox")

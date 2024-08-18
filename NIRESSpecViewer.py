@@ -108,8 +108,10 @@ class UpdateControlWindow(QtCore.QRunnable):
 ##Cuts
 class Cuts(Widgets.Box):
 
-    def __init__(self, logger, fitsimage, dispname, coadds):
+    def __init__(self, logger, fitsimage, dispname, coadds, bm):
         super(Cuts, self).__init__(fitsimage)
+
+        bm.reset_mode(fitsimage)
 
         self.dispname = dispname
 
@@ -1484,7 +1486,7 @@ class FitsViewer(QtGui.QMainWindow):
                 self.c.dismiss(None)
             except AttributeError:
                 pass
-        self.c = Cuts(self.logger, self.fitsimage, self.dispname, self.coadds)
+        self.c = Cuts(self.logger, self.fitsimage, self.dispname, self.coadds, self.bm)
         self.c.show()
 
     def sdiff(self):

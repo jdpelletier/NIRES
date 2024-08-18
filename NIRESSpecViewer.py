@@ -1370,6 +1370,9 @@ class FitsViewer(QtGui.QMainWindow):
             wavelength = int(self.wavelength_data[int(fits_x), int(fits_y)])
         except Exception:
             wavelength = None
+            
+        if value != None:
+            value = str(round(value, 2))
 
         if (fits_x > 2048 or fits_x <0) or (fits_y > 2048 or fits_y <0):
             text = "X:    Y:    Value:    Wavelength: "
@@ -1377,7 +1380,6 @@ class FitsViewer(QtGui.QMainWindow):
         else:
             fx = str(int(fits_x))
             fy = str(int(fits_y))
-            value = str(round(value, 2))
             wavelength = str(wavelength)
             text = f"X: {fx:<7} Y: {fy:<7}  Value: {value:<10}  Wavelength: {wavelength}"
             self.readout.setText(text)

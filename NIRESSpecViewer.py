@@ -1372,7 +1372,7 @@ class FitsViewer(QtGui.QMainWindow):
             wavelength = None
             
         if value != None:
-            value = str(round(value, 2))
+            value = round(value, 2)
 
         if (fits_x > 2048 or fits_x <0) or (fits_y > 2048 or fits_y <0):
             text = "X:    Y:    Value:    Wavelength: "
@@ -1381,6 +1381,7 @@ class FitsViewer(QtGui.QMainWindow):
             fx = str(int(fits_x))
             fy = str(int(fits_y))
             wavelength = str(wavelength)
+            value = str(value)
             text = f"X: {fx:<7} Y: {fy:<7}  Value: {value:<10}  Wavelength: {wavelength}"
             self.readout.setText(text)
         

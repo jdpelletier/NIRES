@@ -1742,11 +1742,10 @@ class FitsViewer(QtGui.QMainWindow):
             py1 = 950
             px2 = 50
             py2 = 880
-            angle = math.radians(self.rot-self.tvangle+90)
-            # if self.rot < 0:
-            #     angle = math.radians(self.rot+360)
-            # else:
-            #     angle = math.radians(self.rot)
+            if self.rot < 0:
+                angle = math.radians(self.rot+self.tvangle+90)
+            else:
+                angle = math.radians(self.rot-self.tvangle+90)
             qx1 = ox + math.cos(angle) * (px1 - ox) - math.sin(angle) * (py1 - oy)
             qy1 = oy + math.sin(angle) * (px1 - ox) + math.cos(angle) * (py1 - oy)
             qx2 = ox + math.cos(angle) * (px2 - ox) - math.sin(angle) * (py2 - oy)
@@ -1770,8 +1769,6 @@ class FitsViewer(QtGui.QMainWindow):
         # ra = float(header['RA'])
         # dec = float(header['DEC'])
         self.rot = float(header['ROTPOSN'])
-        if self.rot < 0:
-            self.rot = self.rot + 360
         self.tvangle = float(header['TVANGL'])
         # w.wcs.crpix = [y, x]
         # w.wcs.cdelt = np.array([-0.05, 0.05])

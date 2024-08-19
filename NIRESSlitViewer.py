@@ -1742,7 +1742,7 @@ class FitsViewer(QtGui.QMainWindow):
             py1 = 950
             px2 = 50
             py2 = 880
-            angle = math.radians(self.rot-self.tvangle-90)
+            angle = math.radians(self.rot-self.tvangle+90)
             # if self.rot < 0:
             #     angle = math.radians(self.rot+360)
             # else:

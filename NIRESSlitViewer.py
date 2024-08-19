@@ -1746,7 +1746,7 @@ class FitsViewer(QtGui.QMainWindow):
                 angle = math.radians(self.rot+self.tvangle+90)
             else:
                 angle = math.radians(self.rot-self.tvangle)
-            print(angle)
+            print(math.degrees(angle))
             qx1 = ox + math.cos(angle) * (px1 - ox) - math.sin(angle) * (py1 - oy)
             qy1 = oy + math.sin(angle) * (px1 - ox) + math.cos(angle) * (py1 - oy)
             qx2 = ox + math.cos(angle) * (px2 - ox) - math.sin(angle) * (py2 - oy)

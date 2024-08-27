@@ -1384,7 +1384,7 @@ class FitsViewer(QtGui.QMainWindow):
             print(f"y = {len(fy)}")
             wavelength = str(wavelength)
             value = str(value)
-            text = f"X: {fx : <7} Y: {fy : <7}  Value: {value : <10}  Wavelength: {wavelength}"
+            text = f"X: {fx :  <7} Y: {fy :  <7}  Value: {value :  <10}  Wavelength: {wavelength}"
             self.readout.setText(text)
         
     def drag_cb(self, viewer, button, data_x, data_y):

@@ -208,31 +208,6 @@ class Cuts(Widgets.Box):
         self.freedraw.set_enabled(True)
         self.horizontaldraw.set_enabled(True)
         self.verticaldraw.set_enabled(False)
-
-    def build_axes(self):
-        self.selected_axis = None
-        if (not self.gui_up) or (self.hbox_axes is None):
-            return
-        self.hbox_axes.remove_all()
-        image = self.fitsimage.get_image()
-        if image is not None:
-            # Add Checkbox widgets
-            # `image.naxispath` returns only mdim axes
-            for i in range(1, len(image.naxispath) + 3):
-                chkbox = Widgets.CheckBox('NAXIS%d' % i)
-                self.hbox_axes.add_widget(chkbox)
-
-                # Disable axes 1,2
-                if i < 3:
-                    chkbox.set_enabled(False)
-                    continue
-
-                # Add callback
-                self.axes_callback_handler(chkbox, i)
-
-    def axes_callback_handler(self, chkbox, pos):
-        chkbox.add_callback('activated',
-                            lambda w, tf: self.axis_toggle_cb(w, tf, pos))
     
     def delete_all(self):
         self.canvas.delete_all_objects()
@@ -282,37 +257,6 @@ class Cuts(Widgets.Box):
         """
 
         self.replot_all()
-
-    def _get_perpendicular_points(self, obj, x, y, r):
-        dx = float(obj.x1 - obj.x2)
-        dy = float(obj.y1 - obj.y2)
-        dist = np.sqrt(dx * dx + dy * dy)
-        dx /= dist
-        dy /= dist
-        x3 = x + r * dy
-        y3 = y - r * dx
-        x4 = x - r * dy
-        y4 = y + r * dx
-        return (x3, y3, x4, y4)
-
-    def _get_width_points(self, obj, x, y, rx, ry):
-        x3, y3 = x - rx, y - ry
-        x4, y4 = x + rx, y + ry
-        return (x3, y3, x4, y4)
-
-    def get_orthogonal_points(self, obj, x, y, r):
-        if self.widthtype == 'x':
-            return self._get_width_points(obj, x, y, r, 0)
-        elif self.widthtype == 'y':
-            return self._get_width_points(obj, x, y, 0, r)
-        else:
-            return self._get_perpendicular_points(obj, x, y, r)
-
-    def get_orthogonal_array(self, image, obj, x, y, r):
-        x1, y1, x2, y2 = self.get_orthogonal_points(obj, x, y, r)
-        values = image.get_pixels_on_line(int(x1), int(y1),
-                                          int(x2), int(y2))
-        return np.array(values)
 
     def _plotpoints(self, obj, color):
 

@@ -122,7 +122,6 @@ class Cuts(Widgets.Box):
         self.cutstag = self._new_cut
         self.tags = [self._new_cut]
         self.count = 0
-        self.cuttypes = ['line', 'path', 'freepath', 'beziercurve']
         self.cuttype = 'line'
         self.save_enabled = False
         # for 3D Slit functionality
@@ -234,10 +233,6 @@ class Cuts(Widgets.Box):
     def axes_callback_handler(self, chkbox, pos):
         chkbox.add_callback('activated',
                             lambda w, tf: self.axis_toggle_cb(w, tf, pos))
-
-    def set_cutsdrawtype_cb(self, w, index):
-        self.cuttype = self.cuttypes[index]
-        self.canvas.set_drawtype(self.cuttype, color='cyan', linestyle='dash')
     
     def delete_all(self):
         self.canvas.delete_all_objects()
@@ -416,32 +411,11 @@ class Cuts(Widgets.Box):
         if obj.objects[0].kind != 'line':
             # right now we only know how to adjust lines
             return
-
         # Remove previous tines, if any
         if len(obj.objects) > 2:
             obj.objects = obj.objects[:2]
-
         if self.widthtype == 'none':
-            print("width is 0")
             return
-
-        # image = self.fitsimage.get_image()
-        # line = obj.objects[0]
-        # coords = image.get_pixels_on_line(int(line.x1), int(line.y1),
-        #                                   int(line.x2), int(line.y2),
-        #                                   getvalues=False)
-        # crdmap = OffsetMapper(self.fitsimage, line)
-        # num_ticks = max(len(coords) // self.tine_spacing_px, 3)
-        # interval = max(1, len(coords) // num_ticks)
-        # for i in range(0, len(coords), interval):
-        #     x, y = coords[i]
-        #     x1, y1, x2, y2 = self.get_orthogonal_points(line, x, y,
-        #                                                 self.width_radius)
-        #     (x1, y1), (x2, y2) = crdmap.calc_offsets([(x1, y1), (x2, y2)])
-        #     aline = self.dc.Line(x1, y1, x2, y2)
-        #     aline.crdmap = crdmap
-        #     aline.editable = False
-        #     obj.objects.append(aline)
 
     def _create_cut_obj(self, cuts_obj, color='cyan'):
         self.delete_all()
@@ -479,7 +453,7 @@ class Cuts(Widgets.Box):
 
     def _getlines(self, obj):
         if obj.kind == 'compound':
-            #return self._append_lists(list(map(self._getlines, obj.objects)))
+            print('compound')
             return [obj.objects[0]]
         elif obj.kind in self.cuttypes:
             return [obj]

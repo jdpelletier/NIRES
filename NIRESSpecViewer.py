@@ -535,6 +535,7 @@ class Cuts(Widgets.Box):
 
         if len(cuts) == 1:
             cut = cuts[0]
+            print("cuts = 1")
         else:
             cut = self._combine_cuts(*cuts)
 

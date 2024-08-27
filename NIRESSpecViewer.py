@@ -397,7 +397,7 @@ class Cuts(Widgets.Box):
             x, y = x1 + dw + 4, y1 + dh + 4
 
             cut = self._create_cut(x1, y1, x2, y2, color='cyan')
-            self._update_tines(cut)
+            # self._update_tines(cut)
             cuts.append(cut)
             
         cut = cuts[0]

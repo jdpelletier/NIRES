@@ -306,16 +306,6 @@ class Cuts(Widgets.Box):
         obj.set_data(cuts=True)
         return obj
 
-    def _update_tines(self, obj):
-        if obj.objects[0].kind != 'line':
-            # right now we only know how to adjust lines
-            return
-        # Remove previous tines, if any
-        if len(obj.objects) > 2:
-            print("removing tines")
-            obj.objects = obj.objects[:2]
-        return
-
     def _create_cut_obj(self, cuts_obj, color='cyan'):
         self.delete_all()
         text = "cut"
@@ -333,8 +323,6 @@ class Cuts(Widgets.Box):
         obj = self.dc.CompoundObject(*args)
         obj.set_data(cuts=True)
 
-        if (self.widthtype != 'none') and (self.width_radius > 0):
-            self._update_tines(obj)
         return obj
 
     def _getlines(self, obj):
@@ -397,7 +385,6 @@ class Cuts(Widgets.Box):
             x, y = x1 + dw + 4, y1 + dh + 4
 
             cut = self._create_cut(x1, y1, x2, y2, color='cyan')
-            # self._update_tines(cut)
             cuts.append(cut)
             
         cut = cuts[0]
@@ -423,7 +410,6 @@ class Cuts(Widgets.Box):
 
         cut = self._create_cut_obj(obj, color='cyan')
         cut.set_data(count=True)
-        self._update_tines(cut)
 
         canvas.delete_object_by_tag(tag)
         self.canvas.add(cut, tag=tag)

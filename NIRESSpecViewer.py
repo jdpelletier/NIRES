@@ -121,14 +121,6 @@ class Cuts(Widgets.Box):
         self._new_cut = 'New Cut'
         self.cutstag = self._new_cut
         self.tags = [self._new_cut]
-        # for 3D Slit functionality
-
-        # For collecting data orthogonal to the cut
-        self.widthtypes = ['none', 'x', 'y', 'perpendicular']
-        self.widthtype = 'none'
-        self.width_radius = 5
-        self.tine_spacing_px = 100
-
         # get Cuts preferences
         self.fitsimage = fitsimage
         self.coadds = coadds

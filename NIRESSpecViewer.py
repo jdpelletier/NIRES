@@ -122,10 +122,6 @@ class Cuts(Widgets.Box):
         self.cutstag = self._new_cut
         self.tags = [self._new_cut]
         # for 3D Slit functionality
-        self.transpose_enabled = False
-        self.selected_axis = None
-        self.hbox_axes = None
-        self._split_sizes = [400, 500]
 
         # For collecting data orthogonal to the cut
         self.widthtypes = ['none', 'x', 'y', 'perpendicular']
@@ -316,9 +312,9 @@ class Cuts(Widgets.Box):
             return
         # Remove previous tines, if any
         if len(obj.objects) > 2:
+            print("removing tines")
             obj.objects = obj.objects[:2]
-        if self.widthtype == 'none':
-            return
+        return
 
     def _create_cut_obj(self, cuts_obj, color='cyan'):
         self.delete_all()

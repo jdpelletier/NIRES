@@ -122,8 +122,6 @@ class Cuts(Widgets.Box):
         self.cutstag = self._new_cut
         self.tags = [self._new_cut]
         self.count = 0
-        self.cuttype = 'line'
-        self.save_enabled = False
         # for 3D Slit functionality
         self.transpose_enabled = False
         self.selected_axis = None
@@ -387,7 +385,7 @@ class Cuts(Widgets.Box):
     def _get_cut_index(self):
         if self.cutstag != self._new_cut:
             # Replacing a cut
-            self.logger.debug("replacing cut position")
+            print("replacing cut position")
             try:
                 cutobj = self.canvas.get_object_by_tag(self.cutstag)
                 self.canvas.delete_object_by_tag(self.cutstag)
@@ -395,7 +393,7 @@ class Cuts(Widgets.Box):
             except KeyError:
                 count = self._get_new_count()
         else:
-            self.logger.debug("adding cut position")
+            print("adding cut position")
             count = self._get_new_count()
         return count
 

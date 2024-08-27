@@ -158,7 +158,6 @@ class Cuts(Widgets.Box):
         canvas.enable_edit(True)
         canvas.set_drawtype('line', color='cyan', linestyle='dash')
         canvas.set_callback('draw-event', self.draw_cb)
-        canvas.set_callback('edit-event', self.edit_cb)
         canvas.add_draw_mode('move', down=self.buttondown_cb,
                              move=self.motion_cb, up=self.buttonup_cb,
                              key=self.keydown)
@@ -657,17 +656,7 @@ class Cuts(Widgets.Box):
         return True
 
     def keydown(self, canvas, event, data_x, data_y, viewer):
-        print(event.key)
-        if event.key == 'n':
-            self.select_cut(self._new_cut)
-            return True
-        elif event.key == 'h':
-            self.cut_at('horizontal')
-            return True
-        elif event.key in ('j', 'v'):
-            self.cut_at('vertical')
-            return True
-        return False
+        return True
 
     def _get_new_count(self):
         counts = set([])
@@ -769,11 +758,6 @@ class Cuts(Widgets.Box):
 
         self.logger.debug("redoing cut plots")
         return self.replot_all()
-
-    def edit_cb(self, canvas, obj):
-        self.redraw_cuts()
-        self.replot_all()
-        return True
 
     def edit_select_cuts(self):
         if self.cutstag != self._new_cut:

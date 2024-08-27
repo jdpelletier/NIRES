@@ -121,35 +121,8 @@ class Cuts(Widgets.Box):
         self._new_cut = 'New Cut'
         self.cutstag = self._new_cut
         self.tags = [self._new_cut]
-        self.count = 0
-        self.cuttypes = ['line', 'path', 'freepath', 'beziercurve']
-        self.cuttype = 'line'
-        self.save_enabled = False
-        # for 3D Slit functionality
-        self.transpose_enabled = False
-        self.selected_axis = None
-        self.hbox_axes = None
-        self._split_sizes = [400, 500]
-
-        # For collecting data orthogonal to the cut
-        self.widthtypes = ['none', 'x', 'y', 'perpendicular']
-        self.widthtype = 'none'
-        self.width_radius = 5
-        self.tine_spacing_px = 100
-
         # get Cuts preferences
         self.fitsimage = fitsimage
-        # my_canvas = self.fitsimage.get_canvas()
-        # self.crossdc = my_canvas.get_draw_class('crosshair')
-        # self.fitsimage.get_canvas().add(self.crossdc(500, 500, color='blue', text=""))
-        # prefs = Settings.Preferences()
-        # self.settings = prefs.create_category('plugin_Cuts')
-        # self.settings.add_defaults(select_new_cut=True, draw_then_move=True,
-        #                            label_cuts=True, colors=cut_colors,
-        #                            drag_update=False,
-        #                            show_cuts_legend=False, enable_slit=False)
-        # self.settings.load(onError='silent')
-        # self.colors = self.settings.get('colors', cut_colors)
 
         self.dc = self.fitsimage.get_canvas().get_draw_classes()
         canvas = self.dc.DrawingCanvas()
@@ -157,7 +130,6 @@ class Cuts(Widgets.Box):
         canvas.enable_edit(True)
         canvas.set_drawtype('line', color='cyan', linestyle='dash')
         canvas.set_callback('draw-event', self.draw_cb)
-        canvas.set_callback('edit-event', self.edit_cb)
         canvas.add_draw_mode('move', down=self.buttondown_cb,
                              move=self.motion_cb, up=self.buttonup_cb,
                              key=self.keydown)
@@ -189,8 +161,6 @@ class Cuts(Widgets.Box):
         self.verticaldraw = Widgets.Button("Vertical")
         self.verticaldraw.add_callback('activated', self.vertical_draw_cb)
         control_hbox.add_widget(self.verticaldraw)
-        # self.deleteall = Widgets.Button("Delete All")
-        # self.deleteall.add_callback('activated', self.delete_all_cb)
         vbox.add_widget(control_hbox)
         self.closebtn = Widgets.Button("Close")
         self.closebtn.add_callback('activated', self.dismiss)
@@ -222,139 +192,21 @@ class Cuts(Widgets.Box):
         self.freedraw.set_enabled(True)
         self.horizontaldraw.set_enabled(True)
         self.verticaldraw.set_enabled(False)
-
-    def build_axes(self):
-        self.selected_axis = None
-        if (not self.gui_up) or (self.hbox_axes is None):
-            return
-        self.hbox_axes.remove_all()
-        image = self.fitsimage.get_image()
-        if image is not None:
-            # Add Checkbox widgets
-            # `image.naxispath` returns only mdim axes
-            for i in range(1, len(image.naxispath) + 3):
-                chkbox = Widgets.CheckBox('NAXIS%d' % i)
-                self.hbox_axes.add_widget(chkbox)
-
-                # Disable axes 1,2
-                if i < 3:
-                    chkbox.set_enabled(False)
-                    continue
-
-                # Add callback
-                self.axes_callback_handler(chkbox, i)
-
-    def axes_callback_handler(self, chkbox, pos):
-        chkbox.add_callback('activated',
-                            lambda w, tf: self.axis_toggle_cb(w, tf, pos))
-
-    def select_cut(self, tag):
-        self.cutstag = tag
-        self.w.cuts.show_text(tag)
-
-        if (tag == self._new_cut) or len(self.tags) < 2:
-            self.w.copy_cut.set_enabled(False)
-            self.w.delete_cut.set_enabled(False)
-
-            self.w.btn_move.set_enabled(False)
-            self.w.btn_edit.set_enabled(False)
-            self.set_mode('draw')
-        else:
-            self.w.copy_cut.set_enabled(True)
-            self.w.delete_cut.set_enabled(True)
-
-            self.w.btn_move.set_enabled(True)
-            self.w.btn_edit.set_enabled(True)
-
-            if self.w.btn_edit.get_state():
-                self.edit_select_cuts()
-
-    def cut_select_cb(self, w, index):
-        tag = self.tags[index]
-        self.select_cut(tag)
-
-    def set_cutsdrawtype_cb(self, w, index):
-        self.cuttype = self.cuttypes[index]
-        self.canvas.set_drawtype(self.cuttype, color='cyan', linestyle='dash')
-
-    def copy_cut_cb(self, w):
-        old_tag = self.cutstag
-        if old_tag == self._new_cut:  # Can only copy existing cut
-            return
-
-        old_obj = self.canvas.get_object_by_tag(old_tag)
-
-        new_index = self._get_new_count()
-        new_tag = "cuts{}".format(new_index)
-        new_obj = old_obj.objects[0].copy()
-        new_obj.move_delta_pt((20, 20))
-        new_cut = self._create_cut_obj(new_index, new_obj, color='cyan')
-        new_cut.set_data(count=new_index)
-        self._update_tines(new_cut)
-
-        self.logger.debug("adding new cut {} from {}".format(new_tag, old_tag))
-        self.canvas.add(new_cut, tag=new_tag)
-        self.add_cuts_tag(new_tag)
-
-        self.logger.debug("redoing cut plots")
-        return self.replot_all()
-
-    def delete_cut_cb(self, w):
-        tag = self.cutstag
-        if tag == self._new_cut:
-            return
-        index = self.tags.index(tag)  # noqa
-        self.canvas.delete_object_by_tag(tag)
-        self.w.cuts.delete_alpha(tag)
-        self.tags.remove(tag)
-        idx = len(self.tags) - 1
-        tag = self.tags[idx]
-        self.select_cut(tag)
-        if tag == self._new_cut:
-            self.save_cuts.set_enabled(False)
-        # plot cleared in replot_all() if no more cuts
-        self.replot_all()
-
-    def delete_all_cb(self, w):
-        self.canvas.delete_all_objects()
-        # self.w.cuts.clear()
-        self.tags = [self._new_cut]
-        self.cutstag = self._new_cut
-        # self.w.cuts.append_text(self._new_cut)
-        # self.select_cut(self._new_cut)
-        # self.save_cuts.set_enabled(False)
-        self.cuts_plot.clear()
-        # plot cleared in replot_all() if no more cuts
-        self.replot_all()
     
     def delete_all(self):
         self.canvas.delete_all_objects()
-        # self.w.cuts.clear()
         self.tags = [self._new_cut]
         self.cutstag = self._new_cut
-        # self.w.cuts.append_text(self._new_cut)
-        # self.select_cut(self._new_cut)
-        # self.save_cuts.set_enabled(False)
         self.cuts_plot.clear()
 
     def add_cuts_tag(self, tag):
         if tag not in self.tags:
             self.tags.append(tag)
-            # self.w.cuts.append_text(tag)
-
-        # select_flag = self.settings.get('select_new_cut', True)
-        # if select_flag:
-        #     self.select_cut(tag)
-        #     move_flag = self.settings.get('draw_then_move', True)
-        #     if move_flag:
-        #         self.set_mode('move')
 
     def start(self):
         # start line cuts operation
         self.canvas.enable_draw(True)
         self.cuts_plot.set_titles(rtitle="Cuts")
-
-        # self.drag_update = self.settings.get('drag_update', False)
 
         # insert canvas, if not already
         p_canvas = self.fitsimage.get_canvas()
@@ -365,7 +217,6 @@ class Cuts(Widgets.Box):
             # Add ruler layer
             p_canvas.add(self.canvas, tag=self.layertag)
 
-        #self.canvas.delete_all_objects()
         self.resume()
 
     def pause(self):
@@ -376,16 +227,13 @@ class Cuts(Widgets.Box):
         # self.modes_off()
 
         self.canvas.ui_set_active(True, viewer=self.fitsimage)
-        # self.fitsimage.show_status("Draw a line with the right mouse button")
         self.replot_all()
 
     def stop(self):
         self.gui_up = False
-        # self._split_sizes = self.w.splitter.get_sizes()
         # remove the canvas from the image
         p_canvas = self.fitsimage.get_canvas()
         p_canvas.delete_object_by_tag(self.layertag)
-        # self.fitsimage.show_status("")
 
     def redo(self):
         """This is called when a new image arrives or the data in the
@@ -394,121 +242,17 @@ class Cuts(Widgets.Box):
 
         self.replot_all()
 
-    def _get_perpendicular_points(self, obj, x, y, r):
-        dx = float(obj.x1 - obj.x2)
-        dy = float(obj.y1 - obj.y2)
-        dist = np.sqrt(dx * dx + dy * dy)
-        dx /= dist
-        dy /= dist
-        x3 = x + r * dy
-        y3 = y - r * dx
-        x4 = x - r * dy
-        y4 = y + r * dx
-        return (x3, y3, x4, y4)
-
-    def _get_width_points(self, obj, x, y, rx, ry):
-        x3, y3 = x - rx, y - ry
-        x4, y4 = x + rx, y + ry
-        return (x3, y3, x4, y4)
-
-    def get_orthogonal_points(self, obj, x, y, r):
-        if self.widthtype == 'x':
-            return self._get_width_points(obj, x, y, r, 0)
-        elif self.widthtype == 'y':
-            return self._get_width_points(obj, x, y, 0, r)
-        else:
-            return self._get_perpendicular_points(obj, x, y, r)
-
-    def get_orthogonal_array(self, image, obj, x, y, r):
-        x1, y1, x2, y2 = self.get_orthogonal_points(obj, x, y, r)
-        values = image.get_pixels_on_line(int(x1), int(y1),
-                                          int(x2), int(y2))
-        return np.array(values)
-
     def _plotpoints(self, obj, color):
 
         image = self.fitsimage.get_vip()
 
         # Get points on the line
-        if obj.kind == 'line':
-            if self.widthtype == 'none':
-                points = image.get_pixels_on_line(int(obj.x1), int(obj.y1),
+        points = image.get_pixels_on_line(int(obj.x1), int(obj.y1),
                                                   int(obj.x2), int(obj.y2))
-            else:
-                coords = image.get_pixels_on_line(int(obj.x1), int(obj.y1),
-                                                  int(obj.x2), int(obj.y2),
-                                                  getvalues=False)
 
-                points = []
-                for x, y in coords:
-                    arr = self.get_orthogonal_array(image, obj, x, y,
-                                                    self.width_radius)
-                    val = np.nansum(arr)
-                    points.append(val)
-
-        elif obj.kind in ('path', 'freepath'):
-            points = []
-            x1, y1 = obj.points[0]
-            for x2, y2 in obj.points[1:]:
-                pts = image.get_pixels_on_line(int(x1), int(y1),
-                                               int(x2), int(y2))
-                # don't repeat last point when adding next segment
-                points.extend(pts[:-1])
-                x1, y1 = x2, y2
-
-        elif obj.kind == 'beziercurve':
-            points = image.get_pixels_on_curve(obj)
-
-        points = np.array(points)
-
-        self.cuts_plot.cuts(points, title = f"{self.cut_mode} Cut", xtitle="Line Index", ytitle="ADUs",
+        self.cuts_plot.cuts(points, title = f"{self.cut_mode} Cut", xtitle="Line Index", ytitle="ADUs/COADD",
                             color=color)
 
-        # if self.settings.get('show_cuts_legend', False):
-        # self.add_legend()
-
-    def add_legend(self):
-        """Add or update Cuts plot legend."""
-        cuts = [tag for tag in self.tags if tag is not self._new_cut]
-        self.cuts_plot.ax.legend(cuts, loc='best',
-                                 shadow=True, fancybox=True,
-                                 prop={'size': 8}, labelspacing=0.2)
-
-    def get_coords(self, obj):
-        image = self.fitsimage.get_image()
-
-        # Check whether multidimensional
-        if len(image.naxispath) <= 0:
-            return
-
-        # Get points on the line
-        if obj.kind == 'line':
-            coords = image.get_pixels_on_line(int(obj.x1), int(obj.y1),
-                                              int(obj.x2), int(obj.y2),
-                                              getvalues=False)
-
-        elif obj.kind in ('path', 'freepath'):
-            coords = []
-            x1, y1 = obj.points[0]
-            for x2, y2 in obj.points[1:]:
-                pts = image.get_pixels_on_line(int(x1), int(y1),
-                                               int(x2), int(y2),
-                                               getvalues=False)
-                # don't repeat last point when adding next segment
-                coords.extend(pts[:-1])
-                x1, y1 = x2, y2
-
-        elif obj.kind == 'beziercurve':
-            coords = obj.get_pixels_on_curve(image, getvalues=False)
-            # Exclude NaNs
-            coords = [c for c in coords if not np.any(np.isnan(c))]
-
-        shape = image.shape
-        # Exclude points outside boundaries
-        coords = [(coord[0], coord[1]) for coord in coords
-                  if (0 <= coord[0] < shape[1] and 0 <= coord[1] < shape[0])]
-
-        return np.array(coords)
 
     def _replot(self, lines):
         for idx in range(len(lines)):
@@ -527,32 +271,16 @@ class Cuts(Widgets.Box):
             if cutstag == self._new_cut:
                 continue
             obj = self.canvas.get_object_by_tag(cutstag)
-            if obj.kind != 'compound':
-                continue
             lines = self._getlines(obj)
-            # n = len(lines)
-            # count = obj.get_data('count', self.count)
-            # idx = (count + n) % len(self.colors)
-            # colors = self.colors[idx:idx + n]
-            # # text should take same color as first line in line set
-            # text = obj.objects[1]
-            # if text.kind == 'text':
-            #     text.color = colors[0]
-            #text.color = color
             self._replot(lines)
-            # self.save_cuts.set_enabled(True)
-            # self.w.delete_all.set_enabled(True)
-        # self._replot(lines)
 
-        # force mpl redraw
         self.cuts_plot.draw()
 
         self.canvas.redraw(whence=3)
-        # self.fitsimage.show_status(
-        #     "Click or drag left mouse button to reposition cuts")
+
         return True
 
-    def _create_cut(self, x, y, count, x1, y1, x2, y2, color='cyan'):
+    def _create_cut(self, x1, y1, x2, y2, color='cyan'):
         self.delete_all()
         text = "cut"
         # if not self.settings.get('label_cuts', False):
@@ -567,37 +295,7 @@ class Cuts(Widgets.Box):
         obj.set_data(cuts=True)
         return obj
 
-    def _update_tines(self, obj):
-        if obj.objects[0].kind != 'line':
-            # right now we only know how to adjust lines
-            return
-
-        # Remove previous tines, if any
-        if len(obj.objects) > 2:
-            obj.objects = obj.objects[:2]
-
-        if self.widthtype == 'none':
-            return
-
-        image = self.fitsimage.get_image()
-        line = obj.objects[0]
-        coords = image.get_pixels_on_line(int(line.x1), int(line.y1),
-                                          int(line.x2), int(line.y2),
-                                          getvalues=False)
-        crdmap = OffsetMapper(self.fitsimage, line)
-        num_ticks = max(len(coords) // self.tine_spacing_px, 3)
-        interval = max(1, len(coords) // num_ticks)
-        for i in range(0, len(coords), interval):
-            x, y = coords[i]
-            x1, y1, x2, y2 = self.get_orthogonal_points(line, x, y,
-                                                        self.width_radius)
-            (x1, y1), (x2, y2) = crdmap.calc_offsets([(x1, y1), (x2, y2)])
-            aline = self.dc.Line(x1, y1, x2, y2)
-            aline.crdmap = crdmap
-            aline.editable = False
-            obj.objects.append(aline)
-
-    def _create_cut_obj(self, count, cuts_obj, color='cyan'):
+    def _create_cut_obj(self, cuts_obj, color='cyan'):
         self.delete_all()
         text = "cut"
         # if not self.settings.get('label_cuts', False):
@@ -614,31 +312,10 @@ class Cuts(Widgets.Box):
         obj = self.dc.CompoundObject(*args)
         obj.set_data(cuts=True)
 
-        if (self.widthtype != 'none') and (self.width_radius > 0):
-            self._update_tines(obj)
         return obj
 
-    def _combine_cuts(self, *args):
-        return self.dc.CompoundObject(*args)
-
-    def _append_lists(self, l):
-        if len(l) == 0:
-            return []
-        elif len(l) == 1:
-            return l[0]
-        else:
-            res = l[0]
-            res.extend(self._append_lists(l[1:]))
-            return res
-
     def _getlines(self, obj):
-        if obj.kind == 'compound':
-            #return self._append_lists(list(map(self._getlines, obj.objects)))
-            return [obj.objects[0]]
-        elif obj.kind in self.cuttypes:
-            return [obj]
-        else:
-            return []
+        return [obj.objects[0]]
 
     def buttondown_cb(self, canvas, event, data_x, data_y, viewer):
         return self.motion_cb(canvas, event, data_x, data_y, viewer)
@@ -670,50 +347,7 @@ class Cuts(Widgets.Box):
         return True
 
     def keydown(self, canvas, event, data_x, data_y, viewer):
-        print(event.key)
-        if event.key == 'n':
-            self.select_cut(self._new_cut)
-            return True
-        elif event.key == 'h':
-            self.cut_at('horizontal')
-            return True
-        elif event.key in ('j', 'v'):
-            self.cut_at('vertical')
-            return True
-        return False
-
-    def _get_new_count(self):
-        counts = set([])
-        # for cutstag in self.tags:
-        #     try:
-        #         obj = self.canvas.get_object_by_tag(cutstag)
-        #     except KeyError:
-        #         continue
-        #     counts.add(obj.get_data('count', 0))
-        # ncounts = set(range(len(self.colors)))
-        # avail = list(ncounts.difference(counts))
-        # avail.sort()
-        # if len(avail) > 0:
-        #     count = avail[0]
-        # else:
-        self.count += 1
-        count = self.count
-        return count
-
-    def _get_cut_index(self):
-        if self.cutstag != self._new_cut:
-            # Replacing a cut
-            self.logger.debug("replacing cut position")
-            try:
-                cutobj = self.canvas.get_object_by_tag(self.cutstag)
-                self.canvas.delete_object_by_tag(self.cutstag)
-                count = cutobj.get_data('count')
-            except KeyError:
-                count = self._get_new_count()
-        else:
-            self.logger.debug("adding cut position")
-            count = self._get_new_count()
-        return count
+        return True
 
     def cut_at(self, cuttype):
         """Perform a cut at the last mouse position in the image.
@@ -729,7 +363,6 @@ class Cuts(Widgets.Box):
         elif cuttype == 'vertical':
             coords.append((data_x, 0, data_x, ht - 1))
 
-        count = self._get_cut_index()
         tag = "cut"
         cuts = []
         for (x1, y1, x2, y2) in coords:
@@ -740,16 +373,12 @@ class Cuts(Widgets.Box):
             dh = ht // 2
             x, y = x1 + dw + 4, y1 + dh + 4
 
-            cut = self._create_cut(x, y, count, x1, y1, x2, y2, color='cyan')
-            self._update_tines(cut)
+            cut = self._create_cut(x1, y1, x2, y2, color='cyan')
             cuts.append(cut)
+            
+        cut = cuts[0]
 
-        if len(cuts) == 1:
-            cut = cuts[0]
-        else:
-            cut = self._combine_cuts(*cuts)
-
-        cut.set_data(count=count)
+        cut.set_data(count=True)
 
         self.canvas.delete_object_by_tag(tag)
         self.canvas.add(cut, tag=tag)
@@ -766,15 +395,10 @@ class Cuts(Widgets.Box):
         obj = canvas.get_object_by_tag(tag)
         canvas.delete_object_by_tag(tag)
 
-        if obj.kind not in self.cuttypes:
-            return True
-
-        count = self._get_cut_index()
         tag = "cut"
 
-        cut = self._create_cut_obj(count, obj, color='cyan')
-        cut.set_data(count=count)
-        self._update_tines(cut)
+        cut = self._create_cut_obj(obj, color='cyan')
+        cut.set_data(count=True)
 
         canvas.delete_object_by_tag(tag)
         self.canvas.add(cut, tag=tag)
@@ -782,52 +406,10 @@ class Cuts(Widgets.Box):
 
         self.logger.debug("redoing cut plots")
         return self.replot_all()
-
-    def edit_cb(self, canvas, obj):
-        self.redraw_cuts()
-        self.replot_all()
-        return True
-
-    def edit_select_cuts(self):
-        if self.cutstag != self._new_cut:
-            obj = self.canvas.get_object_by_tag(self.cutstag)
-            # drill down to reference shape
-            if hasattr(obj, 'objects'):
-                obj = obj.objects[0]
-            self.canvas.edit_select(obj)
-        else:
-            self.canvas.clear_selected()
-        self.canvas.update_canvas()
-
-    def set_mode_cb(self, mode, tf):
-        """Called when one of the Move/Draw/Edit radio buttons is selected."""
-        if tf:
-            self.canvas.set_draw_mode(mode)
-            if mode == 'edit':
-                self.edit_select_cuts()
-        return True
-
-    def set_mode(self, mode):
-        self.canvas.set_draw_mode(mode)
-        # self.w.btn_move.set_state(mode == 'move')
-        # self.w.btn_draw.set_state(mode == 'draw')
-        # self.w.btn_edit.set_state(mode == 'edit')
-
-    def redraw_cuts(self):
-        """Redraws cuts with tines (for cuts with a 'width')."""
-        self.logger.debug("redrawing cuts")
-        for cutstag in self.tags:
-            if cutstag == self._new_cut:
-                continue
-            obj = self.canvas.get_object_by_tag(cutstag)
-            if obj.kind != 'compound':
-                continue
-            self._update_tines(obj)
-        self.canvas.redraw(whence=3)
     
     
     def start_filecheck(self):
-        self.currentfile = self.fitsimage.get_image().get_header()['DISPNAME2']
+        self.currentfile = self.fitsimage.get_image().get_header()['DISPNAME']
         self.filechecking = True
         filechecker = NewFile(self.new_file)
         filechecker.signals.load.connect(self.file_compare)
@@ -843,7 +425,7 @@ class Cuts(Widgets.Box):
     
     def file_compare(self):
         image = self.fitsimage.get_image()
-        name = image.get_header()['DISPNAME2']
+        name = image.get_header()['DISPNAME']
         if self.currentfile != name:
             self.replot_all()
             self.currentfile = name
@@ -851,8 +433,6 @@ class Cuts(Widgets.Box):
     def dismiss(self, event):
         self.stop_filecheck()
         self.stop()
-        # self.canvas.enable_draw(False)
-        # self.delete_all_cb(event)
         self.delete()
 # END
 

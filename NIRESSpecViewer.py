@@ -436,19 +436,6 @@ class Cuts(Widgets.Box):
             self._update_tines(obj)
         return obj
 
-    def _combine_cuts(self, *args):
-        return self.dc.CompoundObject(*args)
-
-    def _append_lists(self, l):
-        if len(l) == 0:
-            return []
-        elif len(l) == 1:
-            return l[0]
-        else:
-            res = l[0]
-            res.extend(self._append_lists(l[1:]))
-            return res
-
     def _getlines(self, obj):
         return [obj.objects[0]]
 
@@ -532,12 +519,8 @@ class Cuts(Widgets.Box):
             cut = self._create_cut(x, y, count, x1, y1, x2, y2, color='cyan')
             self._update_tines(cut)
             cuts.append(cut)
-        print(len(cuts))
-        if len(cuts) == 1:
-            cut = cuts[0]
-            print("cuts = 1")
-        else:
-            cut = self._combine_cuts(*cuts)
+            
+        cut = cuts[0]
 
         cut.set_data(count=True)
 

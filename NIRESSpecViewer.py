@@ -424,23 +424,23 @@ class Cuts(Widgets.Box):
         if self.widthtype == 'none':
             return
 
-        image = self.fitsimage.get_image()
-        line = obj.objects[0]
-        coords = image.get_pixels_on_line(int(line.x1), int(line.y1),
-                                          int(line.x2), int(line.y2),
-                                          getvalues=False)
-        crdmap = OffsetMapper(self.fitsimage, line)
-        num_ticks = max(len(coords) // self.tine_spacing_px, 3)
-        interval = max(1, len(coords) // num_ticks)
-        for i in range(0, len(coords), interval):
-            x, y = coords[i]
-            x1, y1, x2, y2 = self.get_orthogonal_points(line, x, y,
-                                                        self.width_radius)
-            (x1, y1), (x2, y2) = crdmap.calc_offsets([(x1, y1), (x2, y2)])
-            aline = self.dc.Line(x1, y1, x2, y2)
-            aline.crdmap = crdmap
-            aline.editable = False
-            obj.objects.append(aline)
+        # image = self.fitsimage.get_image()
+        # line = obj.objects[0]
+        # coords = image.get_pixels_on_line(int(line.x1), int(line.y1),
+        #                                   int(line.x2), int(line.y2),
+        #                                   getvalues=False)
+        # crdmap = OffsetMapper(self.fitsimage, line)
+        # num_ticks = max(len(coords) // self.tine_spacing_px, 3)
+        # interval = max(1, len(coords) // num_ticks)
+        # for i in range(0, len(coords), interval):
+        #     x, y = coords[i]
+        #     x1, y1, x2, y2 = self.get_orthogonal_points(line, x, y,
+        #                                                 self.width_radius)
+        #     (x1, y1), (x2, y2) = crdmap.calc_offsets([(x1, y1), (x2, y2)])
+        #     aline = self.dc.Line(x1, y1, x2, y2)
+        #     aline.crdmap = crdmap
+        #     aline.editable = False
+        #     obj.objects.append(aline)
 
     def _create_cut_obj(self, cuts_obj, color='cyan'):
         self.delete_all()

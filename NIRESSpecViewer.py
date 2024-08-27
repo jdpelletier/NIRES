@@ -532,7 +532,7 @@ class Cuts(Widgets.Box):
             cut = self._create_cut(x, y, count, x1, y1, x2, y2, color='cyan')
             self._update_tines(cut)
             cuts.append(cut)
-
+        print(len(cuts))
         if len(cuts) == 1:
             cut = cuts[0]
             print("cuts = 1")

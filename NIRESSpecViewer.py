@@ -563,9 +563,6 @@ class Cuts(Widgets.Box):
         obj = canvas.get_object_by_tag(tag)
         canvas.delete_object_by_tag(tag)
 
-        if obj.kind not in self.cuttypes:
-            return True
-
         tag = "cut"
 
         cut = self._create_cut_obj(obj, color='cyan')

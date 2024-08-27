@@ -319,49 +319,13 @@ class Cuts(Widgets.Box):
         image = self.fitsimage.get_vip()
 
         # Get points on the line
-        if obj.kind == 'line':
-            if self.widthtype == 'none':
-                points = image.get_pixels_on_line(int(obj.x1), int(obj.y1),
+        points = image.get_pixels_on_line(int(obj.x1), int(obj.y1),
                                                   int(obj.x2), int(obj.y2))
-            else:
-                coords = image.get_pixels_on_line(int(obj.x1), int(obj.y1),
-                                                  int(obj.x2), int(obj.y2),
-                                                  getvalues=False)
-
-                points = []
-                for x, y in coords:
-                    arr = self.get_orthogonal_array(image, obj, x, y,
-                                                    self.width_radius)
-                    val = np.nansum(arr)
-                    points.append(val)
-
-        elif obj.kind in ('path', 'freepath'):
-            points = []
-            x1, y1 = obj.points[0]
-            for x2, y2 in obj.points[1:]:
-                pts = image.get_pixels_on_line(int(x1), int(y1),
-                                               int(x2), int(y2))
-                # don't repeat last point when adding next segment
-                points.extend(pts[:-1])
-                x1, y1 = x2, y2
-
-        elif obj.kind == 'beziercurve':
-            points = image.get_pixels_on_curve(obj)
 
         points = np.divide(np.array(points), float(self.coadds))
 
         self.cuts_plot.cuts(points, title = f"{self.cut_mode} Cut", xtitle="Line Index", ytitle="ADUs/COADD",
                             color=color)
-
-        # if self.settings.get('show_cuts_legend', False):
-        # self.add_legend()
-
-    def add_legend(self):
-        """Add or update Cuts plot legend."""
-        cuts = [tag for tag in self.tags if tag is not self._new_cut]
-        self.cuts_plot.ax.legend(cuts, loc='best',
-                                 shadow=True, fancybox=True,
-                                 prop={'size': 8}, labelspacing=0.2)
 
 
     def _replot(self, lines):

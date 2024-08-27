@@ -140,17 +140,6 @@ class Cuts(Widgets.Box):
         # get Cuts preferences
         self.fitsimage = fitsimage
         self.coadds = coadds
-        # my_canvas = self.fitsimage.get_canvas()
-        # self.crossdc = my_canvas.get_draw_class('crosshair')
-        # self.fitsimage.get_canvas().add(self.crossdc(500, 500, color='blue', text=""))
-        # prefs = Settings.Preferences()
-        # self.settings = prefs.create_category('plugin_Cuts')
-        # self.settings.add_defaults(select_new_cut=True, draw_then_move=True,
-        #                            label_cuts=True, colors=cut_colors,
-        #                            drag_update=False,
-        #                            show_cuts_legend=False, enable_slit=False)
-        # self.settings.load(onError='silent')
-        # self.colors = self.settings.get('colors', cut_colors)
 
         self.dc = self.fitsimage.get_canvas().get_draw_classes()
         canvas = self.dc.DrawingCanvas()
@@ -189,8 +178,6 @@ class Cuts(Widgets.Box):
         self.verticaldraw = Widgets.Button("Vertical")
         self.verticaldraw.add_callback('activated', self.vertical_draw_cb)
         control_hbox.add_widget(self.verticaldraw)
-        # self.deleteall = Widgets.Button("Delete All")
-        # self.deleteall.add_callback('activated', self.delete_all_cb)
         vbox.add_widget(control_hbox)
         self.closebtn = Widgets.Button("Close")
         self.closebtn.add_callback('activated', self.dismiss)
@@ -248,62 +235,9 @@ class Cuts(Widgets.Box):
         chkbox.add_callback('activated',
                             lambda w, tf: self.axis_toggle_cb(w, tf, pos))
 
-    def select_cut(self, tag):
-        self.cutstag = tag
-        self.w.cuts.show_text(tag)
-
-        if (tag == self._new_cut) or len(self.tags) < 2:
-            self.w.copy_cut.set_enabled(False)
-            self.w.delete_cut.set_enabled(False)
-
-            self.w.btn_move.set_enabled(False)
-            self.w.btn_edit.set_enabled(False)
-            self.set_mode('draw')
-        else:
-            self.w.copy_cut.set_enabled(True)
-            self.w.delete_cut.set_enabled(True)
-
-            self.w.btn_move.set_enabled(True)
-            self.w.btn_edit.set_enabled(True)
-
-            if self.w.btn_edit.get_state():
-                self.edit_select_cuts()
-
-    def cut_select_cb(self, w, index):
-        tag = self.tags[index]
-        self.select_cut(tag)
-
     def set_cutsdrawtype_cb(self, w, index):
         self.cuttype = self.cuttypes[index]
         self.canvas.set_drawtype(self.cuttype, color='cyan', linestyle='dash')
-
-    def delete_cut_cb(self, w):
-        tag = self.cutstag
-        if tag == self._new_cut:
-            return
-        index = self.tags.index(tag)  # noqa
-        self.canvas.delete_object_by_tag(tag)
-        self.w.cuts.delete_alpha(tag)
-        self.tags.remove(tag)
-        idx = len(self.tags) - 1
-        tag = self.tags[idx]
-        self.select_cut(tag)
-        if tag == self._new_cut:
-            self.save_cuts.set_enabled(False)
-        # plot cleared in replot_all() if no more cuts
-        self.replot_all()
-
-    def delete_all_cb(self, w):
-        self.canvas.delete_all_objects()
-        # self.w.cuts.clear()
-        self.tags = [self._new_cut]
-        self.cutstag = self._new_cut
-        # self.w.cuts.append_text(self._new_cut)
-        # self.select_cut(self._new_cut)
-        # self.save_cuts.set_enabled(False)
-        self.cuts_plot.clear()
-        # plot cleared in replot_all() if no more cuts
-        self.replot_all()
     
     def delete_all(self):
         self.canvas.delete_all_objects()
@@ -749,8 +683,6 @@ class Cuts(Widgets.Box):
     def dismiss(self, event):
         self.stop_filecheck()
         self.stop()
-        # self.canvas.enable_draw(False)
-        # self.delete_all_cb(event)
         self.delete()
 # END
 
@@ -913,8 +845,6 @@ class MathWindow(Widgets.Box):
 
     def dismiss(self, event):
         self.stop()
-        # self.canvas.enable_draw(False)
-        # self.delete_all_cb(event)
         self.delete()
 
 

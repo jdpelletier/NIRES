@@ -241,32 +241,18 @@ class Cuts(Widgets.Box):
     
     def delete_all(self):
         self.canvas.delete_all_objects()
-        # self.w.cuts.clear()
         self.tags = [self._new_cut]
         self.cutstag = self._new_cut
-        # self.w.cuts.append_text(self._new_cut)
-        # self.select_cut(self._new_cut)
-        # self.save_cuts.set_enabled(False)
         self.cuts_plot.clear()
 
     def add_cuts_tag(self, tag):
         if tag not in self.tags:
             self.tags.append(tag)
-            # self.w.cuts.append_text(tag)
-
-        # select_flag = self.settings.get('select_new_cut', True)
-        # if select_flag:
-        #     self.select_cut(tag)
-        #     move_flag = self.settings.get('draw_then_move', True)
-        #     if move_flag:
-        #         self.set_mode('move')
 
     def start(self):
         # start line cuts operation
         self.canvas.enable_draw(True)
         self.cuts_plot.set_titles(rtitle="Cuts")
-
-        # self.drag_update = self.settings.get('drag_update', False)
 
         # insert canvas, if not already
         p_canvas = self.fitsimage.get_canvas()
@@ -277,7 +263,6 @@ class Cuts(Widgets.Box):
             # Add ruler layer
             p_canvas.add(self.canvas, tag=self.layertag)
 
-        #self.canvas.delete_all_objects()
         self.resume()
 
     def pause(self):
@@ -288,16 +273,13 @@ class Cuts(Widgets.Box):
         # self.modes_off()
 
         self.canvas.ui_set_active(True, viewer=self.fitsimage)
-        # self.fitsimage.show_status("Draw a line with the right mouse button")
         self.replot_all()
 
     def stop(self):
         self.gui_up = False
-        # self._split_sizes = self.w.splitter.get_sizes()
         # remove the canvas from the image
         p_canvas = self.fitsimage.get_canvas()
         p_canvas.delete_object_by_tag(self.layertag)
-        # self.fitsimage.show_status("")
 
     def redo(self):
         """This is called when a new image arrives or the data in the
@@ -386,41 +368,6 @@ class Cuts(Widgets.Box):
                                  shadow=True, fancybox=True,
                                  prop={'size': 8}, labelspacing=0.2)
 
-    def get_coords(self, obj):
-        image = self.fitsimage.get_image()
-
-        # Check whether multidimensional
-        if len(image.naxispath) <= 0:
-            return
-
-        # Get points on the line
-        if obj.kind == 'line':
-            coords = image.get_pixels_on_line(int(obj.x1), int(obj.y1),
-                                              int(obj.x2), int(obj.y2),
-                                              getvalues=False)
-
-        elif obj.kind in ('path', 'freepath'):
-            coords = []
-            x1, y1 = obj.points[0]
-            for x2, y2 in obj.points[1:]:
-                pts = image.get_pixels_on_line(int(x1), int(y1),
-                                               int(x2), int(y2),
-                                               getvalues=False)
-                # don't repeat last point when adding next segment
-                coords.extend(pts[:-1])
-                x1, y1 = x2, y2
-
-        elif obj.kind == 'beziercurve':
-            coords = obj.get_pixels_on_curve(image, getvalues=False)
-            # Exclude NaNs
-            coords = [c for c in coords if not np.any(np.isnan(c))]
-
-        shape = image.shape
-        # Exclude points outside boundaries
-        coords = [(coord[0], coord[1]) for coord in coords
-                  if (0 <= coord[0] < shape[1] and 0 <= coord[1] < shape[0])]
-
-        return np.array(coords)
 
     def _replot(self, lines):
         for idx in range(len(lines)):

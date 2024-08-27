@@ -531,26 +531,12 @@ class Cuts(Widgets.Box):
             if obj.kind != 'compound':
                 continue
             lines = self._getlines(obj)
-            # n = len(lines)
-            # count = obj.get_data('count', self.count)
-            # idx = (count + n) % len(self.colors)
-            # colors = self.colors[idx:idx + n]
-            # # text should take same color as first line in line set
-            # text = obj.objects[1]
-            # if text.kind == 'text':
-            #     text.color = colors[0]
-            #text.color = color
             self._replot(lines)
-            # self.save_cuts.set_enabled(True)
-            # self.w.delete_all.set_enabled(True)
-        # self._replot(lines)
 
-        # force mpl redraw
         self.cuts_plot.draw()
 
         self.canvas.redraw(whence=3)
-        # self.fitsimage.show_status(
-        #     "Click or drag left mouse button to reposition cuts")
+
         return True
 
     def _create_cut(self, x, y, count, x1, y1, x2, y2, color='cyan'):
@@ -901,23 +887,11 @@ class MathWindow(Widgets.Box):
         self.wreload = Widgets.Button("Reload Latest Image")
         self.wreload.add_callback('activated', self.reload)
         vbox.add_widget(self.wreload)
-        # self.wsdiff = Widgets.Button("SDiff/Undo")
-        # self.wsdiff.add_callback('activated', self.sdiff)
-        # vbox.add_widget(self.wsdiff)
         self.closebtn = Widgets.Button("Close")
         self.closebtn.add_callback('activated', self.dismiss)
         vbox.add_widget(self.closebtn)
         self.add_widget(vbox)
-
-        # screen = QDesktopWidget().screenGeometry()
-        # x = screen.width()/2
-        # y = screen.height()/2
-        # self.move(x, y)
         self.resize(500, 0)
-
-        # self.threadpool = QtCore.QThreadPool()
-
-        # self.start_updating()
 
     def nightpath(self):
         dir = str(self.dispname)
@@ -1032,43 +1006,6 @@ class MathWindow(Widgets.Box):
         # self.delete_all_cb(event)
         self.delete()
 
-# class Window(Widgets.Box):
-
-#     def __init__(self, logger, fitsimage):
-#         super(Window, self).__init__(fitsimage)
-
-#         self.logger = logger
-
-#         vbox = Widgets.VBox()   
-#         viewer_hbox = Widgets.HBox()
-#         # w = fitsimage.get_widget()
-#         # w.setMinimumSize(QtCore.QSize(1200, 600))
-#         viewer_hbox.add_widget(fitsimage)
-#         # viewer_hbox.setContentsMargins(QtCore.QMargins(4,1,4,1))
-#         vbox.add_widget(viewer_hbox)
-#         button_hbox = Widgets.HBox()
-#         self.closebtn = Widgets.Button("Close")
-#         self.closebtn.add_callback('activated', self.dismiss)
-#         button_hbox.add_widget(self.closebtn)
-#         vbox.add_widget(button_hbox)
-#         self.add_widget(vbox)
-#         self.resize(500, 0)
-
-#         fitsimage.set_callback('cursor-changed', self.motion_cb)
-
-#     def motion_cb(self, viewer, button, data_x, data_y):
-
-#         viewer.set_pan(data_x, data_y)
-
-    
-#     def stop(self):
-#         self.gui_up = False
-
-#     def dismiss(self, event):
-#         self.stop()
-#         # self.canvas.enable_draw(False)
-#         # self.delete_all_cb(event)
-#         self.delete()
 
 class FitsViewer(QtGui.QMainWindow):
     # resized = QtCore.Signal()
@@ -1180,20 +1117,6 @@ class FitsViewer(QtGui.QMainWindow):
             
             item.triggered.connect(partial(self.color_change, stretch_name))
             cutmenu.addAction(item)
-
-        # self.wcut = QtGui.QComboBox()
-        # for name in fi.get_autocut_methods():
-        #     self.wcut.addItem(name)
-        # self.wcut.currentIndexChanged.connect(self.cut_change)
-        # self.wcut.setCurrentText('zscale')
-        # self.wcut.setMaximumSize(QtCore.QSize(100, 30))
-        # readout_hbox.addWidget(self.wcut)
-        # self.wcolor = QtGui.QComboBox()
-        # for name in fi.get_color_algorithms():
-        #     self.wcolor.addItem(name)
-        # self.wcolor.currentIndexChanged.connect(self.color_change)
-        # self.wcolor.setMaximumSize(QtCore.QSize(100, 30))
-        # readout_hbox.addWidget(self.wcolor)
 
         self.bd = fi.get_bindings()
         self.bd.enable_all(False)
@@ -1405,24 +1328,14 @@ class FitsViewer(QtGui.QMainWindow):
 
     def start_scan(self):
         self.scanning = True
-        # hdu = fits.PrimaryHDU()
-        # try:
-        #     hdu.writeto('procImage.fits')
-        # except OSError:
-        #     os.remove('procImage.fits')
-        #     hdu.writeto('procImage.fits')
         print("scan started...")
         scanner = Scanner(self.scan)
         scanner.signals.load.connect(self.load_file)
         self.threadpool.start(scanner)
-        # self.wstartscan.setEnabled(False)
-        # self.wstopscan.setEnabled(True)
 
     def stop_scan(self):
         self.scanning = False
         print('Scanning stopped.')
-        # self.wstartscan.setEnabled(True)
-        # self.wstopscan.setEnabled(False)
 
     def load_file(self, filepath):
         if '/s/' not in filepath and 'sdata' in filepath:
@@ -1434,7 +1347,6 @@ class FitsViewer(QtGui.QMainWindow):
         try:
             image = load_data(filepath, logger=self.logger)
             self.fitsimage.set_image(image)
-            # self.setWindowTitle(filepath)
             try:
                 self.fitsimage.get_canvas().get_object_by_tag(self.picktag)
                 self.fitsimage.get_canvas().delete_object_by_tag(self.picktag)
@@ -1447,31 +1359,6 @@ class FitsViewer(QtGui.QMainWindow):
             self.base_zoom = self.fitsimage.get_zoom()
         except io_fits.FITSError:
             self.file_info.setText(f"File: error loading, wait for next image")
-
-        # self.wsky.setEnabled(True)
-        # self.wsdiff.setEnabled(True)
-        # self.sdiff_done = False
-        # self.wsdiff.setText("SDiff")
-        # if self.sky != "":
-        #     self.subtract_sky(self.sky)
-
-    # def load_sky(self):
-    #     res = QtGui.QFileDialog.getOpenFileName(self, "Load Sky file",
-    #                                             str(self.nightpath()))
-    #     if isinstance(res, tuple):
-    #         fileName = res[0]
-    #     else:
-    #         fileName = str(res)
-    #     if len(fileName) != 0:
-    #         self.sky = fileName
-    #         self.wclearsky.setEnabled(True)
-    #         self.subtract_sky(self.sky)
-    
-    # def clearsky(self):
-    #     self.sky = ""
-    #     image = load_data(self.currentfile, logger=self.logger)
-    #     self.fitsimage.set_image(image)
-    #     self.wclearsky.setEnabled(False)
 
     def open_file(self):
         res = QtGui.QFileDialog.getOpenFileName(self, "Open FITS file",
@@ -1493,7 +1380,6 @@ class FitsViewer(QtGui.QMainWindow):
         self.c.show()
 
     def sdiff(self):
-        # working_path = "/home/jpelletier/NIRES/"
         if self.sdiff_done == False:
             try:
                 ds = self.dispname.read()
@@ -1501,9 +1387,7 @@ class FitsViewer(QtGui.QMainWindow):
                     ds = '/s' + ds
                 image_data = fits.getdata(ds)
                 image_header = fits.getheader(ds)
-                # previous = fits.getdata(str(self.lastfile.read()))
                 previous = self.previous_file(ds)
-                # print(previous)
                 previous_data = fits.getdata(previous)
             except FileNotFoundError:
                 print("No previous file.")
@@ -1511,7 +1395,6 @@ class FitsViewer(QtGui.QMainWindow):
             subtracted = image_data - previous_data
             hdu = fits.PrimaryHDU(header=image_header, data=subtracted)
             filename = self.mathFileNames(ds, previous, '-')
-            # full_path = Path(working_path + filename)
             full_path = filename
             try:
                 hdu.writeto(full_path)
@@ -1519,13 +1402,10 @@ class FitsViewer(QtGui.QMainWindow):
                 os.remove(full_path)
                 hdu.writeto(full_path)
             self.load_file(str(full_path))
-            # self.wsdiff.set_text("Undo SDiff")
             self.sdiff_done = True
             os.remove(full_path)
         else:
             self.load_file(str(self.dispname.read()))
-            # self.fitsimage.set_image(image)
-            # self.wsdiff.set_text("SDiff")
             self.sdiff_done = False
     
     def previous_file(self, fn):
@@ -1550,35 +1430,17 @@ class FitsViewer(QtGui.QMainWindow):
             secondfile = secondfile[-1]
         return f'{firstfile} {operation} {secondfile}.fits'
 
-    # def subtract_sky(self, file):
-    #     image = self.fitsimage.get_image()
-    #     data = image.get_data()
-    #     sky = fits.getdata(file)
-    #     try:
-    #         subtracted = data - sky
-    #         self.fitsimage.set_data(subtracted)
-    #     except ValueError:
-    #         self.fitsimage.set_data(data)
-
-    ##Start of image find and processing code
-
     def scan(self, file_callback):
-        # self.previous_image = self.spec_lastfile.read() #TODO this is to get first previous image, might remove.
         while self.scanning:
-            # if (self.go == 1 or self.test == 1 or self.display == 1) and ("v" in self.slit_filename or "TEMP" in self.slit_filename):
             if self.display == 1:
-                # previm = self.spec_lastfile.read()
                 print("Taking image")
-                # self.waitForFileToBeUnlocked(0.5)
                 file_callback.emit(str(self.dispname.read()))
                 self.waitForZero(0.25)
-                # self.previous_image = previm
             time.sleep(0.25)
 
     def fileIsCurrentlyLocked(self):
         print(f'display {self.display} locked')
         locked = True
-        # if int(self.go.read()) == 0 and int(self.test.read()) == 0:
         if int(self.display.read()) == 0:
             print(f'display {self.display} unlocked')
             locked = False
@@ -1607,10 +1469,8 @@ class FitsViewer(QtGui.QMainWindow):
         return nightly
 
     def writeFits(self, headerinfo, image_data):
-        # working_path = '/home/jpelletier/NIRES/'
         hdu = fits.PrimaryHDU(header=headerinfo, data=image_data)
         filename = 'procImage.fits'
-        # full_path = Path(working_path + filename)
         full_path = filename
         try:
             hdu.writeto(full_path)

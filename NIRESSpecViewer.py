@@ -381,8 +381,6 @@ class Cuts(Widgets.Box):
             if cutstag == self._new_cut:
                 continue
             obj = self.canvas.get_object_by_tag(cutstag)
-            if obj.kind != 'compound':
-                continue
             lines = self._getlines(obj)
             self._replot(lines)
 
@@ -452,13 +450,7 @@ class Cuts(Widgets.Box):
             return res
 
     def _getlines(self, obj):
-        if obj.kind == 'compound':
-            print('compound')
-            return [obj.objects[0]]
-        elif obj.kind in self.cuttypes:
-            return [obj]
-        else:
-            return []
+        return [obj.objects[0]]
 
     def buttondown_cb(self, canvas, event, data_x, data_y, viewer):
         return self.motion_cb(canvas, event, data_x, data_y, viewer)

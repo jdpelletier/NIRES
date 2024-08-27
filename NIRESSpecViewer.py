@@ -759,31 +759,6 @@ class Cuts(Widgets.Box):
         self.logger.debug("redoing cut plots")
         return self.replot_all()
 
-    def edit_select_cuts(self):
-        if self.cutstag != self._new_cut:
-            obj = self.canvas.get_object_by_tag(self.cutstag)
-            # drill down to reference shape
-            if hasattr(obj, 'objects'):
-                obj = obj.objects[0]
-            self.canvas.edit_select(obj)
-        else:
-            self.canvas.clear_selected()
-        self.canvas.update_canvas()
-
-    def set_mode_cb(self, mode, tf):
-        """Called when one of the Move/Draw/Edit radio buttons is selected."""
-        if tf:
-            self.canvas.set_draw_mode(mode)
-            if mode == 'edit':
-                self.edit_select_cuts()
-        return True
-
-    def set_mode(self, mode):
-        self.canvas.set_draw_mode(mode)
-        # self.w.btn_move.set_state(mode == 'move')
-        # self.w.btn_draw.set_state(mode == 'draw')
-        # self.w.btn_edit.set_state(mode == 'edit')
-
     def redraw_cuts(self):
         """Redraws cuts with tines (for cuts with a 'width')."""
         self.logger.debug("redrawing cuts")

@@ -277,28 +277,6 @@ class Cuts(Widgets.Box):
         self.cuttype = self.cuttypes[index]
         self.canvas.set_drawtype(self.cuttype, color='cyan', linestyle='dash')
 
-    def copy_cut_cb(self, w):
-        old_tag = self.cutstag
-        if old_tag == self._new_cut:  # Can only copy existing cut
-            return
-
-        old_obj = self.canvas.get_object_by_tag(old_tag)
-
-        new_index = self._get_new_count()
-        new_tag = "cuts{}".format(new_index)
-        new_obj = old_obj.objects[0].copy()
-        new_obj.move_delta_pt((20, 20))
-        new_cut = self._create_cut_obj(new_index, new_obj, color='cyan')
-        new_cut.set_data(count=new_index)
-        self._update_tines(new_cut)
-
-        self.logger.debug("adding new cut {} from {}".format(new_tag, old_tag))
-        self.canvas.add(new_cut, tag=new_tag)
-        self.add_cuts_tag(new_tag)
-
-        self.logger.debug("redoing cut plots")
-        return self.replot_all()
-
     def delete_cut_cb(self, w):
         tag = self.cutstag
         if tag == self._new_cut:
@@ -583,7 +561,7 @@ class Cuts(Widgets.Box):
             aline.editable = False
             obj.objects.append(aline)
 
-    def _create_cut_obj(self, count, cuts_obj, color='cyan'):
+    def _create_cut_obj(self, cuts_obj, color='cyan'):
         self.delete_all()
         text = "cut"
         # if not self.settings.get('label_cuts', False):
@@ -659,19 +637,6 @@ class Cuts(Widgets.Box):
         return True
 
     def _get_new_count(self):
-        counts = set([])
-        # for cutstag in self.tags:
-        #     try:
-        #         obj = self.canvas.get_object_by_tag(cutstag)
-        #     except KeyError:
-        #         continue
-        #     counts.add(obj.get_data('count', 0))
-        # ncounts = set(range(len(self.colors)))
-        # avail = list(ncounts.difference(counts))
-        # avail.sort()
-        # if len(avail) > 0:
-        #     count = avail[0]
-        # else:
         self.count += 1
         count = self.count
         return count
@@ -725,7 +690,7 @@ class Cuts(Widgets.Box):
         else:
             cut = self._combine_cuts(*cuts)
 
-        cut.set_data(count=count)
+        cut.set_data(count=True)
 
         self.canvas.delete_object_by_tag(tag)
         self.canvas.add(cut, tag=tag)
@@ -745,11 +710,10 @@ class Cuts(Widgets.Box):
         if obj.kind not in self.cuttypes:
             return True
 
-        count = self._get_cut_index()
         tag = "cut"
 
-        cut = self._create_cut_obj(count, obj, color='cyan')
-        cut.set_data(count=count)
+        cut = self._create_cut_obj(obj, color='cyan')
+        cut.set_data(count=True)
         self._update_tines(cut)
 
         canvas.delete_object_by_tag(tag)
@@ -758,18 +722,6 @@ class Cuts(Widgets.Box):
 
         self.logger.debug("redoing cut plots")
         return self.replot_all()
-
-    def redraw_cuts(self):
-        """Redraws cuts with tines (for cuts with a 'width')."""
-        self.logger.debug("redrawing cuts")
-        for cutstag in self.tags:
-            if cutstag == self._new_cut:
-                continue
-            obj = self.canvas.get_object_by_tag(cutstag)
-            if obj.kind != 'compound':
-                continue
-            self._update_tines(obj)
-        self.canvas.redraw(whence=3)
     
     
     def start_filecheck(self):

@@ -422,6 +422,7 @@ class Cuts(Widgets.Box):
             obj.objects = obj.objects[:2]
 
         if self.widthtype == 'none':
+            print("width is 0")
             return
 
         # image = self.fitsimage.get_image()

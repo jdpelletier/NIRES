@@ -121,7 +121,6 @@ class Cuts(Widgets.Box):
         self._new_cut = 'New Cut'
         self.cutstag = self._new_cut
         self.tags = [self._new_cut]
-        self.count = 0
         # for 3D Slit functionality
         self.transpose_enabled = False
         self.selected_axis = None
@@ -296,7 +295,7 @@ class Cuts(Widgets.Box):
 
         return True
 
-    def _create_cut(self, x, y, count, x1, y1, x2, y2, color='cyan'):
+    def _create_cut(self, x1, y1, x2, y2, color='cyan'):
         self.delete_all()
         text = "cut"
         # if not self.settings.get('label_cuts', False):
@@ -377,26 +376,6 @@ class Cuts(Widgets.Box):
     def keydown(self, canvas, event, data_x, data_y, viewer):
         return True
 
-    def _get_new_count(self):
-        self.count += 1
-        count = self.count
-        return count
-
-    def _get_cut_index(self):
-        if self.cutstag != self._new_cut:
-            # Replacing a cut
-            print("replacing cut position")
-            try:
-                cutobj = self.canvas.get_object_by_tag(self.cutstag)
-                self.canvas.delete_object_by_tag(self.cutstag)
-                count = cutobj.get_data('count')
-            except KeyError:
-                count = self._get_new_count()
-        else:
-            print("adding cut position")
-            count = self._get_new_count()
-        return count
-
     def cut_at(self, cuttype):
         """Perform a cut at the last mouse position in the image.
         `cuttype` determines the type of cut made.
@@ -411,7 +390,6 @@ class Cuts(Widgets.Box):
         elif cuttype == 'vertical':
             coords.append((data_x, 0, data_x, ht - 1))
 
-        count = self._get_cut_index()
         tag = "cut"
         cuts = []
         for (x1, y1, x2, y2) in coords:
@@ -422,7 +400,7 @@ class Cuts(Widgets.Box):
             dh = ht // 2
             x, y = x1 + dw + 4, y1 + dh + 4
 
-            cut = self._create_cut(x, y, count, x1, y1, x2, y2, color='cyan')
+            cut = self._create_cut(x1, y1, x2, y2, color='cyan')
             self._update_tines(cut)
             cuts.append(cut)
             

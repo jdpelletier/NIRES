@@ -953,6 +953,8 @@ class FitsViewer(QtGui.QMainWindow):
             self.base_zoom = self.fitsimage.get_zoom()
         except io_fits.FITSError:
             self.file_info.setText(f"File: error loading, wait for next image")
+        except OSError:
+            self.file_info.setText(f"File: error loading, wait for next image")
 
     def open_file(self):
         res = QtGui.QFileDialog.getOpenFileName(self, "Open FITS file",

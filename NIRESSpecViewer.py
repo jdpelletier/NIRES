@@ -957,8 +957,10 @@ class FitsViewer(QtGui.QMainWindow):
             self.file_info.setText(f"File: error loading, wait for next image")
 
     def open_file(self):
+        filters = "Images (s*.fits)"
+        selected_filter = "Images (s*.fits)"
         res = QtGui.QFileDialog.getOpenFileName(self, "Open FITS file",
-                                                str(self.nightpath()))
+                                                str(self.nightpath()), filters, selected_filter)
         if isinstance(res, tuple):
             fileName = res[0]
         else:

@@ -901,6 +901,8 @@ class FitsViewer(QtGui.QMainWindow):
 
         self.m = None
 
+        self.fitsimage.set_color_map('heat')
+
         self.base_zoom = 0
 
         self.start_updating()

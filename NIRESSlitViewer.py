@@ -964,8 +964,8 @@ class FitsViewer(QtGui.QMainWindow):
             ra_txt, dec_txt = image.pixtoradec(fits_x, fits_y,
                                                format='str', coords='fits')
         except Exception as e:
-            self.logger.warning("Bad coordinate conversion: %s" % (
-                str(e)))
+            # self.logger.warning("Bad coordinate conversion: %s" % (
+            #     str(e)))
             ra_txt = 'BAD WCS'
             dec_txt = 'BAD WCS'
 

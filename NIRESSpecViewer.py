@@ -958,8 +958,8 @@ class FitsViewer(QtGui.QMainWindow):
 
     def open_file(self):
         print(str(self.nightpath()))
-        filters = "Images (s*.fits)"
-        selected_filter = "Images (s*.fits)"
+        filters = "Images (s*_*.fits)"
+        selected_filter = "Images (s*_*.fits)"
         res = QtGui.QFileDialog.getOpenFileName(self, "Open FITS file",
                                                 str(self.nightpath()), filters, selected_filter)
         if isinstance(res, tuple):

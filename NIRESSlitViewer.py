@@ -1343,28 +1343,17 @@ class FitsViewer(QtGui.QMainWindow):
         w = wcs.WCS(naxis=2)
         fitsData = fits.getdata(filen, ext=0)
         header = fits.getheader(filen)
-        w = wcs.WCS(header)
-        # ht, wd = fitsData.shape[:2]
-        # y = ht//2
-        # x = wd//2
-        # ra = float(header['RA'])
-        # dec = float(header['DEC'])
+        # w = wcs.WCS(header)
         self.rot = float(header['ROTPOSN'])
-        # self.tvangle = float(header['TVANGL'])
-        # w.wcs.crpix = [y, x]
-        # w.wcs.cdelt = np.array([-0.05, 0.05])
-        # w.wcs.crota = np.array([-rot, rot])
-        # w.wcs.crval = [ra, dec]
-        # w.wcs.ctype = ["RA---TAN", "DEC--TAN"]
         pixcrd = np.array([[0, 0], [24, 38], [45, 98]], dtype=np.float64)
         world = w.wcs_pix2world(pixcrd, 0)
         # Convert the same coordinates back to pixel coordinates.
-        pixcrd2 = w.wcs_world2pix(world, 0)
+        # pixcrd2 = w.wcs_world2pix(world, 0)
         # These should be the same as the original pixel coordinates, modulo
         # some floating-point error.
-        assert np.max(np.abs(pixcrd - pixcrd2)) < 1e-6
+        # assert np.max(np.abs(pixcrd - pixcrd2)) < 1e-6
         # Now, write out the WCS object as a FITS header
-        header = w.to_header()
+        # header = w.to_header()
         header['DISPNAME2'] = str(self.dispname2.read())
         return header, fitsData
 

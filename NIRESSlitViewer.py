@@ -1343,10 +1343,11 @@ class FitsViewer(QtGui.QMainWindow):
         w = wcs.WCS(naxis=2)
         fitsData = fits.getdata(filen, ext=0)
         header = fits.getheader(filen)
-        # w = wcs.WCS(header)
         self.rot = float(header['ROTPOSN'])
-        pixcrd = np.array([[0, 0], [24, 38], [45, 98]], dtype=np.float64)
-        world = w.wcs_pix2world(pixcrd, 0)
+        ##TODO remove WCS stuff if confirmed no need
+        # w = wcs.WCS(header)
+        # pixcrd = np.array([[0, 0], [24, 38], [45, 98]], dtype=np.float64)
+        # world = w.wcs_pix2world(pixcrd, 0)
         # Convert the same coordinates back to pixel coordinates.
         # pixcrd2 = w.wcs_world2pix(world, 0)
         # These should be the same as the original pixel coordinates, modulo

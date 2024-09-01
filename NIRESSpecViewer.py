@@ -952,9 +952,9 @@ class FitsViewer(QtGui.QMainWindow):
             self.file_info.setText(f"File: {filepath}")
             self.base_zoom = self.fitsimage.get_zoom()
         except io_fits.FITSError:
-            self.file_info.setText(f"File: error loading, wait for next image")
+            self.file_info.setText(f"File: error loading, empty image")
         except OSError:
-            self.file_info.setText(f"File: error loading, wait for next image")
+            self.file_info.setText(f"File: error loading, possible server crash")
 
     def open_file(self):
         filters = "Images (s*_*.fits)"

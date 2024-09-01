@@ -1075,8 +1075,10 @@ class FitsViewer(QtGui.QMainWindow):
     #     self.wclearsky.setEnabled(False)
 
     def open_file(self):
+        filters = "Images (v*_*.fits)"
+        selected_filter = "Images (v*_*.fits)"
         res = QtGui.QFileDialog.getOpenFileName(self, "Open FITS file",
-                                                str(self.nightpath()))
+                                                str(self.nightpath()), filters, selected_filter)
         if isinstance(res, tuple):
             fileName = res[0]
         else:
@@ -1322,7 +1324,7 @@ class FitsViewer(QtGui.QMainWindow):
             py1 = 950
             px2 = 50
             py2 = 880
-            angle = math.radians(180-self.rot)
+            angle = math.radians(91-self.rot)
             qx1 = ox + math.cos(angle) * (px1 - ox) - math.sin(angle) * (py1 - oy)
             qy1 = oy + math.sin(angle) * (px1 - ox) + math.cos(angle) * (py1 - oy)
             qx2 = ox + math.cos(angle) * (px2 - ox) - math.sin(angle) * (py2 - oy)

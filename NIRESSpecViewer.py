@@ -827,6 +827,8 @@ class FitsViewer(QtGui.QMainWindow):
         file_path = config.get('DEFAULT', 'FILE_PATH')
         self.wavelength_data = np.flip((fits.getdata(file_path)), 0)
 
+        self.fitsimage.set_color_map('heat')
+
         self.start_updating()
 
     def start_updating(self):

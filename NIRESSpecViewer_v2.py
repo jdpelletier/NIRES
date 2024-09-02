@@ -1032,6 +1032,7 @@ class FitsViewer(QtGui.QMainWindow):
     
     def scan(self, file_callback):
         in_file = str(self.dispname)
+        file_callback.emit(in_file)
         while self.scanning:
             cur_file = str(self.dispname)
             if in_file != cur_file:

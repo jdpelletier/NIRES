@@ -1038,6 +1038,7 @@ class FitsViewer(QtGui.QMainWindow):
                 print("New Image Detected")
                 self.waitForFileToBeUnlocked(cur_file, 1)
                 file_callback.emit(cur_file)
+                in_file = cur_file
             time.sleep(1)
 
     # def updateFileCache(self, cachedFiles):

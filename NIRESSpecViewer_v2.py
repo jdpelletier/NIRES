@@ -1077,7 +1077,7 @@ class FitsViewer(QtGui.QMainWindow):
             except OSError:
                 locked = True
             
-            except Warning:
+            except AstropyUserWarning:
                 locked = True
                 hdulist.close()
 

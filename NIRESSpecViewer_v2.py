@@ -8,7 +8,6 @@ from pathlib import Path
 from functools import partial
 import configparser
 import warnings
-# warnings.filterwarnings("error")
 
 import numpy as np
 from astropy.io import fits
@@ -1055,6 +1054,7 @@ class FitsViewer(QtGui.QMainWindow):
         
 
     def fileIsCurrentlyLocked(self, filepath):
+        warnings.filterwarnings("error")
         locked = None
         hdulist = None
         file_object = None
@@ -1070,11 +1070,15 @@ class FitsViewer(QtGui.QMainWindow):
                             and hdu[0].header.isascii() == True])
                 if file_object:
                     locked = False
+                    warnings.resetwarnings()
 
             except TypeError:
                 locked = True
 
             except OSError:
+                locked = True
+            
+            except Warning:
                 locked = True
 
             # except Warning as w:

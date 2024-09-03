@@ -1066,8 +1066,7 @@ class FitsViewer(QtGui.QMainWindow):
 
                 file_object = np.sum([1 for hdu in hdulist if type(hdu) in
                         	[fits.hdu.image.PrimaryHDU, fits.hdu.image.ImageHDU]
-                        	and hdu.data is not None
-                            and hdu[0].header.isascii() == True])
+                        	and hdu.data is not None])
                 if file_object:
                     locked = False
                     warnings.resetwarnings()
@@ -1080,6 +1079,7 @@ class FitsViewer(QtGui.QMainWindow):
             
             except Warning:
                 locked = True
+                hdulist.close()
 
             # except Warning as w:
             #     print("waiting on header")

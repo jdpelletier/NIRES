@@ -8,7 +8,7 @@ from pathlib import Path
 from functools import partial
 import configparser
 import warnings
-warnings.filterwarnings("error")
+# warnings.filterwarnings("error")
 
 import numpy as np
 from astropy.io import fits

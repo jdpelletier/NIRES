@@ -10,6 +10,7 @@ import configparser
 import warnings
 
 import numpy as np
+import astropy
 from astropy.io import fits
 # from astropy import wcs
 import astropy.units as u
@@ -1078,7 +1079,7 @@ class FitsViewer(QtGui.QMainWindow):
             except OSError:
                 locked = True
             
-            except AstropyUserWarning:
+            except astropy.utils.exceptions.AstropyUserWarnin:
                 locked = True
 
             # except Warning as w:

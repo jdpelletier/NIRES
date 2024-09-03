@@ -11,7 +11,7 @@ import warnings
 
 import numpy as np
 from astropy.io import fits
-from astropy import wcs
+from astropy import wcs, utils
 # import astropy.units as u
 # from astropy.stats import gaussian_sigma_to_fwhm
 from astropy.modeling import models, fitting
@@ -1207,7 +1207,7 @@ class FitsViewer(QtGui.QMainWindow):
             except OSError:
                 locked = True
             
-            except astropy.utils.exceptions.AstropyUserWarning:
+            except utils.exceptions.AstropyUserWarning:
                 locked = True
 
             # except Warning as w:

@@ -7,8 +7,8 @@ from pathlib import Path
 # import copy
 from functools import partial
 import configparser
-import warnings
-warnings.filterwarnings("error")
+# import warnings
+# warnings.filterwarnings("error")
 
 import numpy as np
 from astropy.io import fits
@@ -1076,9 +1076,9 @@ class FitsViewer(QtGui.QMainWindow):
             except OSError:
                 locked = True
 
-            except Warning as w:
-                print("waiting on header")
-                locked = True
+            # except Warning as w:
+            #     print("waiting on header")
+            #     locked = True
 
             finally:
                 if file_object:

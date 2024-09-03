@@ -1238,36 +1238,36 @@ class FitsViewer(QtGui.QMainWindow):
         while self.fileIsCurrentlyLocked(filename):
             time.sleep(wait_time)
 
-    def scan(self, file_callback):
-        # self.previous_image = self.slit_lastfile.read() #TODO this is to get first previous image, might remove.
-        while self.scanning:
-            # if (self.go == 1 or self.test == 1 or self.display2 == 1) and ("v" in self.slit_filename or "TEMP" in self.slit_filename):
-            if self.display2 == 1:
-                # previm = self.slit_lastfile.read()
-                print("Taking image")
-                # self.waitForFileToBeUnlocked(0.5)
-                file_callback.emit(str(self.dispname2.read()))
-                self.waitForZero(0.25)
-                # self.previous_image = previm
-            time.sleep(0.25)
+    # def scan(self, file_callback):
+    #     # self.previous_image = self.slit_lastfile.read() #TODO this is to get first previous image, might remove.
+    #     while self.scanning:
+    #         # if (self.go == 1 or self.test == 1 or self.display2 == 1) and ("v" in self.slit_filename or "TEMP" in self.slit_filename):
+    #         if self.display2 == 1:
+    #             # previm = self.slit_lastfile.read()
+    #             print("Taking image")
+    #             # self.waitForFileToBeUnlocked(0.5)
+    #             file_callback.emit(str(self.dispname2.read()))
+    #             self.waitForZero(0.25)
+    #             # self.previous_image = previm
+    #         time.sleep(0.25)
 
-    def fileIsCurrentlyLocked(self):
-        print(f'display2 {self.display2} locked')
-        locked = True
-        # if int(self.go.read()) == 0 and int(self.test.read()) == 0:
-        if int(self.display2.read()) == 0:
-            print(f'display2 {self.display2} unlocked')
-            locked = False
-        return locked
+    # def fileIsCurrentlyLocked(self):
+    #     print(f'display2 {self.display2} locked')
+    #     locked = True
+    #     # if int(self.go.read()) == 0 and int(self.test.read()) == 0:
+    #     if int(self.display2.read()) == 0:
+    #         print(f'display2 {self.display2} unlocked')
+    #         locked = False
+    #     return locked
     
-    def waitForZero(self, wait_time):
-        while self.display2 == 1:
-            time.sleep(wait_time)
-        print(f'display2 {self.display2}')
+    # def waitForZero(self, wait_time):
+    #     while self.display2 == 1:
+    #         time.sleep(wait_time)
+    #     print(f'display2 {self.display2}')
 
-    def waitForFileToBeUnlocked(self, wait_time):
-        while self.fileIsCurrentlyLocked():
-            time.sleep(wait_time)
+    # def waitForFileToBeUnlocked(self, wait_time):
+    #     while self.fileIsCurrentlyLocked():
+    #         time.sleep(wait_time)
 
     def nightpath(self):
         dir = str(self.dispname2)

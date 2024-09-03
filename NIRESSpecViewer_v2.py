@@ -1068,6 +1068,7 @@ class FitsViewer(QtGui.QMainWindow):
                         	[fits.hdu.image.PrimaryHDU, fits.hdu.image.ImageHDU]
                         	and hdu.data is not None])
                 if file_object:
+                    print("File Unlocked")
                     locked = False
                     warnings.resetwarnings()
 
@@ -1076,14 +1077,6 @@ class FitsViewer(QtGui.QMainWindow):
 
             except OSError:
                 locked = True
-            
-            except AstropyUserWarning:
-                locked = True
-                hdulist.close()
-
-            # except Warning as w:
-            #     print("waiting on header")
-            #     locked = True
 
             finally:
                 if file_object:

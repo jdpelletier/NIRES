@@ -1079,7 +1079,7 @@ class FitsViewer(QtGui.QMainWindow):
             except OSError:
                 locked = True
             
-            except astropy.utils.exceptions.AstropyUserWarnin:
+            except astropy.utils.exceptions.AstropyUserWarning:
                 locked = True
 
             # except Warning as w:

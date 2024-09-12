@@ -960,18 +960,6 @@ class FitsViewer(QtGui.QMainWindow):
             self.file_info.setText(f"File: error loading, empty image")
         except OSError:
             self.file_info.setText(f"File: error loading, possible server crash")
-            image = load_data(self.spec_lastfile, logger=self.logger)
-            self.fitsimage.set_image(image)
-            try:
-                self.fitsimage.get_canvas().get_object_by_tag(self.picktag)
-                self.fitsimage.get_canvas().delete_object_by_tag(self.picktag)
-            except KeyError:
-                pass
-            if recenter == True:
-                self.recenter()
-            print(f"Loaded {filepath}")
-            self.file_info.setText(f"File: {filepath}")
-            self.base_zoom = self.fitsimage.get_zoom()
 
     def open_file(self):
         filters = "Images (s*_*.fits)"
@@ -1046,7 +1034,7 @@ class FitsViewer(QtGui.QMainWindow):
         return f'{firstfile} {operation} {secondfile}.fits'
     
     def scan(self, file_callback):
-        in_file = str(self.dispname)
+        in_file = str(self.spec_lastfile)
         file_callback.emit(in_file)
         while self.scanning:
             cur_file = str(self.dispname)

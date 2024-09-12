@@ -995,6 +995,8 @@ class FitsViewer(QtGui.QMainWindow):
             except FileNotFoundError:
                 print("No previous file.")
                 return
+            except OSError:
+                print("Empty file.")
             subtracted = image_data - previous_data
             hdu = fits.PrimaryHDU(header=image_header, data=subtracted)
             filename = self.mathFileNames(ds, previous, '-')

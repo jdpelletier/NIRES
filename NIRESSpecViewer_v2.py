@@ -985,18 +985,16 @@ class FitsViewer(QtGui.QMainWindow):
     def sdiff(self):
         if self.sdiff_done == False:
             try:
-                ds = self.dispname.read()
+                ds = self.spec_lastfile.read()
                 if '/s/' not in ds:
                     ds = '/s' + ds
                 image_data = fits.getdata(ds)
                 image_header = fits.getheader(ds)
-                previous = self.previous_file(self.spec_lastfile)
+                previous = self.previous_file(ds)
                 previous_data = fits.getdata(previous)
             except FileNotFoundError:
                 print("No previous file.")
                 return
-            except OSError:
-                print("Empty file.")
             subtracted = image_data - previous_data
             hdu = fits.PrimaryHDU(header=image_header, data=subtracted)
             filename = self.mathFileNames(ds, previous, '-')

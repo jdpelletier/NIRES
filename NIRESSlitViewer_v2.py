@@ -442,7 +442,7 @@ class MathWindow(Widgets.Box):
     This "window" is a QWidget. If it has no parent, it
     will appear as a free-floating window as we want.
     """
-    def __init__(self, logger, fitsimage, loadfile, dispname2):
+    def __init__(self, logger, fitsimage, loadfile, lastfile):
         super(MathWindow, self).__init__(fitsimage)
 
         self.math_path = "/home/jpelletier/NIRES/"
@@ -451,7 +451,8 @@ class MathWindow(Widgets.Box):
         self.logger = logger
         self.fitsimage = fitsimage
         self.load_file = loadfile
-        self.dispname2 = dispname2
+        # self.dispname2 = dispname2
+        self.lastfile = lastfile
 
         vbox = Widgets.VBox()
         math_hbox = Widgets.HBox()
@@ -502,7 +503,7 @@ class MathWindow(Widgets.Box):
         # self.start_updating()
 
     def nightpath(self):
-        dir = str(self.dispname2.read())
+        dir = str(self.lastfile.read())
         if "//" in str(dir):
             dir = str(dir).split("//")
             dir = dir[0] + "/"
@@ -593,7 +594,7 @@ class MathWindow(Widgets.Box):
 
 
     def reload(self, event):
-        self.load_file(str(self.dispname2.read()))
+        self.load_file(str(self.lastfile.read()))
         self.sdiff_done = False
 
     def stop(self):
@@ -1091,7 +1092,7 @@ class FitsViewer(QtGui.QMainWindow):
             self.load_file(fileName)
 
     def math_popup(self):
-        self.m = MathWindow(self.logger, self.fitsimage, self.load_file, self.dispname2)
+        self.m = MathWindow(self.logger, self.fitsimage, self.load_file, self.slit_lastfile)
         self.m.show()
 
     def cuts_popup(self):

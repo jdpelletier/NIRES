@@ -1008,7 +1008,7 @@ class FitsViewer(QtGui.QMainWindow):
             self.sdiff_done = True
             os.remove(full_path)
         else:
-            self.load_file(str(self.dispname.read()))
+            self.load_file(str(self.spec_lastfile.read()))
             self.sdiff_done = False
     
     def previous_file(self, fn):

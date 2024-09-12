@@ -990,7 +990,7 @@ class FitsViewer(QtGui.QMainWindow):
                     ds = '/s' + ds
                 image_data = fits.getdata(ds)
                 image_header = fits.getheader(ds)
-                previous = self.previous_file(ds)
+                previous = self.previous_file(self.spec_lastfile)
                 previous_data = fits.getdata(previous)
             except FileNotFoundError:
                 print("No previous file.")

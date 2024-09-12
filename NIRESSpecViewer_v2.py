@@ -1034,7 +1034,8 @@ class FitsViewer(QtGui.QMainWindow):
         return f'{firstfile} {operation} {secondfile}.fits'
     
     def scan(self, file_callback):
-        in_file = str(self.spec_lastfile)
+        in_file = str(self.dispname)
+        self.waitForFileToBeUnlocked(in_file, 1)
         file_callback.emit(in_file)
         while self.scanning:
             cur_file = str(self.dispname)

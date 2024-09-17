@@ -853,7 +853,7 @@ class FitsViewer(QtGui.QMainWindow):
         buttons_vbox_left = QtGui.QVBoxLayout()
         buttons_vbox_left.setContentsMargins(QtCore.QMargins(0, 0, 10, 0))
         buttons_vbox_left.setObjectName("buttons_vbox_left")
-        self.wmovSlitCent = QtGui.QPushButton("Center on Slit", color="blue")
+        self.wmovSlitCent = QtGui.QPushButton("Center on Slit")
         self.wmovSlitCent.setObjectName("wmovSlitCent")
         self.wmovSlitCent.setStyleSheet("background-color: red")
         self.wmovSlitCent.clicked.connect(self.movSlitCent)

@@ -822,7 +822,7 @@ class FitsViewer(QtGui.QMainWindow):
         # self.wtogglecomp = QtGui.QPushButton("Compass")
         # self.wtogglecomp.setObjectName("wtogglecomp")
         # self.wtogglecomp.clicked.connect(self.togglecompass)
-        file_hbox.addWidget(self.wtogglecomp)
+        # file_hbox.addWidget(self.wtogglecomp)
         # self.box_readout = QtGui.QLabel("Amplitude:                  FWHM: ")
         # self.box_readout.setMinimumSize(QtCore.QSize(350, 0))
         # self.box_readout.setObjectName("box_readout")

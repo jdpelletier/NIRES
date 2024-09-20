@@ -1009,6 +1009,7 @@ class FitsViewer(QtGui.QMainWindow):
         #     os.remove('procImage.fits')
         #     hdu.writeto('procImage.fits')
         print("scan started...")
+        self.cachedFiles = self.walkDirectory()
         scanner = Scanner(self.scan)
         scanner.signals.load.connect(self.load_file)
         self.threadpool.start(scanner)
@@ -1201,7 +1202,6 @@ class FitsViewer(QtGui.QMainWindow):
 
     def updateFileCache(self, cachedFiles):
         updatedFileList = self.walkDirectory()
-        print(updatedFileList)
         if updatedFileList == None:
             return False, None, None
         filtered = [i for i in updatedFileList if not i in cachedFiles]

@@ -1201,6 +1201,7 @@ class FitsViewer(QtGui.QMainWindow):
 
     def updateFileCache(self, cachedFiles):
         updatedFileList = self.walkDirectory()
+        print(updatedFileList)
         if updatedFileList == None:
             return False, None, None
         filtered = [i for i in updatedFileList if not i in cachedFiles]

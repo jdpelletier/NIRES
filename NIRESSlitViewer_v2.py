@@ -1,6 +1,6 @@
 import os, time, sys, subprocess
 # from os import listdir
-# from os.path import abspath, isfile, join
+from os.path import abspath, isfile, join
 from pathlib import Path
 # import datetime
 # import csv
@@ -1183,7 +1183,29 @@ class FitsViewer(QtGui.QMainWindow):
                 self.waitForFileToBeUnlocked(cur_file, 1)
                 file_callback.emit(cur_file)
                 in_file = cur_file
+            hasNewFiles, files, self.cachedFiles = self.updateFileCache(self.cachedFiles)
+            if hasNewFiles and ('snapi' in files[0] or 'diff' in files[0]):
+                print(f"New {files[0]} Detected!")
+                filen = files[0]
+                self.waitForFileToBeUnlocked(filen, 1)
+                file_callback.emit(filen)
             time.sleep(1)
+    
+
+    def walkDirectory(self):
+        directory = self.nightpath()
+        try:
+            return [abspath(join(directory, f)) for f in listdir(directory) if isfile(join(directory, f))]
+        except FileNotFoundError:
+            return None
+
+    def updateFileCache(self, cachedFiles):
+        updatedFileList = self.walkDirectory()
+        if updatedFileList == None:
+            return False, None, None
+        filtered = [i for i in updatedFileList if not i in cachedFiles]
+        cachedFiles = updatedFileList
+        return len(filtered) > 0, filtered, cachedFiles
         
 
     def fileIsCurrentlyLocked(self, filepath):

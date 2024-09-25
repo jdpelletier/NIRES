@@ -1195,7 +1195,7 @@ class FitsViewer(QtGui.QMainWindow):
                 self.waitForFileToBeUnlocked(filen, 1)
                 file_callback.emit(filen)
                 # try:
-                os.remove('snapi.fits')
+                os.remove(files[0])
                 # except FileNotFoundError:
                 #     pass
                 # try:

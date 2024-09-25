@@ -1307,12 +1307,10 @@ class FitsViewer(QtGui.QMainWindow):
         if "//" in str(file):
             file = str(file).split("//")
             file = '/'.join(file)
-            print(file)
-            nightly = Path(os.path.dirname(dir))
-            print(dir)
+            nightly = Path(file).parent
         else: 
-            dir = Path(dir)
-            nightly = dir.parent
+            file = Path(file)
+            nightly = file.parent
         return nightly
 
     def writeFits(self, headerinfo, image_data):

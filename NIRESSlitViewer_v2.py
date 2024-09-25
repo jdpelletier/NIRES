@@ -1185,7 +1185,10 @@ class FitsViewer(QtGui.QMainWindow):
                 file_callback.emit(cur_file)
                 in_file = cur_file
             hasNewFiles, files, self.cachedFiles = self.updateFileCache(self.cachedFiles)
-            print(files[0])
+            try:
+                print(files[0])
+            except IndexError:
+                pass
             if hasNewFiles and ('snapi.fits' in files[0] or 'display.fits' in files[0]):
                 print(f"New {files[0]} Detected!")
                 filen = files[0]

@@ -1053,6 +1053,8 @@ class FitsViewer(QtGui.QMainWindow):
                 self.togglecompass()
             except KeyError:
                 pass
+            if 'snapi.fits' in filepath or 'display.fits' in filepath:
+                os.remove(filepath)
         except io_fits.FITSError:
             self.file_info.setText(f"File: error loading, wait for next image")
         except FileNotFoundError:
@@ -1194,14 +1196,6 @@ class FitsViewer(QtGui.QMainWindow):
                 filen = files[0]
                 self.waitForFileToBeUnlocked(filen, 1)
                 file_callback.emit(filen)
-                # try:
-                os.remove(files[0])
-                # except FileNotFoundError:
-                #     pass
-                # try:
-                #     os.remove('display.fits')
-                # except FileNotFoundError:
-                #     pass
             time.sleep(1)
     
 

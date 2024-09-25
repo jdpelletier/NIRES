@@ -1301,13 +1301,16 @@ class FitsViewer(QtGui.QMainWindow):
     #         time.sleep(wait_time)
 
     def nightpath(self):
-        dir = str(self.dispname2)
-        if '/s/' not in dir:
-            dir = '/s' + dir
-        if "//" in str(dir):
-            dir = str(dir).split("//")
-            dir = dir[0] + "/"
-            nightly = Path(dir)
+        file = str(self.dispname2)
+        if '/s/' not in file:
+            file = '/s' + file
+        if "//" in str(file):
+            file = str(file).split("//")
+            for i in range(len(file)):
+             file = file[i] + "/"
+             print(file)
+            nightly = Path(os.path.dirname(dir))
+            print(dir)
         else: 
             dir = Path(dir)
             nightly = dir.parent

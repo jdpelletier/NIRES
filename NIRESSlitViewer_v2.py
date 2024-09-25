@@ -1306,6 +1306,7 @@ class FitsViewer(QtGui.QMainWindow):
             file = '/s' + file
         if "//" in str(file):
             file = str(file).split("//")
+            print(file)
             for i in range(len(file)):
              file = file[i] + "/"
              print(file)

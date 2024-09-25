@@ -1306,10 +1306,8 @@ class FitsViewer(QtGui.QMainWindow):
             file = '/s' + file
         if "//" in str(file):
             file = str(file).split("//")
+            file = '/'.join(file)
             print(file)
-            for i in range(len(file)):
-             file = file[i] + "/"
-             print(file)
             nightly = Path(os.path.dirname(dir))
             print(dir)
         else: 

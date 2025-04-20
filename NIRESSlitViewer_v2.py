@@ -1047,6 +1047,7 @@ class FitsViewer(QtGui.QMainWindow):
             print(f"Loaded {filepath}")
             self.file_info.setText(f"File: {filepath}")
             self.base_zoom = self.fitsimage.get_zoom()
+            self.sdiff_done = False
             try:
                 self.fitsimage.get_canvas().get_object_by_tag(self.customcomptag)
                 self.fitsimage.get_canvas().delete_object_by_tag(self.customcomptag)

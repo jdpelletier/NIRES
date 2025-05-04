@@ -1165,7 +1165,7 @@ class FitsViewer(QtGui.QMainWindow):
         self.m.show()
 
     def window(self):
-        self.w = Window(self.logger, self.fitsimage)
+        self.w = Window(self.logger, self.fitsimage) # type: ignore
         self.w.show()
 
     ##Find star stuff

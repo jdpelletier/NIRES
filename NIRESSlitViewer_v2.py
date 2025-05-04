@@ -647,6 +647,7 @@ class FitsViewer(QtGui.QMainWindow):
         self.display2 = ktl.cache('nids', 'display2')
         self.display2.monitor()
         self.sdiff_check = ktl.cache('nids', 'dispname2')
+        self.sdiff_check.monitor()
         self.dispname2 = ktl.cache('nids', 'FILENAME')
         self.dispname2.monitor()
         # self.tempsky2 = ktl.cache('nids', 'TEMPSKY2')

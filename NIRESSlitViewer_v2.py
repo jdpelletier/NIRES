@@ -1189,7 +1189,7 @@ class FitsViewer(QtGui.QMainWindow):
                 self.waitForFileToBeUnlocked(cur_file, 1)
                 file_callback.emit(cur_file)
                 in_file = cur_file
-            elif int(self.display2) == 1:
+            elif int(self.display2) == 1 and in_file == cur_file:
                 print("New SDiff Detected")
                 self.waitForFileToBeUnlocked(sdf_file, 1)
                 file_callback.emit(sdf_file)

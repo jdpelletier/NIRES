@@ -646,7 +646,7 @@ class FitsViewer(QtGui.QMainWindow):
         # self.test.monitor()
         self.display2 = ktl.cache('nids', 'display2')
         self.display2.monitor()
-        # self.dispname2 = ktl.cache('nids', 'dispname2')
+        self.sdiff_check = ktl.cache('nids', 'dispname2')
         self.dispname2 = ktl.cache('nids', 'FILENAME')
         self.dispname2.monitor()
         # self.tempsky2 = ktl.cache('nids', 'TEMPSKY2')
@@ -1187,6 +1187,11 @@ class FitsViewer(QtGui.QMainWindow):
                 self.waitForFileToBeUnlocked(cur_file, 1)
                 file_callback.emit(cur_file)
                 in_file = cur_file
+            elif in_file != self.sdiff_check:
+                print("New SDiff Detected")
+                self.waitForFileToBeUnlocked(self.sdiff_check, 1)
+                file_callback.emit(self.sdiff_check)
+                in_file = self.sdiff_check
             hasNewFiles, files, self.cachedFiles = self.updateFileCache(self.cachedFiles)
             try:
                 print(files[0])

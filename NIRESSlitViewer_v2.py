@@ -646,8 +646,7 @@ class FitsViewer(QtGui.QMainWindow):
         # self.test.monitor()
         self.display2 = ktl.cache('nids', 'display2')
         self.display2.monitor()
-        self.sdiff_check = ktl.cache('nids', 'dispname2')
-        self.sdiff_check.monitor()
+        # self.dispname2 = ktl.cache('nids', 'dispname2')
         self.dispname2 = ktl.cache('nids', 'FILENAME')
         self.dispname2.monitor()
         # self.tempsky2 = ktl.cache('nids', 'TEMPSKY2')
@@ -1183,22 +1182,17 @@ class FitsViewer(QtGui.QMainWindow):
         file_callback.emit(in_file)
         while self.scanning:
             cur_file = str(self.dispname2)
-            sdf_file = str(self.sdiff_check)
-            if in_file != cur_file and 'sdiff' not in cur_file:
+            if in_file != cur_file:
                 print("New Image Detected")
                 self.waitForFileToBeUnlocked(cur_file, 1)
                 file_callback.emit(cur_file)
                 in_file = cur_file
-            elif int(self.display2) == 1 and in_file == cur_file:
-                print("New SDiff Detected")
-                self.waitForFileToBeUnlocked(sdf_file, 1)
-                file_callback.emit(sdf_file)
             hasNewFiles, files, self.cachedFiles = self.updateFileCache(self.cachedFiles)
             try:
                 print(files[0])
             except IndexError:
                 pass
-            if hasNewFiles and ('snapi.fits' in files[0] or 'disp.fits' in files[0]):
+            if hasNewFiles and ('snapi.fits' in files[0] or 'disp.fits' in files[0] or 'sdiff.fits' in files[0]):
                 print(f"New {files[0]} Detected!")
                 filen = files[0]
                 self.waitForFileToBeUnlocked(filen, 1)

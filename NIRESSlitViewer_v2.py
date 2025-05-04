@@ -1189,11 +1189,10 @@ class FitsViewer(QtGui.QMainWindow):
                 self.waitForFileToBeUnlocked(cur_file, 1)
                 file_callback.emit(cur_file)
                 in_file = cur_file
-            elif in_file != sdf_file and 'sdiff' in sdf_file:
+            elif int(self.display2) == 1:
                 print("New SDiff Detected")
                 self.waitForFileToBeUnlocked(sdf_file, 1)
                 file_callback.emit(sdf_file)
-                in_file = sdf_file
             hasNewFiles, files, self.cachedFiles = self.updateFileCache(self.cachedFiles)
             try:
                 print(files[0])

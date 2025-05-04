@@ -1183,16 +1183,17 @@ class FitsViewer(QtGui.QMainWindow):
         file_callback.emit(in_file)
         while self.scanning:
             cur_file = str(self.dispname2)
+            sdf_file = str(self.sdiff_check)
             if in_file != cur_file and 'sdiff' not in cur_file:
                 print("New Image Detected")
                 self.waitForFileToBeUnlocked(cur_file, 1)
                 file_callback.emit(cur_file)
                 in_file = cur_file
-            elif in_file != self.sdiff_check and 'sdiff' in self.sdiff_check:
+            elif in_file != sdf_file and 'sdiff' in sdf_file:
                 print("New SDiff Detected")
-                self.waitForFileToBeUnlocked(self.sdiff_check, 1)
-                file_callback.emit(self.sdiff_check)
-                in_file = self.sdiff_check
+                self.waitForFileToBeUnlocked(sdf_file, 1)
+                file_callback.emit(sdf_file)
+                in_file = sdf_file
             hasNewFiles, files, self.cachedFiles = self.updateFileCache(self.cachedFiles)
             try:
                 print(files[0])

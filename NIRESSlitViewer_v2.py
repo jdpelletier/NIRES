@@ -1008,6 +1008,11 @@ class FitsViewer(QtGui.QMainWindow):
         # except OSError:
         #     os.remove('procImage.fits')
         #     hdu.writeto('procImage.fits')
+        filename = 'subImage.fits'
+        try:
+            os.remove(filename)
+        except FileNotFoundError:
+            pass
         print("scan started...")
         self.cachedFiles = self.walkDirectory()
         scanner = Scanner(self.scan)
@@ -1146,6 +1151,8 @@ class FitsViewer(QtGui.QMainWindow):
             except FileNotFoundError:
                 print("No previous file.")
                 return
+            except OSError:
+                print("Wait for image to readout")
             subtracted = image_data - previous_data
             hdu = fits.PrimaryHDU(header=image_header, data=subtracted)
             filename = self.mathFileNames(ds, previous, '-')
